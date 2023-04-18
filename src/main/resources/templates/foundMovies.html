@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Film Cercato - SiW Movie</title>
+		<link rel="stylesheet" href="/stylesheet.css?version=2"/>
+	</head>
+	<body>
+		<div>
+			<a href="/index"><img th:src="@{/logo-siw.png}" width=30%/></a>
+		</div>
+		<div>
+			<h1><span>Film trovati</span></h1>
+		</div>
+		<div th:if="${movies.isEmpty()}"> Non ci sono film che soddisfano i requisiti </div>
+		<div th:if="${!movies.isEmpty()}">
+			<ul>
+				<li th:each="movie:${movies}">
+					<a href="movie.html" th:href="@{'/movies'+'/'+${movie.id}}" 
+					th:text="${movie.title}+' ('+${movie.year}+')'">FilmGenerico (2077)</a>
+				</li>
+			</ul>
+		</div>
+	</body>
+</html>

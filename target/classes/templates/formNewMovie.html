@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Inserisci Film - SiW Movie</title>
+		<link rel="stylesheet" href="/stylesheet.css?version=2"/>
+	</head>
+	<body>
+		<div>
+			<a href="/index"><img th:src="@{/logo-siw.png}" width=30%/></a>
+		</div>
+		<div>
+			<h1>
+				Aggiungi nuovo film
+			</h1>
+			<form th:action="@{/movies}" method="POST" th:object="${movie}">
+				<div>
+					<span th:text="${messaggioErrore}">Messaggio di errore</span>
+				</div>
+				<div>
+					<span>Titolo<input required type="text" th:field="${movie.title}"></input></span>
+				</div>
+				<div>
+					<span>Anno<input required type="text" th:field="${movie.year}"></input></span>
+				</div>
+				<div>
+					<span>Immagine<input type="url" th:field="${movie.urlImage}"></input></span>
+				</div>
+				<div>
+					<span><button type="submit">Conferma</button></span>
+				</div>
+			</form>
+		</div>
+	</body>
+</html>

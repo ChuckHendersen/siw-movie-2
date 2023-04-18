@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title> Movie - SiW Movie</title>
+		<link rel="stylesheet" href="/stylesheet.css?version=2"/>
+	</head>
+	<body>
+		<div>
+			<a href="/index"><img src="/logo-siw.png" width="30%"/></a>
+		</div>
+		<div th:if="${movie}">
+			<div>
+				<h1 th:text="${movie.title}">Titolo Film</h1>
+			</div>
+			<div>
+				<span>Anno: <span th:text="'('+${movie.year}+')'">2000</span></span>
+			</div>
+			<div>
+				<span>Regista: <span th:text="${movie.director.name}+' '+${movie.director.surname}">Cristopher Nolan</span></span>
+			</div>
+			<div>
+				<span>Attori: <div th:each="actor:${movie.actors}"><span th:text="${actor.name}"></span></div></span>
+			</div>
+			<div>
+				<img th:src="${movie.urlImage}"/>
+			</div>
+		</div>
+		<div th:unless="${movie}">Non esiste</div>
+	</body>
+</html>
