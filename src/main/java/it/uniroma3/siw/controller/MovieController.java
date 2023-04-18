@@ -45,7 +45,7 @@ public class MovieController {
 	@PostMapping("/movies")
 	public String newMovie(@Valid @ModelAttribute("movie") Movie movie, BindingResult bindingResult, Model model) {
 		this.movieValidator.validate(movie, bindingResult);
-		if(!bindingResult.hasErrors() && !movieRepository.existsByTitleAndYear(movie.getTitle(), movie.getYear())) {
+		if(!bindingResult.hasErrors()) {
 			this.movieRepository.save(movie);
 			model.addAttribute("movie", movie);
 			return "movie.html";
