@@ -5,22 +5,26 @@ import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import it.uniroma3.siw.controller.validator.MovieValidator;
 import it.uniroma3.siw.model.Artist;
 import it.uniroma3.siw.model.Movie;
 import it.uniroma3.siw.repository.ArtistRepository;
 import it.uniroma3.siw.repository.MovieRepository;
+import jakarta.validation.Valid;
 
 @Controller
 public class MovieController {
 
 	@Autowired MovieRepository movieRepository;
 	@Autowired ArtistRepository artistRepository;
+	@Autowired MovieValidator movieValidator;
 
 	@GetMapping("/index")
 	public String index(Model model) {
@@ -31,7 +35,7 @@ public class MovieController {
 	public String indexMovie() {
 		return "indexMovie.html";
 	}
-	
+
 	@GetMapping("/formNewMovie")
 	public String formNewMovie(Model model) {
 		model.addAttribute("movie", new Movie());
@@ -39,8 +43,9 @@ public class MovieController {
 	}
 
 	@PostMapping("/movies")
-	public String newMovie(@ModelAttribute("movie") Movie movie, Model model) {
-		if (!movieRepository.existsByTitleAndYear(movie.getTitle(), movie.getYear())) {
+	public String newMovie(@Valid @ModelAttribute("movie") Movie movie, BindingResult bindingResult, Model model) {
+		this.movieValidator.validate(movie, bindingResult);
+		if(!bindingResult.hasErrors() && !movieRepository.existsByTitleAndYear(movie.getTitle(), movie.getYear())) {
 			this.movieRepository.save(movie);
 			model.addAttribute("movie", movie);
 			return "movie.html";
@@ -160,7 +165,7 @@ public class MovieController {
 		model.addAttribute("artists", setAttoriCheNonHannoRecitato);
 		return "actorsToAdd.html";
 	}
-	
+
 	@GetMapping("/deleteActorFromMovie/{actor_id}/{movie_id}")
 	public String deleteActorFromMovie(Model model, @PathVariable("actor_id") Long actor_id, @PathVariable("movie_id") Long movie_id) {
 		Movie movie = movieRepository.findById(movie_id).get();
