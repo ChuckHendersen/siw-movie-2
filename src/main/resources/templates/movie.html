@@ -15,8 +15,7 @@
 			<div>
 				<span>Anno: <span th:text="'('+${movie.year}+')'">2000</span></span>
 			</div>
-			<div>
-				<span>Regista: <span th:text="${movie.director.name}+' '+${movie.director.surname}">Cristopher Nolan</span></span>
+				<span>Regista: <span th:if="${movie.director}" th:text="${movie.director.name}+' '+${movie.director.surname}">Cristopher Nolan</span></span>
 			</div>
 			<div>
 				<span>Attori: <div th:each="actor:${movie.actors}"><span th:text="${actor.name}"></span></div></span>
