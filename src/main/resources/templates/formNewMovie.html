@@ -17,13 +17,13 @@
 					<span th:text="${messaggioErrore}">Messaggio di errore</span>
 				</div>
 				<div>
-					<span>Titolo<input required type="text" th:field="${movie.title}"></input></span>
+					<span>Titolo<input required type="text" th:field="*{title}"></input></span>
 				</div>
 				<div>
-					<span>Anno<input required type="text" th:field="${movie.year}"></input></span>
+					<span>Anno<input required type="text" th:field="*{year}"></input></span>
 				</div>
 				<div>
-					<span>Immagine<input type="url" th:field="${movie.urlImage}"></input></span>
+					<span>Immagine<input type="url" th:field="*{urlImage}"></input></span>
 				</div>
 				<div>
 					<span><button type="submit">Conferma</button></span>
