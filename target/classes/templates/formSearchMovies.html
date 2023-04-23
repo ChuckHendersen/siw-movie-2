@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Cerca film per anno - SiW Movie</title>
+		<link rel="stylesheet" href="/stylesheet.css?version=2"/>
+	</head>
+	<body>
+		<div>
+			<a href="/index"><img th:src="@{/logo-siw.png}" width=30%/></a>
+		</div>
+		<div>
+			<h1>
+				Cerca film per anno
+			</h1>
+		</div>
+		<div>
+			<form th:action="@{/searchMovies}" method="POST">
+				<div>
+					<span>Inserire anno<input required type="number" th:value="${year}" name="year"></input></span>
+				</div>
+				<div>
+					<span><button type="submit">Cerca</button></span>
+				</div>
+			</form>
+		</div>
+	</body>
+</html>

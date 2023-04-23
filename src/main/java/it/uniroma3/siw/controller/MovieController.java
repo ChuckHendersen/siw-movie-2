@@ -50,7 +50,7 @@ public class MovieController {
 			model.addAttribute("movie", movie);
 			return "movie.html";
 		} else {
-			model.addAttribute("messaggioErrore", "Questo film esiste già");
+			//model.addAttribute("messaggioErrore", "Questo film esiste già");
 			return "formNewMovie.html";
 		}
 	}
