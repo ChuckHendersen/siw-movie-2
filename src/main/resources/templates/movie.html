@@ -20,8 +20,9 @@
 			<div>
 				<span>Attori: <div th:each="actor:${movie.actors}"><span th:text="${actor.name}"></span></div></span>
 			</div>
-			<div>
-				<img th:src="${movie.urlImage}"/>
+			<div th:each="img : ${movie.pictures}">
+				<!-- Immagine-->
+				<img th:src="'data:image/jpeg;base64,'+${img.getImgData()}"></img>
 			</div>
 		</div>
 		<div th:unless="${movie}">Non esiste</div>

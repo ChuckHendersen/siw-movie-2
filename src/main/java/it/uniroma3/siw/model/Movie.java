@@ -2,7 +2,6 @@ package it.uniroma3.siw.model;
 
 import java.util.Objects;
 import java.util.Set;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -21,11 +20,8 @@ public class Movie {
 	@Max(2023)
 	private Integer year;
 	
-	private String urlImage;
-	
 	@NotBlank
 	private String title;
-	
 	
 	@ManyToOne
 	private Artist director;
@@ -36,6 +32,9 @@ public class Movie {
 	@OneToMany
 	@JoinColumn(name="movie_id")
 	private Set<News> news;
+	
+	@OneToMany
+	private Set<Picture> pictures;
 	
 	public Artist getDirector() {
 		return director;
@@ -68,14 +67,6 @@ public class Movie {
 		this.year = year;
 	}
 	
-	public String getUrlImage() {
-		return urlImage;
-	}
-	
-	public void setUrlImage(String urlImage) {
-		this.urlImage = urlImage;
-	}
-	
 	@Override
 	public int hashCode() {
 		return Objects.hash(title, year);
@@ -98,5 +89,20 @@ public class Movie {
 	public void setActors(Set<Artist> actors) {
 		this.actors = actors;
 	}
-	
+
+	public Set<News> getNews() {
+		return news;
+	}
+
+	public void setNews(Set<News> news) {
+		this.news = news;
+	}
+
+	public Set<Picture> getPictures() {
+		return pictures;
+	}
+
+	public void setPictures(Set<Picture> pictures) {
+		this.pictures = pictures;
+	}
 }

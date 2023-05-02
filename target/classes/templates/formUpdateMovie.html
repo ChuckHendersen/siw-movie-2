@@ -15,8 +15,9 @@
 			<div>
 				<span>Anno: <span th:text="'('+${movie.year}+')'">2000</span></span>
 			</div>
-			<div>
-				<img th:src="${movie.urlImage}"/>
+			<div th:each="img : ${movie.pictures}">
+				<!-- Immagine-->
+				<img th:src="'data:image/jpeg;base64,'+${img.getImgData()}"></img>
 			</div>
 			<div>
 				<h3>Regista (<a th:href="@{'/addDirectorToMovie/'+${movie.id}}">modifica regista</a>)</h3>

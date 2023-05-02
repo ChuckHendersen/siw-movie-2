@@ -12,7 +12,7 @@
 			<h1>
 				Aggiungi nuovo film
 			</h1>
-			<form th:action="@{/movies}" method="POST" th:object="${movie}">
+			<form th:action="@{/movies}" method="POST" th:object="${movie}" enctype="multipart/form-data">
 				<div th:if="${#fields.hasGlobalErrors()}">
 					<p th:each="err:${#fields.globalErrors()}" th:text="${err}"></span>
 				</div>
@@ -27,7 +27,7 @@
 					<span th:if="${#fields.hasErrors('year')}" th:errors="*{year}"></span>
 				</div>
 				<div>
-					<span>Immagine<input type="url" th:field="${movie.urlImage}"></input></span>
+					<span>Immagine<input type="file" name="file"></input></span>
 				</div>
 				<div>
 					<span><button type="submit">Conferma</button></span>

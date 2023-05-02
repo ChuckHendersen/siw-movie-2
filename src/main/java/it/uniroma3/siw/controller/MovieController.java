@@ -1,7 +1,7 @@
 package it.uniroma3.siw.controller;
 
+import java.io.IOException;
 import java.util.*;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,12 +11,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
+import org.springframework.web.multipart.MultipartFile;
 import it.uniroma3.siw.controller.validator.MovieValidator;
 import it.uniroma3.siw.model.Artist;
 import it.uniroma3.siw.model.Movie;
+import it.uniroma3.siw.model.Picture;
 import it.uniroma3.siw.repository.ArtistRepository;
 import it.uniroma3.siw.repository.MovieRepository;
+import it.uniroma3.siw.repository.PictureRepository;
 import jakarta.validation.Valid;
 
 @Controller
@@ -25,6 +27,7 @@ public class MovieController {
 	@Autowired MovieRepository movieRepository;
 	@Autowired ArtistRepository artistRepository;
 	@Autowired MovieValidator movieValidator;
+	@Autowired PictureRepository pictureRepository;
 
 	@GetMapping("/index")
 	public String index(Model model) {
@@ -39,13 +42,21 @@ public class MovieController {
 	@GetMapping("/formNewMovie")
 	public String formNewMovie(Model model) {
 		model.addAttribute("movie", new Movie());
+		//model.addAttribute("picture", new Picture());
 		return "formNewMovie.html";
 	}
 
 	@PostMapping("/movies")
-	public String newMovie(@Valid @ModelAttribute("movie") Movie movie, BindingResult bindingResult, Model model) {
+	public String newMovie(@Valid @ModelAttribute("movie") Movie movie, @RequestParam("file") MultipartFile file, BindingResult bindingResult, Model model) throws IOException {
+		Picture picture = new Picture();
 		this.movieValidator.validate(movie, bindingResult);
 		if(!bindingResult.hasErrors()) {
+			picture.setName(file.getResource().getFilename());
+			picture.setData(file.getBytes());
+			this.pictureRepository.save(picture);
+			System.out.println(picture);
+			movie.setPictures(new HashSet<Picture>());
+			movie.getPictures().add(picture);
 			this.movieRepository.save(movie);
 			model.addAttribute("movie", movie);
 			return "movie.html";
