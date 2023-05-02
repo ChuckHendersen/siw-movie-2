@@ -17,17 +17,29 @@
 					<p th:each="err:${#fields.globalErrors()}" th:text="${err}"></span>
 				</div>
 				<div>
+<<<<<<< HEAD
+					<span>Titolo<input required type="text" th:field="*{title}"></input></span>
+=======
 					<span>Titolo</span>
 					<span><input required type="text" th:field="${movie.title}"></input></span>
 					<span th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
+>>>>>>> branch 'main' of https://github.com/ChuckHendersen/siw-movie-2.git
 				</div>
 				<div>
+<<<<<<< HEAD
+					<span>Anno<input required type="text" th:field="*{year}"></input></span>
+=======
 					<span>Anno</span>
 					<span><input required type="text" th:field="${movie.year}"></input></span>
 					<span th:if="${#fields.hasErrors('year')}" th:errors="*{year}"></span>
+>>>>>>> branch 'main' of https://github.com/ChuckHendersen/siw-movie-2.git
 				</div>
 				<div>
+<<<<<<< HEAD
 					<span>Immagine<input type="file" name="file"></input></span>
+=======
+					<span>Immagine<input type="url" th:field="*{urlImage}"></input></span>
+>>>>>>> branch 'main' of https://github.com/ChuckHendersen/siw-movie-2
 				</div>
 				<div>
 					<span><button type="submit">Conferma</button></span>
