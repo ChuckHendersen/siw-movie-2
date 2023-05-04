@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import it.uniroma3.siw.controller.validator.ArtistValidator;
 import it.uniroma3.siw.model.Artist;
@@ -34,7 +35,7 @@ public class ArtistController {
 	}
 	
 	@PostMapping("/artists")
-	public String newArtist(@Valid @ModelAttribute("artist") Artist artist, BindingResult bindingResult, Model model) {
+	public String newArtist(@Valid @ModelAttribute("artist") Artist artist, @RequestAttribute("file") MultipartFile[] files , BindingResult bindingResult, Model model) {
 		this.artistValidator.validate(artist, bindingResult);
 		if(!bindingResult.hasErrors()) {
 			this.artistRepository.save(artist);

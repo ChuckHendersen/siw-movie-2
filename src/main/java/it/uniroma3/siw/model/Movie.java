@@ -11,6 +11,7 @@ import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Movie {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;

@@ -11,7 +11,7 @@
 			Inserisci nuovo artista
 		</h1>
 		<div>
-			<form th:action="@{/artists}" th:method="POST" th:object="${artist}">
+			<form th:action="@{/artists}" th:method="POST" th:object="${artist}" enctype="multipart/form-data">
 				<div th:if="${#fields.hasGlobalErrors()}">
 					<p th:each="err:${#fields.globalErrors()}" th:text="${err}"></span>
 				</div>
@@ -30,6 +30,9 @@
 				<div>
 					<span>Data morte (opzionale)<input type="date" th:field="${artist.deceasedDate}"></input></span>
 					<span th:if="${#fields.hasErrors('deceasedDate')}" th:errors="*{deceasedDate}"></span>
+				</div>
+				<div>
+					<span>Immagine<input type="file" name="file" multiple></input></span>
 				</div>
 				<div>
 					<button type="submit">Conferma</button>
