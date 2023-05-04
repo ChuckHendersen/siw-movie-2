@@ -15,6 +15,16 @@
 			<div>
 				<span>Anno: <span th:text="'('+${movie.year}+')'">2000</span></span>
 			</div>
+			<div>
+				<form th:action="@{'/uploadPhoto/'+${movie.id}}" method="POST" enctype="multipart/form-data">
+					<div>
+						<span>Immagine<input type="file" name="file" multiple></input></span>
+					</div>
+					<div>
+						<span><button type="submit">Conferma</button></span>
+					</div>
+				</form>
+			</div>
 			<div th:each="img : ${movie.pictures}">
 				<!-- Immagine-->
 				<img th:src="'data:image/jpeg;base64,'+${img.getImgData()}"></img>

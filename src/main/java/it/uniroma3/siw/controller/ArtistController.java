@@ -5,16 +5,22 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import it.uniroma3.siw.controller.validator.ArtistValidator;
 import it.uniroma3.siw.model.Artist;
 import it.uniroma3.siw.repository.ArtistRepository;
+import jakarta.validation.Valid;
 
 @Controller
 public class ArtistController {
 
 	@Autowired 
 	private ArtistRepository artistRepository;
+	
+	@Autowired
+	private ArtistValidator artistValidator;
 	
 	@GetMapping("/indexArtist")
 	public String indexArtist() {
@@ -28,13 +34,14 @@ public class ArtistController {
 	}
 	
 	@PostMapping("/artists")
-	public String newArtist(@ModelAttribute("artist") Artist artist,Model model) {
-		if(!artistRepository.existsByNameAndSurname(artist.getName(),artist.getSurname())) {
+	public String newArtist(@Valid @ModelAttribute("artist") Artist artist, BindingResult bindingResult, Model model) {
+		this.artistValidator.validate(artist, bindingResult);
+		if(!bindingResult.hasErrors()) {
 			this.artistRepository.save(artist);
 			model.addAttribute(artist);
 			return "artist.html";
 		}else {
-			model.addAttribute("messaggioErrore", "Questo artista è già presente");
+			//model.addAttribute("messaggioErrore", "Questo artista è già presente");
 			return "formNewArtist.html";
 		}
 	}

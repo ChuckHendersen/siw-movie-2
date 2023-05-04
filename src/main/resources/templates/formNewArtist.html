@@ -12,14 +12,24 @@
 		</h1>
 		<div>
 			<form th:action="@{/artists}" th:method="POST" th:object="${artist}">
-				<div>
-					<span th:if="${messaggioErrore}" th:text="${messaggioErrore}"></span>
+				<div th:if="${#fields.hasGlobalErrors()}">
+					<p th:each="err:${#fields.globalErrors()}" th:text="${err}"></span>
 				</div>
 				<div>
-					<span>Nome artista<input required type="text" th:field="${artist.name}"></input></span>
+					<span>Nome<input required type="text" th:field="${artist.name}"></input></span>
+					<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
 				</div>
 				<div>
-					<span>Cognome artista<input required type="text" th:field="${artist.surname}"></input></span>
+					<span>Cognome<input required type="text" th:field="${artist.surname}"></input></span>
+					<span th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"></span>
+				</div>
+				<div>
+					<span>Data nascita<input required type="date" th:field="${artist.birthDate}"></input></span>
+					<span th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"></span>
+				</div>
+				<div>
+					<span>Data morte (opzionale)<input type="date" th:field="${artist.deceasedDate}"></input></span>
+					<span th:if="${#fields.hasErrors('deceasedDate')}" th:errors="*{deceasedDate}"></span>
 				</div>
 				<div>
 					<button type="submit">Conferma</button>

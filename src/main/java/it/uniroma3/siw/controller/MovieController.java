@@ -47,16 +47,21 @@ public class MovieController {
 	}
 
 	@PostMapping("/movies")
-	public String newMovie(@Valid @ModelAttribute("movie") Movie movie, @RequestParam("file") MultipartFile file, BindingResult bindingResult, Model model) throws IOException {
-		Picture picture = new Picture();
+	public String newMovie(@Valid @ModelAttribute("movie") Movie movie, @RequestParam("file") MultipartFile[] file, BindingResult bindingResult, Model model) throws IOException {
+		Picture[] pictures = new Picture[file.length];
 		this.movieValidator.validate(movie, bindingResult);
 		if(!bindingResult.hasErrors()) {
-			picture.setName(file.getResource().getFilename());
-			picture.setData(file.getBytes());
-			this.pictureRepository.save(picture);
-			System.out.println(picture);
 			movie.setPictures(new HashSet<Picture>());
-			movie.getPictures().add(picture);
+			int i=0;
+			for(MultipartFile f:file) {
+				pictures[i] = new Picture();
+				pictures[i].setName(f.getResource().getFilename());
+				pictures[i].setData(f.getBytes());
+				this.pictureRepository.save(pictures[i]);
+				//System.out.println(pictures[i]);
+				movie.getPictures().add(pictures[i]);
+				i++;
+			}
 			this.movieRepository.save(movie);
 			model.addAttribute("movie", movie);
 			return "movie.html";
@@ -64,6 +69,24 @@ public class MovieController {
 			//model.addAttribute("messaggioErrore", "Questo film esiste già");
 			return "formNewMovie.html";
 		}
+	}
+	
+	@PostMapping("/uploadPhoto/{movie_id}")
+	public String uploadPhoto(@PathVariable("movie_id") Long movieId, @RequestParam("file") MultipartFile[] files, Model model) throws IOException {
+		// Prendere il film, caricare le nuove foto nell'array e poi mettere il movie nel model addattribute
+		Movie movie = movieRepository.findById(movieId).get();
+		Picture picture;
+		for(MultipartFile f:files) {
+			picture = new Picture();
+			picture.setName(f.getResource().getFilename());
+			picture.setData(f.getBytes());
+			this.pictureRepository.save(picture);
+			//System.out.println(pictures[i]);
+			movie.getPictures().add(picture);	
+		}
+		movieRepository.save(movie);
+		model.addAttribute("movie", movie);
+		return "formUpdateMovie.html";
 	}
 
 	@GetMapping("/movies")
