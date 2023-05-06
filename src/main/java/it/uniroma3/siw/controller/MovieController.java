@@ -19,7 +19,7 @@ import it.uniroma3.siw.model.Picture;
 import it.uniroma3.siw.repository.ArtistRepository;
 import it.uniroma3.siw.repository.MovieRepository;
 import it.uniroma3.siw.repository.PictureRepository;
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 
 @Controller
 public class MovieController {
@@ -48,19 +48,16 @@ public class MovieController {
 
 	@PostMapping("/movies")
 	public String newMovie(@Valid @ModelAttribute("movie") Movie movie, @RequestParam("file") MultipartFile[] file, BindingResult bindingResult, Model model) throws IOException {
-		Picture[] pictures = new Picture[file.length];
 		this.movieValidator.validate(movie, bindingResult);
 		if(!bindingResult.hasErrors()) {
 			movie.setPictures(new HashSet<Picture>());
-			int i=0;
 			for(MultipartFile f:file) {
-				pictures[i] = new Picture();
-				pictures[i].setName(f.getResource().getFilename());
-				pictures[i].setData(f.getBytes());
-				this.pictureRepository.save(pictures[i]);
+				Picture picture = new Picture();
+				picture.setName(f.getResource().getFilename());
+				picture.setData(f.getBytes());
+				this.pictureRepository.save(picture);
 				//System.out.println(pictures[i]);
-				movie.getPictures().add(pictures[i]);
-				i++;
+				movie.getPictures().add(picture);
 			}
 			this.movieRepository.save(movie);
 			model.addAttribute("movie", movie);

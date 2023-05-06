@@ -5,18 +5,18 @@
 		<link rel="stylesheet" href="/stylesheet.css?version=2"/>
 	</head>
 	<body>
+		<header th:replace="fragments/loginHeader.html :: headerLogin"></header>
 		<div>
 			<a href="/"><img th:src="@{/logo-siw.png}" width=30%/></a>
 		</div>
 		<div>
-			<h1>Categorie Operazioni</h1>
+			<h1>Esplora archivio</h1>
 		</div>
 		<div>
-			<a href="/indexMovie">Operazioni Film</a>
+			<a href="/movies">Esplora i film</a>
 		</div>
-		
 		<div>
-			<a href="/indexArtist">Operazioni Artisti</a>
+			<a href="/artists">Vedi gli artisti</a>
 		</div>
 	</body>
 </html>

@@ -2,7 +2,7 @@ package it.uniroma3.siw.model;
 
 import java.util.Objects;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Entity
 public class News {

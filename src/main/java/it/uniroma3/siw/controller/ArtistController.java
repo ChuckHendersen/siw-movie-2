@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import it.uniroma3.siw.controller.validator.ArtistValidator;
 import it.uniroma3.siw.model.Artist;
 import it.uniroma3.siw.repository.ArtistRepository;
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 
 @Controller
 public class ArtistController {
