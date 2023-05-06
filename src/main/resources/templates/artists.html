@@ -2,13 +2,18 @@
 <html>
 	<head>
 		<title>Lista Artisti - SiW Movie</title>
+		<meta charset="UTF-8" />
+		<link th:replace="fragments/header.html :: stylesheetFragment"/>
 	</head>
 	<body>
 		<header th:replace="fragments/loginHeader.html :: headerLogin"></header>
 		<div>
-			<a href="/index"><img th:src="@{/logo-siw.png}" width=30%/></a>
+			<a href="/"><img src="/images/logo-siw.png" width=30%/></a>
 		</div>
 		<h1>Lista artisti</h1>
+		<div th:if="${artists.size()<=0}">
+			<span>Non ci sono artisti</span>
+		</div>
 		<div>
 			<ul>
 				<li th:each="artist:${artists}">

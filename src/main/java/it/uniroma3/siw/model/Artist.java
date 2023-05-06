@@ -35,6 +35,9 @@ public class Artist {
 	@ManyToMany(mappedBy="actors")
 	private List<Movie> listaFilmRecitati;
 	
+	@OneToOne
+	private Picture picture;
+	
 	public Long getId() {
 		return id;
 	}
@@ -89,6 +92,16 @@ public class Artist {
 
 	public void setDeceasedDate(Date deceasedDate) {
 		this.deceasedDate = deceasedDate;
+	}
+	
+	
+	
+	public Picture getPicture() {
+		return picture;
+	}
+
+	public void setPicture(Picture picture) {
+		this.picture = picture;
 	}
 
 	@Override

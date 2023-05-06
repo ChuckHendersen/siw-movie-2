@@ -1,22 +1,22 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:fragment="headerfiles(title)">
-	<meta charset="UTF-8" />
-	<link th:href="@{/stylesheet.css?version=2}" rel="stylesheet">
-</head>
-<body>
-	<header th:fragment="headerLogin">
-		<div th:if="${#request.userPrincipal}">
-			<span th:text="${#request.userPrincipal.principal.username}"></span>
-			<a href="/logout">Logout</a>
-		</div>
-		<div th:unless="${#request.userPrincipal}">
-			<a href="/login">Login</a>
-		</div>
-	</header>
+	<head th:fragment="headerfiles(title)">
+		<meta charset="UTF-8" />
+		<link th:href="@{/css/stylesheet.css?version=2}" rel="stylesheet">
+	</head>
+	<body>
+		<header th:fragment="headerLogin">
+			<div th:if="${#request.userPrincipal}">
+				<span th:text="${#request.userPrincipal.principal.username}"></span>
+				<a href="/logout">Logout</a>
+			</div>
+			<div th:unless="${#request.userPrincipal}">
+				<a href="/login">Login</a>
+			</div>
+		</header>
 	
-	<footer th:fragment="footer">
-		<a th:href="@{/}">Home</a>
-	</footer>
-</body>
+		<footer th:fragment="footer">
+			<a th:href="@{/}">Home</a>
+		</footer>
+	</body>
 </html>

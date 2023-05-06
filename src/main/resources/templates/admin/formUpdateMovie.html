@@ -2,11 +2,13 @@
 <html>
 	<head>
 		<title> Movie - SiW Movie</title>
-		<link rel="stylesheet" href="/stylesheet.css?version=2"/>
+		<meta charset="UTF-8" />
+		<link th:replace="fragments/header.html :: stylesheetFragment"/>
 	</head>
 	<body>
+		<header th:replace="fragments/loginHeader.html :: headerLogin"></header>
 		<div>
-			<a href="/"><img th:src="@{/logo-siw.png}" width="30%"/></a>
+			<a href="/"><img src="/images/logo-siw.png" width=30%/></a>
 		</div>
 
 			<div>

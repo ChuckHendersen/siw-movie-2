@@ -25,13 +25,13 @@ public class ArtistController {
 	
 	@GetMapping("/indexArtist")
 	public String indexArtist() {
-		return "indexArtist.html";
+		return "/admin/indexArtist.html";
 	}
 	
 	@GetMapping("/formNewArtist")
 	public String formNewArtist(Model model) {
 		model.addAttribute("artist", new Artist());
-		return "formNewArtist.html";
+		return "/admin/formNewArtist.html";
 	}
 	
 	@PostMapping("/artists")
@@ -43,7 +43,7 @@ public class ArtistController {
 			return "artist.html";
 		}else {
 			//model.addAttribute("messaggioErrore", "Questo artista è già presente");
-			return "formNewArtist.html";
+			return "/admin/formNewArtist.html";
 		}
 	}
 	

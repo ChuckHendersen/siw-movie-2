@@ -3,6 +3,8 @@ package it.uniroma3.siw.controller;
 import java.io.IOException;
 import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,11 +16,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import it.uniroma3.siw.controller.validator.MovieValidator;
 import it.uniroma3.siw.model.Artist;
+import it.uniroma3.siw.model.Credentials;
 import it.uniroma3.siw.model.Movie;
 import it.uniroma3.siw.model.Picture;
 import it.uniroma3.siw.repository.ArtistRepository;
 import it.uniroma3.siw.repository.MovieRepository;
 import it.uniroma3.siw.repository.PictureRepository;
+import it.uniroma3.siw.service.CredentialsService;
+
 import javax.validation.Valid;
 
 @Controller
@@ -28,22 +33,40 @@ public class MovieController {
 	@Autowired ArtistRepository artistRepository;
 	@Autowired MovieValidator movieValidator;
 	@Autowired PictureRepository pictureRepository;
+	@Autowired
+	private CredentialsService credentialsService;
 
-	@GetMapping("/index")
+	@GetMapping("/")
 	public String index(Model model) {
-		return "index.html";
+		return indexGeneral(model);
 	}
 
+	@GetMapping("/index")
+	public String index1(Model model) {
+		return indexGeneral(model);
+	}
+	
+	private String indexGeneral(Model model) {
+		if(!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
+			UserDetails userDetails = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			Credentials credentials = credentialsService.getCredentials(userDetails.getUsername());
+			if (credentials.getRole().equals(Credentials.ADMIN_ROLE)) {
+				return "admin/indexAdmin.html";
+			}
+		}
+		return "index.html";
+	}
+	
 	@GetMapping("/indexMovie")
 	public String indexMovie() {
-		return "indexMovie.html";
+		return "/admin/indexMovie.html";
 	}
 
 	@GetMapping("/formNewMovie")
 	public String formNewMovie(Model model) {
 		model.addAttribute("movie", new Movie());
 		//model.addAttribute("picture", new Picture());
-		return "formNewMovie.html";
+		return "/admin/formNewMovie.html";
 	}
 
 	@PostMapping("/movies")
@@ -64,10 +87,10 @@ public class MovieController {
 			return "movie.html";
 		} else {
 			//model.addAttribute("messaggioErrore", "Questo film esiste già");
-			return "formNewMovie.html";
+			return "/admin/formNewMovie.html";
 		}
 	}
-	
+
 	@PostMapping("/uploadPhoto/{movie_id}")
 	public String uploadPhoto(@PathVariable("movie_id") Long movieId, @RequestParam("file") MultipartFile[] files, Model model) throws IOException {
 		// Prendere il film, caricare le nuove foto nell'array e poi mettere il movie nel model addattribute
@@ -119,7 +142,7 @@ public class MovieController {
 	@GetMapping("/manageMovies")
 	public String manageMovies(Model model) {
 		model.addAttribute("movies", movieRepository.findAll());
-		return "manageMovies.html";
+		return "/admin/manageMovies.html";
 	}
 
 	@GetMapping("formUpdateMovie/{id}")
@@ -132,7 +155,7 @@ public class MovieController {
 		}
 		//movie = this.movieRepository.findById(id).get();
 		model.addAttribute("movie", movie);
-		return "formUpdateMovie.html";
+		return "/admin/formUpdateMovie.html";
 	}
 
 	@GetMapping("addDirectorToMovie/{movie_id}")
@@ -145,7 +168,7 @@ public class MovieController {
 			model.addAttribute("artists", listaArtisti);
 			model.addAttribute("movie", movie);
 		}
-		return "directorsToAdd.html";
+		return "/admin/directorsToAdd.html";
 	}
 
 	@GetMapping("setDirectorToMovie/{director_id}/{movie_id}")
@@ -169,7 +192,7 @@ public class MovieController {
 				model.addAttribute("messaggioErrore", "Errore Generico");
 			}
 		}
-		return "formUpdateMovie.html";
+		return "/admin/formUpdateMovie.html";
 	}
 
 	@GetMapping("/updateActorsOfMovie/{movie_id}")
@@ -178,7 +201,7 @@ public class MovieController {
 		Set<Artist> setAttoriCheNonHannoRecitato = (Set<Artist>) artistRepository.findAllByListaFilmRecitatiIsNotContaining(movie);
 		model.addAttribute("movie", movie);
 		model.addAttribute("artists", setAttoriCheNonHannoRecitato);
-		return "actorsToAdd.html";
+		return "/admin/actorsToAdd.html";
 	}
 
 	@GetMapping("/setActorToMovie/{actor_id}/{movie_id}")
@@ -194,7 +217,7 @@ public class MovieController {
 		Set<Artist> setAttoriCheNonHannoRecitato = (Set<Artist>) artistRepository.findAllByListaFilmRecitatiIsNotContaining(movie);
 		model.addAttribute("movie", movie);
 		model.addAttribute("artists", setAttoriCheNonHannoRecitato);
-		return "actorsToAdd.html";
+		return "/admin/actorsToAdd.html";
 	}
 
 	@GetMapping("/deleteActorFromMovie/{actor_id}/{movie_id}")
@@ -206,6 +229,6 @@ public class MovieController {
 		Set<Artist> setAttoriCheNonHannoRecitato = (Set<Artist>) artistRepository.findAllByListaFilmRecitatiIsNotContaining(movie);
 		model.addAttribute("movie", movie);
 		model.addAttribute("artists", setAttoriCheNonHannoRecitato);
-		return "actorsToAdd.html";
+		return "/admin/actorsToAdd.html";
 	}
 }
