@@ -31,8 +31,8 @@ public class Movie {
 	@JoinColumn(name="movie_id")
 	private Set<News> news;
 	
-	@OneToMany
-	private Set<Picture> pictures;
+	@OneToMany(fetch = FetchType.LAZY)
+	private	Set<Picture> pictures;
 	
 	public Artist getDirector() {
 		return director;

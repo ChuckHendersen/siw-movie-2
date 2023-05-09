@@ -18,7 +18,7 @@
 		<ul>
 			<li th:each="movie:${movies}">
 				<div>
-					<a th:href="@{'/formUpdateMovie/'+${movie.id}}" th:text="${movie.title}"></a>
+					<a th:href="@{'/admin/formUpdateMovie/'+${movie.id}}" th:text="${movie.title}"></a>
 				</div>
 			</li>
 		</ul>

@@ -23,18 +23,18 @@ public class ArtistController {
 	@Autowired
 	private ArtistValidator artistValidator;
 	
-	@GetMapping("/indexArtist")
+	@GetMapping("/admin/indexArtist")
 	public String indexArtist() {
 		return "/admin/indexArtist.html";
 	}
 	
-	@GetMapping("/formNewArtist")
+	@GetMapping("/admin/formNewArtist")
 	public String formNewArtist(Model model) {
 		model.addAttribute("artist", new Artist());
 		return "/admin/formNewArtist.html";
 	}
 	
-	@PostMapping("/artists")
+	@PostMapping("/admin/artists")
 	public String newArtist(@Valid @ModelAttribute("artist") Artist artist, @RequestAttribute("file") MultipartFile[] files , BindingResult bindingResult, Model model) {
 		this.artistValidator.validate(artist, bindingResult);
 		if(!bindingResult.hasErrors()) {

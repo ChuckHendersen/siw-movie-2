@@ -35,7 +35,7 @@ public class Artist {
 	@ManyToMany(mappedBy="actors")
 	private List<Movie> listaFilmRecitati;
 	
-	@OneToOne
+	@OneToOne(fetch = FetchType.LAZY)
 	private Picture picture;
 	
 	public Long getId() {

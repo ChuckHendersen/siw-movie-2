@@ -14,7 +14,7 @@
 			<h1>
 				Aggiungi nuovo film
 			</h1>
-			<form th:action="@{/movies}" method="POST" th:object="${movie}" enctype="multipart/form-data">
+			<form th:action="@{/admin/movies}" method="POST" th:object="${movie}" enctype="multipart/form-data">
 				<div th:if="${#fields.hasGlobalErrors()}">
 					<p th:each="err:${#fields.globalErrors()}" th:text="${err}"></span>
 				</div>

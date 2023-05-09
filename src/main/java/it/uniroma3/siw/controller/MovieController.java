@@ -57,30 +57,27 @@ public class MovieController {
 		return "index.html";
 	}
 	
-	@GetMapping("/indexMovie")
+	@GetMapping("/admin/indexMovie")
 	public String indexMovie() {
 		return "/admin/indexMovie.html";
 	}
 
-	@GetMapping("/formNewMovie")
+	@GetMapping("/admin/formNewMovie")
 	public String formNewMovie(Model model) {
 		model.addAttribute("movie", new Movie());
 		//model.addAttribute("picture", new Picture());
 		return "/admin/formNewMovie.html";
 	}
-
-	@PostMapping("/movies")
-	public String newMovie(@Valid @ModelAttribute("movie") Movie movie, @RequestParam("file") MultipartFile[] file, BindingResult bindingResult, Model model) throws IOException {
+	
+	//RICORDARSI DI CAMBIARE I COSTRAINST DI JPA nella tabella di join fra movie e picture (non so come dirlo da java)
+	@PostMapping("/admin/movies")
+	public String newMovie(@Valid @ModelAttribute("movie") Movie movie, @RequestParam("file") MultipartFile[] files, BindingResult bindingResult, Model model) throws IOException {
 		this.movieValidator.validate(movie, bindingResult);
 		if(!bindingResult.hasErrors()) {
 			movie.setPictures(new HashSet<Picture>());
-			for(MultipartFile f:file) {
-				Picture picture = new Picture();
-				picture.setName(f.getResource().getFilename());
-				picture.setData(f.getBytes());
-				this.pictureRepository.save(picture);
-				//System.out.println(pictures[i]);
-				movie.getPictures().add(picture);
+			Picture[] pictures = this.savePictureIfNotExistsOrRetrieve(files);
+			for(Picture p:pictures) {
+				movie.getPictures().add(p);
 			}
 			this.movieRepository.save(movie);
 			model.addAttribute("movie", movie);
@@ -91,22 +88,17 @@ public class MovieController {
 		}
 	}
 
-	@PostMapping("/uploadPhoto/{movie_id}")
+	@PostMapping("/admin/uploadPhoto/{movie_id}")
 	public String uploadPhoto(@PathVariable("movie_id") Long movieId, @RequestParam("file") MultipartFile[] files, Model model) throws IOException {
 		// Prendere il film, caricare le nuove foto nell'array e poi mettere il movie nel model addattribute
 		Movie movie = movieRepository.findById(movieId).get();
-		Picture picture;
-		for(MultipartFile f:files) {
-			picture = new Picture();
-			picture.setName(f.getResource().getFilename());
-			picture.setData(f.getBytes());
-			this.pictureRepository.save(picture);
-			//System.out.println(pictures[i]);
-			movie.getPictures().add(picture);	
+		Picture[] pictures = this.savePictureIfNotExistsOrRetrieve(files);
+		for(Picture p:pictures) {
+			movie.getPictures().add(p);	
 		}
 		movieRepository.save(movie);
 		model.addAttribute("movie", movie);
-		return "formUpdateMovie.html";
+		return "/admin/formUpdateMovie.html";
 	}
 
 	@GetMapping("/movies")
@@ -139,13 +131,13 @@ public class MovieController {
 		return "foundMovies.html";
 	}
 
-	@GetMapping("/manageMovies")
+	@GetMapping("/admin/manageMovies")
 	public String manageMovies(Model model) {
 		model.addAttribute("movies", movieRepository.findAll());
 		return "/admin/manageMovies.html";
 	}
 
-	@GetMapping("formUpdateMovie/{id}")
+	@GetMapping("/admin/formUpdateMovie/{id}")
 	public String formUpdateMovie(@PathVariable Long id,Model model) {
 		Movie movie;
 		try {
@@ -158,7 +150,7 @@ public class MovieController {
 		return "/admin/formUpdateMovie.html";
 	}
 
-	@GetMapping("addDirectorToMovie/{movie_id}")
+	@GetMapping("/admin/addDirectorToMovie/{movie_id}")
 	public String addDirector(@PathVariable("movie_id") Long id, Model model) {
 		List<Artist> listaArtisti = (List<Artist>) this.artistRepository.findAll();
 		Movie movie = (Movie) this.movieRepository.findById(id).get();
@@ -171,7 +163,7 @@ public class MovieController {
 		return "/admin/directorsToAdd.html";
 	}
 
-	@GetMapping("setDirectorToMovie/{director_id}/{movie_id}")
+	@GetMapping("/admin/setDirectorToMovie/{director_id}/{movie_id}")
 	public String setDirectorToMovie(@PathVariable("director_id") Long director_id,@PathVariable("movie_id") Long movie_id, Model model) {
 		Artist director=null;
 		Movie movie = null;
@@ -195,7 +187,7 @@ public class MovieController {
 		return "/admin/formUpdateMovie.html";
 	}
 
-	@GetMapping("/updateActorsOfMovie/{movie_id}")
+	@GetMapping("/admin/updateActorsOfMovie/{movie_id}")
 	public String addActors(Model model, @PathVariable("movie_id") Long movie_id) {
 		Movie movie = movieRepository.findById(movie_id).get();
 		Set<Artist> setAttoriCheNonHannoRecitato = (Set<Artist>) artistRepository.findAllByListaFilmRecitatiIsNotContaining(movie);
@@ -204,7 +196,7 @@ public class MovieController {
 		return "/admin/actorsToAdd.html";
 	}
 
-	@GetMapping("/setActorToMovie/{actor_id}/{movie_id}")
+	@GetMapping("/admin/setActorToMovie/{actor_id}/{movie_id}")
 	public String setActorToMovie(Model model, @PathVariable("actor_id") Long actor_id, @PathVariable("movie_id") Long movie_id) {
 		Movie movie = movieRepository.findById(movie_id).get();
 		Artist actor = artistRepository.findById(actor_id).get();
@@ -220,7 +212,7 @@ public class MovieController {
 		return "/admin/actorsToAdd.html";
 	}
 
-	@GetMapping("/deleteActorFromMovie/{actor_id}/{movie_id}")
+	@GetMapping("/admin/deleteActorFromMovie/{actor_id}/{movie_id}")
 	public String deleteActorFromMovie(Model model, @PathVariable("actor_id") Long actor_id, @PathVariable("movie_id") Long movie_id) {
 		Movie movie = movieRepository.findById(movie_id).get();
 		Artist actor2beRemoved = artistRepository.findById(actor_id).get();
@@ -230,5 +222,25 @@ public class MovieController {
 		model.addAttribute("movie", movie);
 		model.addAttribute("artists", setAttoriCheNonHannoRecitato);
 		return "/admin/actorsToAdd.html";
+	}
+	
+	private Picture[] savePictureIfNotExistsOrRetrieve(MultipartFile[] files) throws IOException {
+		Picture[] pictures = new Picture[files.length];
+		int i=0;
+		for(MultipartFile f:files) {
+			Picture picture = new Picture();
+			picture.setName(f.getResource().getFilename());
+			picture.setData(f.getBytes());
+			if(!pictureRepository.existsByName(picture.getName())) {
+				System.out.println("la foto non esiste");
+				this.pictureRepository.save(picture);
+			}else {
+				System.out.println("La foto già esiste");
+				picture = this.pictureRepository.findByName(picture.getName());
+			}
+			pictures[i] = picture;
+			i++;	
+		}
+		return pictures;
 	}
 }

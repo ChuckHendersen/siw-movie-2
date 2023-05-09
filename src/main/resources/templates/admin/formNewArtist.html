@@ -14,7 +14,7 @@
 			Inserisci nuovo artista
 		</h1>
 		<div>
-			<form th:action="@{/artists}" th:method="POST" th:object="${artist}" enctype="multipart/form-data">
+			<form th:action="@{/admin/artists}" th:method="POST" th:object="${artist}" enctype="multipart/form-data">
 				<div th:if="${#fields.hasGlobalErrors()}">
 					<p th:each="err:${#fields.globalErrors()}" th:text="${err}"></span>
 				</div>

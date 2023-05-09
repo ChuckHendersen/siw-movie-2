@@ -18,7 +18,7 @@
 				<span>Anno: <span th:text="'('+${movie.year}+')'">2000</span></span>
 			</div>
 			<div>
-				<form th:action="@{'/uploadPhoto/'+${movie.id}}" method="POST" enctype="multipart/form-data">
+				<form th:action="@{'/admin/uploadPhoto/'+${movie.id}}" method="POST" enctype="multipart/form-data">
 					<div>
 						<span>Immagine<input type="file" name="file" multiple></input></span>
 					</div>
@@ -32,13 +32,13 @@
 				<img th:src="'data:image/jpeg;base64,'+${img.getImgData()}"></img>
 			</div>
 			<div>
-				<h3>Regista (<a th:href="@{'/addDirectorToMovie/'+${movie.id}}">modifica regista</a>)</h3>
+				<h3>Regista (<a th:href="@{'/admin/addDirectorToMovie/'+${movie.id}}">modifica regista</a>)</h3>
 			<span th:if="${movie.director}">
 				<a th:href="@{'/artists/'+${movie.director.id}}" th:text="${movie.director.name}+' '+${movie.director.surname}"></a>
 			</span>
 			</div>
 			<div>
-				<h3>Attori (<a th:href="@{'/updateActorsOfMovie/'+${movie.id}}">modifica attori</a>)</h3>
+				<h3>Attori (<a th:href="@{'/admin/updateActorsOfMovie/'+${movie.id}}">modifica attori</a>)</h3>
 				<div th:each="actor:${movie.actors}">
 					<a th:href="@{'/artists/'+${actor.id}}" th:text="${actor.name}+' '+${actor.surname}"></a>
 				</div>

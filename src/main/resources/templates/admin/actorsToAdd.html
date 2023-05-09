@@ -16,23 +16,23 @@
 			<div>
 				<h4>Attori Inseriti</h4>
 			</div>
-			<div th:if="${movie.actors.size == 0}"> Nessun attore inserito</div>
-			<div th:each="actor:${movie.actors}"><a th:href="@{'/deleteActorFromMovie/'+${actor.id}+'/'+${movie.id}}"></a>
-				<span th:text="${actor.name}+' '+${actor.surname}+' '"></span>(<a th:href="@{'/deleteActorFromMovie/'+${actor.id}+'/'+${movie.id}}">rimuovi attore</a>)
+			<div th:if="${movie.actors.size() == 0}"> Nessun attore inserito</div>
+			<div th:each="actor:${movie.actors}">
+				<span th:text="${actor.name}+' '+${actor.surname}+' '"></span>(<a th:href="@{'/admin/deleteActorFromMovie/'+${actor.id}+'/'+${movie.id}}">rimuovi attore</a>)
 			</div>
 		</div>
 		<div>
 			<div>
 				<h4>Artisti Disponibili</h4>
 			</div>
-			<div th:if="${artists.size == 0}"> Nessun artista disponibile</div>
+			<div th:if="${artists.size() == 0}"> Nessun artista disponibile</div>
 			<div th:each="artist:${artists}">
 				<span th:text="${artist.name}+' '+${artist.surname}+' '"></span>
-				(<a th:href="@{'/setActorToMovie/'+${artist.id}+'/'+${movie.id}}">aggiungi attore</a>)
+				(<a th:href="@{'/admin/setActorToMovie/'+${artist.id}+'/'+${movie.id}}">aggiungi attore</a>)
 			</div>
 		</div>
 		<div>
-			<form method="GET" th:action="@{'/formUpdateMovie/'+${movie.id}}">
+			<form method="GET" th:action="@{'/admin/formUpdateMovie/'+${movie.id}}">
 				<input type="submit" value="Fine modifica"></a>
 			</form>
 		</div>
