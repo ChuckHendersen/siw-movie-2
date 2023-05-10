@@ -19,6 +19,7 @@ import it.uniroma3.siw.model.Artist;
 import it.uniroma3.siw.model.Credentials;
 import it.uniroma3.siw.model.Movie;
 import it.uniroma3.siw.model.Picture;
+import it.uniroma3.siw.model.Review;
 import it.uniroma3.siw.repository.ArtistRepository;
 import it.uniroma3.siw.repository.MovieRepository;
 import it.uniroma3.siw.repository.PictureRepository;
@@ -33,8 +34,8 @@ public class MovieController {
 	@Autowired ArtistRepository artistRepository;
 	@Autowired MovieValidator movieValidator;
 	@Autowired PictureRepository pictureRepository;
-	@Autowired
-	private CredentialsService credentialsService;
+	
+	@Autowired private CredentialsService credentialsService;
 
 	@GetMapping("/")
 	public String index(Model model) {
@@ -47,11 +48,7 @@ public class MovieController {
 	}
 	
 	private String indexGeneral(Model model) {
-		if(!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
-			UserDetails userDetails = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			Credentials credentials = credentialsService.getCredentials(userDetails.getUsername());
-			model.addAttribute("credentials", credentials);
-		}
+		model.addAttribute("credentials", this.getCredentials());
 		return "index.html";
 	}
 	
@@ -107,6 +104,12 @@ public class MovieController {
 
 	@GetMapping("/movies/{id}")
 	public String getMovie(@PathVariable("id") Long id, Model model) {
+		Credentials credentials = this.getCredentials();
+		model.addAttribute("credentials", credentials);
+		if(credentials!=null) {
+			System.out.println("Utente loggato");
+			model.addAttribute("review", new Review());
+		}
 		Movie movie;
 		try {
 			movie = this.movieRepository.findById(id).get();
@@ -220,6 +223,15 @@ public class MovieController {
 		model.addAttribute("movie", movie);
 		model.addAttribute("artists", setAttoriCheNonHannoRecitato);
 		return "/admin/actorsToAdd.html";
+	}
+	
+	private Credentials getCredentials() {
+		if(!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
+			UserDetails userDetails = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			Credentials credentials = credentialsService.getCredentials(userDetails.getUsername());
+			return credentials;
+		}
+		return null;
 	}
 	
 	private Picture[] savePictureIfNotExistsOrRetrieve(MultipartFile[] files) throws IOException {

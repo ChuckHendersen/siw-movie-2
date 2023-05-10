@@ -26,6 +26,30 @@
 				<!-- Immagine-->
 				<img th:src="'data:image/jpeg;base64,'+${img.getImgData()}"></img>
 			</div>
+			<div th:if="${credentials}">
+			<div th:if="${!credentials.isGuest()}")>
+				<h3>Scrivi una recensione</h3>
+				<div>
+					<form th:action="@{/user/newReview}" th:object="${review}" method="POST">
+						<div>
+							<label>Titolo</label> <input type="text" required th:value="${review.title}"></input>
+						</div>
+						<div>
+							<label>Valutazione</label> <input type="number" required th:value="${review.vote}"></input>
+						</div>
+						<div>
+							<label>Testo</label> <input type="text" th:value="${review.text}"></input>
+						</div>
+						<div>
+							<span><button type="submit">Conferma</button></span>
+						</div>
+					</form>
+				</div>
+			</div>
+			</div>
+			<div>
+				<h2>Recensioni</h2>
+			</div>
 		</div>
 		<div th:unless="${movie}">Non esiste</div>
 	</body>

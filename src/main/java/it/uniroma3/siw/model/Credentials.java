@@ -62,5 +62,17 @@ public class Credentials {
 	public void setRole(String role) {
 		this.role = role;
 	}
+	
+	public boolean isGuest() {
+		return !this.role.equals(ADMIN_ROLE) && !this.role.equals(DEFAULT_ROLE);
+	}
+	
+	public boolean isDefault() {
+		return this.role.equals(DEFAULT_ROLE);
+	}
+	
+	public boolean isAdmin() {
+		return this.role.equals(ADMIN_ROLE);
+	}
 
 }

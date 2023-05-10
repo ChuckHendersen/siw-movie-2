@@ -8,9 +8,15 @@ public class Review {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+	
 	@NotBlank
-	private String name;
-	@NotNull
+	private String title;
+	
+	@Max(5)
+	@Min(1)
+	private Integer vote;
+	
+	@NotBlank
 	private String text;
 	
 	public Long getId() {
@@ -21,12 +27,12 @@ public class Review {
 		this.id = id;
 	}
 	
-	public String getName() {
-		return name;
+	public String getTitle() {
+		return title;
 	}
 	
-	public void setName(String name) {
-		this.name = name;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 	
 	public String getText() {
@@ -36,4 +42,14 @@ public class Review {
 	public void setText(String text) {
 		this.text = text;
 	}
+
+	public Integer getVote() {
+		return vote;
+	}
+
+	public void setVote(Integer vote) {
+		this.vote = vote;
+	}
+	
+	
 }

@@ -31,7 +31,8 @@ public class Movie {
 	@JoinColumn(name="movie_id")
 	private Set<Review> reviews;
 	
-	@ManyToMany(fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.LAZY)
+	@JoinColumn(name="movie_id")
 	private	Set<Picture> pictures;
 	
 	public Artist getDirector() {
@@ -88,11 +89,11 @@ public class Movie {
 		this.actors = actors;
 	}
 
-	public Set<Review> getNews() {
+	public Set<Review> getReviews() {
 		return reviews;
 	}
 
-	public void setNews(Set<Review> reviews) {
+	public void setReviews(Set<Review> reviews) {
 		this.reviews = reviews;
 	}
 
