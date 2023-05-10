@@ -31,7 +31,7 @@ public class LoginController {
 	public String showRegisterForm (Model model) {
 		model.addAttribute("user", new User());
 		model.addAttribute("credentials", new Credentials());
-		return "formRegisterUser";
+		return "formRegisterUser.html";
 	}
 	
 	@PostMapping("/register")
@@ -45,18 +45,18 @@ public class LoginController {
             credentials.setUser(user);
             credentialsService.saveCredentials(credentials);
             model.addAttribute("user", user);
-            return "registrationSuccessful";
+            return "registrationSuccessful.html";
         }
-        return "registerUser";
+        System.out.println(userBindingResult.getNestedPath());
+        System.out.println(credentialsBindingResult.getNestedPath());
+        return "formRegisterUser.html";
     }
 	
 	@GetMapping("/success")
     public String defaultAfterLogin(Model model) {
     	UserDetails userDetails = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     	Credentials credentials = credentialsService.getCredentials(userDetails.getUsername());
-    	if (credentials.getRole().equals(Credentials.ADMIN_ROLE)) {
-            return "admin/indexAdmin.html";
-        }
+    	model.addAttribute("credentials", credentials);
         return "index.html";
     }
 }

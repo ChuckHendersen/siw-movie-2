@@ -1,8 +1,8 @@
 package it.uniroma3.siw.repository;
 
 import org.springframework.data.repository.CrudRepository;
-import it.uniroma3.siw.model.News;
+import it.uniroma3.siw.model.Review;
 
-public interface NewsRepository extends CrudRepository<News,Long> {
+public interface ReviewRepository extends CrudRepository<Review,Long> {
 	//fare repositiories
 }

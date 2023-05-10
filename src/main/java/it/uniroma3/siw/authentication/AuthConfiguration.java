@@ -14,7 +14,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.sql.DataSource;
 
-import static it.uniroma3.siw.model.Credentials.ADMIN_ROLE;
+import static it.uniroma3.siw.model.Credentials.*;
 //import static it.uniroma3.siw.model.Credentials.DEFAULT_ROLE;
 
 @Configuration
@@ -42,6 +42,8 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
 		// chiunque (autenticato o no) può mandare richieste POST al punto di accesso per login e register 
 		.antMatchers(HttpMethod.POST, "/login", "/register").permitAll()
 		// solo gli utenti autenticati con ruolo ADMIN possono accedere a risorse con path /admin/**
+		.antMatchers(HttpMethod.GET, "/user/**").hasAnyAuthority(DEFAULT_ROLE)
+		.antMatchers(HttpMethod.POST, "/user/**").hasAnyAuthority(DEFAULT_ROLE)
 		.antMatchers(HttpMethod.GET, "/admin/**").hasAnyAuthority(ADMIN_ROLE)
 		.antMatchers(HttpMethod.POST, "/admin/**").hasAnyAuthority(ADMIN_ROLE)
 		// tutti gli utenti autenticati possono accere alle pagine rimanenti 

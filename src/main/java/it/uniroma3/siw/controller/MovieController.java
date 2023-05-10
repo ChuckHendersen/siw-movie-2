@@ -50,9 +50,7 @@ public class MovieController {
 		if(!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
 			UserDetails userDetails = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			Credentials credentials = credentialsService.getCredentials(userDetails.getUsername());
-			if (credentials.getRole().equals(Credentials.ADMIN_ROLE)) {
-				return "admin/indexAdmin.html";
-			}
+			model.addAttribute("credentials", credentials);
 		}
 		return "index.html";
 	}
@@ -228,15 +226,16 @@ public class MovieController {
 		Picture[] pictures = new Picture[files.length];
 		int i=0;
 		for(MultipartFile f:files) {
-			Picture picture = new Picture();
-			picture.setName(f.getResource().getFilename());
-			picture.setData(f.getBytes());
-			if(!pictureRepository.existsByName(picture.getName())) {
+			Picture picture;
+			if(!pictureRepository.existsByName(f.getResource().getFilename())) {
 				System.out.println("la foto non esiste");
+				picture = new Picture();
+				picture.setName(f.getResource().getFilename());
+				picture.setData(f.getBytes());
 				this.pictureRepository.save(picture);
 			}else {
 				System.out.println("La foto già esiste");
-				picture = this.pictureRepository.findByName(picture.getName());
+				picture = this.pictureRepository.findByName(f.getResource().getFilename());
 			}
 			pictures[i] = picture;
 			i++;	
