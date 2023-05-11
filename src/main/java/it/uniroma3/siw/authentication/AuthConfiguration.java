@@ -11,11 +11,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
 import javax.sql.DataSource;
-
-import static it.uniroma3.siw.model.Credentials.*;
-//import static it.uniroma3.siw.model.Credentials.DEFAULT_ROLE;
+import static it.uniroma3.siw.model.Credentials.*;//import static it.uniroma3.siw.model.Credentials.DEFAULT_ROLE;
 
 @Configuration
 @EnableWebSecurity
@@ -25,8 +22,7 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
 	 * La sorgente dati (che contiene le credenziali) è 
 	 * iniettata automaticamente
 	 */
-	@Autowired
-	DataSource datasource;
+	@Autowired DataSource datasource;
 
 	/**
 	 * Questo metodo contiene le impostazioni della configurazione
@@ -41,15 +37,12 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
 		.antMatchers(HttpMethod.GET, "/", "/index", "/login", "/register", "/css/**", "/images/**", "favicon.ico", "/movies", "/movies/**", "/artists", "/artists/**", "/formSearchMovies").permitAll()
 		// chiunque (autenticato o no) può mandare richieste POST al punto di accesso per login e register 
 		.antMatchers(HttpMethod.POST, "/login", "/register", "/searchMovies").permitAll()
-		.antMatchers(HttpMethod.GET, "/user/**").hasAnyAuthority(DEFAULT_ROLE)
-		.antMatchers(HttpMethod.POST, "/user/**").hasAnyAuthority(DEFAULT_ROLE)
+		.antMatchers("/user/**").hasAnyAuthority(ROLE_DEFAULT)
 		// solo gli utenti autenticati con ruolo ADMIN possono accedere a risorse con path /admin/**
-		.antMatchers(HttpMethod.GET, "/admin/**", "/user/**").hasAnyAuthority(ADMIN_ROLE)
-		.antMatchers(HttpMethod.POST, "/admin/**", "/user/**").hasAnyAuthority(ADMIN_ROLE)
+		.antMatchers("/admin/**", "/user/**").hasAnyAuthority(ROLE_ADMIN)
 		// tutti gli utenti autenticati possono accere alle pagine rimanenti 
 		.anyRequest().authenticated()
 		.and().exceptionHandling().accessDeniedPage("/index")
-
 		// LOGIN: qui definiamo come è gestita l'autenticazione
 		// usiamo il protocollo formlogin 
 		.and().formLogin()
@@ -57,7 +50,6 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
 		.loginPage("/login")
 		// se il login ha successo, si viene rediretti al path /default
 		.defaultSuccessUrl("/success", true)
-
 		// LOGOUT: qui definiamo il logout
 		.and()
 		.logout()

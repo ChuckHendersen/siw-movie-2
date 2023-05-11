@@ -23,6 +23,7 @@ import it.uniroma3.siw.model.Review;
 import it.uniroma3.siw.repository.ArtistRepository;
 import it.uniroma3.siw.repository.MovieRepository;
 import it.uniroma3.siw.repository.PictureRepository;
+import it.uniroma3.siw.repository.UserRepository;
 import it.uniroma3.siw.service.CredentialsService;
 
 import javax.validation.Valid;
@@ -34,8 +35,8 @@ public class MovieController {
 	@Autowired ArtistRepository artistRepository;
 	@Autowired MovieValidator movieValidator;
 	@Autowired PictureRepository pictureRepository;
-	
-	@Autowired private CredentialsService credentialsService;
+	@Autowired UserRepository userRepository;
+	@Autowired CredentialsService credentialsService;
 
 	@GetMapping("/")
 	public String index(Model model) {
@@ -74,9 +75,8 @@ public class MovieController {
 			for(Picture p:pictures) {
 				movie.getPictures().add(p);
 			}
-			this.movieRepository.save(movie);
-			model.addAttribute("movie", movie);
-			return "movie.html";
+			movie = this.movieRepository.save(movie);
+			return "redirect:/movies/"+movie.getId();
 		} else {
 			//model.addAttribute("messaggioErrore", "Questo film esiste già");
 			return "/admin/formNewMovie.html";
@@ -107,7 +107,7 @@ public class MovieController {
 		Credentials credentials = this.getCredentials();
 		model.addAttribute("credentials", credentials);
 		if(credentials!=null) {
-			System.out.println("Utente loggato");
+			//System.out.println("Utente loggato");
 			model.addAttribute("review", new Review());
 		}
 		Movie movie;

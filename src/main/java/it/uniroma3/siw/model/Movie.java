@@ -27,12 +27,10 @@ public class Movie {
 	@ManyToMany
 	private Set<Artist> actors;
 	
-	@OneToMany(fetch = FetchType.LAZY)
-	@JoinColumn(name="movie_id")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "reviewedMovie")
 	private Set<Review> reviews;
 	
-	@OneToMany(fetch = FetchType.LAZY)
-	@JoinColumn(name="movie_id")
+	@ManyToMany(fetch = FetchType.LAZY)
 	private	Set<Picture> pictures;
 	
 	public Artist getDirector() {
@@ -103,5 +101,9 @@ public class Movie {
 
 	public void setPictures(Set<Picture> pictures) {
 		this.pictures = pictures;
+	}
+	
+	public boolean areThereAnyReviews() {
+		return reviews.size()>0;
 	}
 }

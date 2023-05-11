@@ -1,9 +1,13 @@
 package it.uniroma3.siw.model;
 
+import java.util.Objects;
+
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
 @Entity
+// Uno User può scrivere una sola recensione per film
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = {"reviewed_movie_id", "author_id"}) })
 public class Review {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,28 +23,26 @@ public class Review {
 	@NotBlank
 	private String text;
 	
+	@ManyToOne
+	private Movie reviewedMovie;
+	
+	@ManyToOne
+	private User author;
+
 	public Long getId() {
 		return id;
 	}
-	
+
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
 	public String getTitle() {
 		return title;
 	}
-	
+
 	public void setTitle(String title) {
 		this.title = title;
-	}
-	
-	public String getText() {
-		return text;
-	}
-	
-	public void setText(String text) {
-		this.text = text;
 	}
 
 	public Integer getVote() {
@@ -50,6 +52,43 @@ public class Review {
 	public void setVote(Integer vote) {
 		this.vote = vote;
 	}
-	
-	
+
+	public String getText() {
+		return text;
+	}
+
+	public void setText(String text) {
+		this.text = text;
+	}
+
+	public Movie getReviewedMovie() {
+		return reviewedMovie;
+	}
+
+	public void setReviewedMovie(Movie reviewedMovie) {
+		this.reviewedMovie = reviewedMovie;
+	}
+
+	public User getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(User author) {
+		this.author = author;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(author, reviewedMovie);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!(obj instanceof Review))
+			return false;
+		Review other = (Review) obj;
+		return Objects.equals(author, other.author) && Objects.equals(reviewedMovie, other.reviewedMovie);
+	}
 }

@@ -10,8 +10,8 @@ import javax.persistence.OneToOne;
 @Entity
 public class Credentials {
 
-	public static final String DEFAULT_ROLE = "DEFAULT";
-	public static final String ADMIN_ROLE = "ADMIN";
+	public static final String ROLE_DEFAULT = "DEFAULT";
+	public static final String ROLE_ADMIN = "ADMIN";
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -64,15 +64,15 @@ public class Credentials {
 	}
 	
 	public boolean isGuest() {
-		return !this.role.equals(ADMIN_ROLE) && !this.role.equals(DEFAULT_ROLE);
+		return !this.role.equals(ROLE_ADMIN) && !this.role.equals(ROLE_DEFAULT);
 	}
 	
 	public boolean isDefault() {
-		return this.role.equals(DEFAULT_ROLE);
+		return this.role.equals(ROLE_DEFAULT);
 	}
 	
 	public boolean isAdmin() {
-		return this.role.equals(ADMIN_ROLE);
+		return this.role.equals(ROLE_ADMIN);
 	}
 
 }

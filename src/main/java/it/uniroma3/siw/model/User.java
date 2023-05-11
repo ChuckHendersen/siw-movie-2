@@ -3,10 +3,10 @@ package it.uniroma3.siw.model;
 import java.util.Objects;
 import java.util.*;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -21,8 +21,7 @@ public class User {
 	private String surname;
 	private String email;
 	
-	@OneToMany
-	@JoinColumn(name="users_id")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "author")
 	private Set<Review> reviews;
 
 	public User() {

@@ -23,15 +23,6 @@
 			<a href="/formSearchMovies">Cerca film per anno</a>
 		</div>
 		<div th:if="${credentials}">
-			<div th:if="${!credentials.isGuest()}">
-				<h1>Operazioni Utente</h1>
-				<div>
-					<a href="/user/updateReview"> Modifica recensione</a>
-				</div>
-				<div>
-					<a href="/user/formNewReview"> Scrivi recensione</a>
-				</div>
-			</div>
 			<div th:if="${credentials.isAdmin()}">
 				<h1>Operazioni Amministratore</h1>
 				<div>
