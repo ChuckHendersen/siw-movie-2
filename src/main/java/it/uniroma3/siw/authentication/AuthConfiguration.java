@@ -37,9 +37,9 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
 		.antMatchers(HttpMethod.GET, "/", "/index", "/login", "/register", "/css/**", "/images/**", "favicon.ico", "/movies", "/movies/**", "/artists", "/artists/**", "/formSearchMovies").permitAll()
 		// chiunque (autenticato o no) può mandare richieste POST al punto di accesso per login e register 
 		.antMatchers(HttpMethod.POST, "/login", "/register", "/searchMovies").permitAll()
-		.antMatchers("/user/**").hasAnyAuthority(ROLE_DEFAULT)
+		.antMatchers("/user/**").hasAnyAuthority(ROLE_DEFAULT,ROLE_ADMIN)
 		// solo gli utenti autenticati con ruolo ADMIN possono accedere a risorse con path /admin/**
-		.antMatchers("/admin/**", "/user/**").hasAnyAuthority(ROLE_ADMIN)
+		.antMatchers("/admin/**").hasAnyAuthority(ROLE_ADMIN)
 		// tutti gli utenti autenticati possono accere alle pagine rimanenti 
 		.anyRequest().authenticated()
 		.and().exceptionHandling().accessDeniedPage("/index")

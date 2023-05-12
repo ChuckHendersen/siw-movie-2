@@ -26,7 +26,7 @@ public class Review {
 	@ManyToOne
 	private Movie reviewedMovie;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	private User author;
 
 	public Long getId() {

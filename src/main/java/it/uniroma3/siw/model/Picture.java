@@ -55,11 +55,8 @@ public class Picture {
 	public String toString() {
 		StringBuilder s = new StringBuilder();
 		
-		s.append("Picture: [");
-		for(byte b:data) {
-			s.append(b);
-		}
-		s.append("]");
+		s.append("Picture size-> ");
+		s.append(this.data.length);
 		return s.toString();
 	}
 }
