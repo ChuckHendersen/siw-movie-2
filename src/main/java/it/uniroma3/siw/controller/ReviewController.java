@@ -30,13 +30,13 @@ public class ReviewController {
 
 	@Autowired
 	private ReviewValidator reviewValidator;
-
+	
 	@GetMapping("/user/formNewReview")
 	public String formNewReview(Model model) {
 		model.addAttribute("review", new Review());
 		return "/user/formNewReview.html";
 	}
-
+	
 	@PostMapping("/user/newReview/{movie_id}/{user_id}")
 	public String newReview(@Valid @ModelAttribute("review") Review review,
 			BindingResult bindingResult,
@@ -44,15 +44,15 @@ public class ReviewController {
 			@PathVariable("user_id") Long userId,
 			Model model) {
 		//Devo recuperare lo user
+		Movie movie = this.movieRepository.findById(movieId).get();
+		User author = this.userRepository.findById(userId).get();
+		movie.getReviews().add(review);
+		author.getReviews().add(review);
+		review.setReviewedMovie(movie);
+		review.setAuthor(author);
 		this.reviewValidator.validate(review, bindingResult);
 		System.out.println("movie_id: "+movieId);
 		if(!bindingResult.hasErrors()) {
-			Movie movie = this.movieRepository.findById(movieId).get();
-			User author = this.userRepository.findById(userId).get();
-			movie.getReviews().add(review);
-			author.getReviews().add(review);
-			review.setReviewedMovie(movie);
-			review.setAuthor(author);
 			this.reviewRepository.save(review);
 			this.movieRepository.save(movie);
 			this.userRepository.save(author);

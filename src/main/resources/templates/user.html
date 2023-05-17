@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Informazioni Utente - SiW Movie</title>
+		<meta charset="UTF-8" />
+		<link th:replace="fragments/header.html :: stylesheetFragment"/>
+	</head>
+	<body>
+		<header th:replace="fragments/loginHeader.html :: headerLogin"></header>
+		<h1>Informazioni utente</h1>
+		<div>
+			<h2 th:text="${user.credentials.username}">Username</h2>
+		</div>
+		<div>
+			<h2 th:text="${user.name}+' '+${user.surname}">Nome cognome</h2>
+		</div>
+		<div th:if="${user.areThereAnyReviews()}">
+			<h3>Recensioni scritte</h3>
+			<div th:each="review : ${user.reviews}">
+				<a th:href="'/reviews/'+${review.id}">
+					<div>
+						<span th:text="'Titolo: '+${review.title}">Titolo: titolo</span><br>
+						<span th:text="'Voto: '+${review.vote}">Voto: titolo</span><br>
+					</div>
+				</a>
+				<a th:href="'/movies/'+${review.reviewedMovie.id}" th:text="'Film recensito: '+${review.reviewedMovie.title}">Film recensito: titolo film</a><br>
+			</div>
+		</div>
+		<div th:unless="${user.areThereAnyReviews()}">
+			<h3>Non ha scritto nessuna recensione</h3>
+		</div>
+	</body>
+</html>

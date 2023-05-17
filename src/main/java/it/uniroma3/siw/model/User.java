@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -23,6 +24,9 @@ public class User {
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "author")
 	private Set<Review> reviews;
+	
+	@OneToOne(mappedBy = "user")
+	private Credentials credentials;
 
 	public User() {
 		this.reviews = new HashSet<>();
@@ -67,6 +71,18 @@ public class User {
 		this.reviews = reviews;
 	}
 
+	public Credentials getCredentials() {
+		return credentials;
+	}
+
+	public void setCredentials(Credentials credentials) {
+		this.credentials = credentials;
+	}
+
+	public boolean areThereAnyReviews() {
+		return reviews.size()>0;
+	}
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(email);

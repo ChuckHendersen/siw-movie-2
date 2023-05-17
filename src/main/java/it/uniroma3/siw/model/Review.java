@@ -23,7 +23,7 @@ public class Review {
 	@NotBlank
 	private String text;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	private Movie reviewedMovie;
 	
 	@ManyToOne(fetch = FetchType.LAZY)

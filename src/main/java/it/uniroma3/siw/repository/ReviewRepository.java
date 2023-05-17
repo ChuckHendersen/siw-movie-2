@@ -8,4 +8,6 @@ import it.uniroma3.siw.model.User;
 public interface ReviewRepository extends CrudRepository<Review,Long> {
 	//fare repositiories
 	public boolean existsByReviewedMovieAndAuthor(Movie reviewedMovie, User author);
+	
+	//public List<Review> findByReviewedMovie(Movie reviewedMovie);
 }

@@ -8,31 +8,31 @@ import javax.validation.constraints.*;
 
 @Entity
 public class Movie {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
+
 	@NotNull
 	@Min(1900)
 	@Max(2023)
 	private Integer year;
-	
+
 	@NotBlank
 	private String title;
-	
+
 	@ManyToOne
 	private Artist director;
-	
+
 	@ManyToMany
 	private Set<Artist> actors;
-	
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "reviewedMovie")
 	private Set<Review> reviews;
-	
+
 	@ManyToMany(fetch = FetchType.LAZY)
 	private	Set<Picture> pictures;
-	
+
 	public Artist getDirector() {
 		return director;
 	}
@@ -44,31 +44,31 @@ public class Movie {
 	public String getTitle() {
 		return title;
 	}
-	
+
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
 	public Integer getYear() {
 		return year;
 	}
-	
+
 	public void setYear(Integer year) {
 		this.year = year;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(title, year);
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -101,6 +101,21 @@ public class Movie {
 
 	public void setPictures(Set<Picture> pictures) {
 		this.pictures = pictures;
+	}
+
+	public float getAverageVote() {
+		float risultato=0;
+		if(this.reviews.size()>0) {
+			for(Review r: this.reviews) {
+				risultato = risultato + r.getVote();
+			}
+			risultato = risultato/this.reviews.size();
+			//flooring
+			int aux = (int) (risultato*10);
+			risultato = (float) aux/10f;
+		}
+		return risultato;
+		
 	}
 	
 	public boolean areThereAnyReviews() {

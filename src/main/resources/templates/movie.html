@@ -14,6 +14,12 @@
 			<div>
 				<h1 th:text="${movie.title}">Titolo Film</h1>
 			</div>
+			<div th:if="${movie.areThereAnyReviews()}">
+				<h2 th:text="'Valutazione media: '+${movie.getAverageVote()}">Valutazione media: 4.5</h2>
+			</div>
+			<div th:unless="${movie.areThereAnyReviews()}">
+				<h2>Valutazione media: nessuna recensione</h2>
+			</div>
 			<div>
 				<span>Anno: <span th:text="'('+${movie.year}+')'">2000</span></span>
 			</div>
@@ -24,7 +30,7 @@
 			</div>
 			<div th:each="img : ${movie.pictures}">
 				<!-- Immagine-->
-				<img th:src="'data:image/jpeg;base64,'+${img.getImgData()}"></img>
+				<img th:src="'data:image;base64,'+${img.getImgData()}"></img>
 			</div>
 			<div th:if="${credentials}">
 				<div th:if="${!credentials.isGuest()}">
@@ -51,6 +57,7 @@
 				<h2>Recensioni</h2>
 				<div th:if="${movie.areThereAnyReviews()}">
 					<div th:each = "review : ${movie.reviews}">
+						<span><a th:href="'/users/'+${review.author.id}" th:text="'Autore: '+${review.author.name}+' '+${review.author.surname}"/></span><br>
 						<span th:text="'Titolo: '+${review.title}"></span><br>
 						<span th:text="'Voto: '+${review.vote}"></span><br>
 						<span th:text="'Testo: '+${review.text}"></span><br>
