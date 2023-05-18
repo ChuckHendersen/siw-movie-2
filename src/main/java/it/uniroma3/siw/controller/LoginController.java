@@ -34,14 +34,14 @@ public class LoginController {
 	@GetMapping("/register") 
 	public String showRegisterForm (Model model) {
 		model.addAttribute("user", new User());
-		model.addAttribute("credentials", new Credentials());
+		model.addAttribute("newCredentials", new Credentials());
 		return "formRegisterUser.html";
 	}
 	
 	@PostMapping("/register")
     public String registerUser(@Valid @ModelAttribute("user") User user, 
     			BindingResult userBindingResult, 
-    			@Valid @ModelAttribute("credentials") Credentials credentials,
+    			@Valid @ModelAttribute("newCredentials") Credentials credentials,
                 BindingResult credentialsBindingResult,
                 Model model) {
         // se user e credential hanno entrambi contenuti validi, memorizza User e the Credentials nel DB

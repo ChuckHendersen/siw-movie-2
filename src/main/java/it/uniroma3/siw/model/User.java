@@ -82,7 +82,7 @@ public class User {
 	public boolean areThereAnyReviews() {
 		return reviews.size()>0;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(email);
@@ -97,5 +97,4 @@ public class User {
 		User other = (User) obj;
 		return Objects.equals(email, other.email);
 	}
-	
 }

@@ -10,7 +10,7 @@
 				<span th:text="${userDetails.username}"></span>
 				<a href="/logout">Logout</a>
 			</div>
-		<div th:unless="${user}">
+		<div th:unless="${userDetails}">
 			<a href="/login">Login</a>
 		</div>
 		</header>

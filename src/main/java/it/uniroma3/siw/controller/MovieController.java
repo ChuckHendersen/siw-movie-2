@@ -49,7 +49,7 @@ public class MovieController {
 	}
 	
 	private String indexGeneral(Model model) {
-		model.addAttribute("credentials", this.getCredentials());
+		//model.addAttribute("credentials", this.getCredentials());
 		return "index.html";
 	}
 	

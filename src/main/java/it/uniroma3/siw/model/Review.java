@@ -77,6 +77,10 @@ public class Review {
 		this.author = author;
 	}
 
+	public boolean isAuthor(User user) {
+		return author.equals(user);
+	}
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(author, reviewedMovie);
