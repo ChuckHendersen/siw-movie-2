@@ -35,18 +35,18 @@ public class AuthConfiguration {
 		.usersByUsernameQuery("SELECT username, password, 1 as enabled FROM credentials WHERE username=?");
 	}
 
-	@Bean
-	public PasswordEncoder passwordEncoder(){
+    @Bean
+    PasswordEncoder passwordEncoder(){
 		return new BCryptPasswordEncoder();
 	}
 
-	@Bean
-	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception{
+    @Bean
+    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception{
 		return authenticationConfiguration.getAuthenticationManager();
 	}
 
-	@Bean
-	protected SecurityFilterChain configure(final HttpSecurity httpSecurity) throws Exception{
+    @Bean
+    SecurityFilterChain configure(final HttpSecurity httpSecurity) throws Exception{
 		httpSecurity
 		.csrf().and().cors().disable()
 		.authorizeHttpRequests()
