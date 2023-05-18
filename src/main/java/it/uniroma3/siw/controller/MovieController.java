@@ -26,7 +26,7 @@ import it.uniroma3.siw.repository.PictureRepository;
 import it.uniroma3.siw.repository.UserRepository;
 import it.uniroma3.siw.service.CredentialsService;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 @Controller
 public class MovieController {

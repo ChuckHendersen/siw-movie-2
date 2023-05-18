@@ -3,9 +3,8 @@ package it.uniroma3.siw.model;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity

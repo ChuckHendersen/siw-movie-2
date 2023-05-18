@@ -2,8 +2,8 @@ package it.uniroma3.siw.model;
 
 import java.util.Objects;
 import java.util.Set;
-import javax.persistence.*;
-import javax.validation.constraints.*;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 
 @Entity

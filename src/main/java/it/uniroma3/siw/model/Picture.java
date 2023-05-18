@@ -3,7 +3,7 @@ package it.uniroma3.siw.model;
 import java.util.Base64;
 import java.util.Objects;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 public class Picture {
