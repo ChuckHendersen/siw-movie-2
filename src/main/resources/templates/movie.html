@@ -58,10 +58,11 @@
 				<div th:if="${movie.areThereAnyReviews()}">
 					<div th:each = "review : ${movie.reviews}">
 						<span><a th:href="'/users/'+${review.author.id}" th:text="'Autore: '+${review.author.name}+' '+${review.author.surname}"/></span><br>
-						<span th:text="'Titolo: '+${review.title}"></span><br>
-						<span th:text="'Voto: '+${review.vote}"></span><br>
-						<span th:text="'Testo: '+${review.text}"></span><br>
-						<span th:if="${credentials != null && credentials.isAdmin()}"><a th:href="'/reviews/'+${review.getId()}">Gestisci recensione</a></span>
+						<a th:href="'/reviews/'+${review.id}">
+							<span th:text="'Titolo: '+${review.title}"></span><br>
+							<span th:text="'Voto: '+${review.vote}"></span><br>
+							<span th:text="'Testo: '+${review.text}"></span><br>
+						</a>
 					</div>
 				</div>
 				<div th:unless="${movie.areThereAnyReviews()}">

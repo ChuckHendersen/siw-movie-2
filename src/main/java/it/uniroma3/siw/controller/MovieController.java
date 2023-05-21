@@ -239,16 +239,17 @@ public class MovieController {
 		int i=0;
 		for(MultipartFile f:files) {
 			Picture picture;
-			if(!pictureRepository.existsByName(f.getResource().getFilename())) {
+			if(true) {
 				//System.out.println("la foto non esiste");
 				picture = new Picture();
 				picture.setName(f.getResource().getFilename());
 				picture.setData(f.getBytes());
 				this.pictureRepository.save(picture);
-			}else {
-				System.out.println("La foto già esiste");
-				picture = this.pictureRepository.findByName(f.getResource().getFilename());
 			}
+//			}else {
+//				System.out.println("La foto già esiste");
+//				picture = this.pictureRepository.findByName(f.getResource().getFilename());
+//			}
 			pictures[i] = picture;
 			i++;	
 		}
