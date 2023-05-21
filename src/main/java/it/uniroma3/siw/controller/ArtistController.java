@@ -81,7 +81,9 @@ public class ArtistController {
 		}
 		return "artist.html";
 	}
-
+	
+	//Implementare cancellazione artista
+	
 	private Picture savePictureIfNotExistsOrRetrieve(MultipartFile f) throws IOException {
 		Picture picture = new Picture();
 		//System.out.println("la foto non esiste");

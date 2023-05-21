@@ -23,6 +23,7 @@ import it.uniroma3.siw.model.Review;
 import it.uniroma3.siw.repository.ArtistRepository;
 import it.uniroma3.siw.repository.MovieRepository;
 import it.uniroma3.siw.repository.PictureRepository;
+import it.uniroma3.siw.repository.ReviewRepository;
 import it.uniroma3.siw.repository.UserRepository;
 import it.uniroma3.siw.service.CredentialsService;
 
@@ -33,6 +34,7 @@ public class MovieController {
 
 	@Autowired MovieRepository movieRepository;
 	@Autowired ArtistRepository artistRepository;
+	@Autowired private ReviewRepository reviewRepository;
 	@Autowired MovieValidator movieValidator;
 	@Autowired PictureRepository pictureRepository;
 	@Autowired UserRepository userRepository;
@@ -223,6 +225,53 @@ public class MovieController {
 		model.addAttribute("movie", movie);
 		model.addAttribute("artists", setAttoriCheNonHannoRecitato);
 		return "/admin/actorsToAdd.html";
+	}
+	
+	@GetMapping("/admin/moviesToDeleteIndex")
+	public String moviesToDeleteIndex(Model model) {
+		Iterable<Movie> movies = this.movieRepository.findAll();
+		model.addAttribute("movies", movies);
+		return "/admin/movieToDeleteIndex.html";
+	}
+	
+	@GetMapping("/admin/confirmMovieDeletion/{movie_id}")
+	public String confirmMovieDeletion(@PathVariable("movie_id") Long movieId, Model model) {
+		Movie movie = this.movieRepository.findById(movieId).orElse(null);
+		if(movie != null) {
+			model.addAttribute("movie", movie);
+			return "/admin/confirmMovieDeletion.html";
+		}else {
+			return "movieError.html";
+		}
+	}
+	
+	// DA TESTARE
+	@GetMapping("/admin/deleteMovie/{movie_id}")
+	public String deleteMovie(@PathVariable("movie_id") Long movieId, Model model) {
+		Movie movieToBeDeleted = this.movieRepository.findById(movieId).orElse(null);
+		if(movieToBeDeleted != null) {
+			Set<Review> reviews = movieToBeDeleted.getReviews();
+			Set<Artist> actors = movieToBeDeleted.getActors();
+			Artist director = movieToBeDeleted.getDirector();
+			Set<Picture> pictures = movieToBeDeleted.getPictures();
+			movieToBeDeleted.setReviews(null);
+			movieToBeDeleted.setActors(null);
+			movieToBeDeleted.setDirector(null);
+			movieToBeDeleted.setPictures(null);
+			this.movieRepository.save(movieToBeDeleted);
+			//Eliminiamo le recensioni
+			for(Review r : reviews) {
+				r.getAuthor().getReviews().remove(r);
+				r.setAuthor(null);
+				r.setReviewedMovie(null);
+				this.userRepository.save(r.getAuthor());
+				this.reviewRepository.delete(r);
+			}
+			
+			// ripetere il processo per tutti quanti
+			// sono troppo stanco per continuare
+		}
+		return "/admin/movieToDeleteIndex.html";
 	}
 	
 	private Credentials getCredentials() {
