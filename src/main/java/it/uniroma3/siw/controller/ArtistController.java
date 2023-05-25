@@ -58,6 +58,28 @@ public class ArtistController {
 			return "/admin/formNewArtist.html";
 		}
 	}
+	
+	@GetMapping("/admin/artistToDeleteIndex")
+	public String artistToDeleteIndex(Model model) {
+		model.addAttribute("artists",this.artistRepository.findAll());
+		return "/admin/artistToDeleteIndex.html";
+	}
+	
+	@GetMapping("/admin/confirmArtistDeletion/{artist_id}")
+	public String confirmArtistDeletion(@PathVariable("artist_id") Long artistId, Model model) {
+		Artist artist = this.artistRepository.findById(artistId).orElse(null);
+		if(artist==null) {
+			return "artistError.html";
+		}else {
+			model.addAttribute("artist", artist);
+			return "/admin/confirmArtistDeletion.html";
+		}
+	}
+	
+	@GetMapping("/admin/deleteArtist/{artist_id}")
+	public String deleteArtist(@PathVariable("artist_id") Long artistId, Model model) {
+		return "redirect:/admin/artistToDeleteIndex";
+	}
 
 	@GetMapping("/artists")
 	public String artists(Model model) {
@@ -81,17 +103,18 @@ public class ArtistController {
 		}
 		return "artist.html";
 	}
-	
-	//Implementare cancellazione artista
-	
-	private Picture savePictureIfNotExistsOrRetrieve(MultipartFile f) throws IOException {
-		Picture picture = new Picture();
-		//System.out.println("la foto non esiste");
-		picture = new Picture();
-		picture.setName(f.getResource().getFilename());
-		picture.setData(f.getBytes());
-		this.pictureRepository.save(picture);	
-		return picture;
-	}
 
+	//Implementare cancellazione artista
+	private Picture savePictureIfNotExistsOrRetrieve(MultipartFile f) throws IOException {
+		Picture picture;
+		if(f.getSize()!=0) {
+			//System.out.println("la foto non esiste");
+			picture = new Picture();
+			picture.setName(f.getResource().getFilename());
+			picture.setData(f.getBytes());
+			return this.pictureRepository.save(picture);
+		}else {
+			return null;
+		}
+	}
 }

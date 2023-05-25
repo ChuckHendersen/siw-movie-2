@@ -16,6 +16,18 @@
 		<div>
 			<span th:text="${artist.name}+' '+${artist.surname}"></span>
 		</div>
+		<div>
+		<h2>Film in cui ha recitato</h2>
+			<div th:each="movie : ${artist.listaFilmRecitati}">
+				<a th:href="@{'/movies/'+${movie.id}}" th:text="${movie.title}"></a>
+			</div>
+		</div>
+		<div>
+		<h2>Film che ha diretto</h2>
+			<div th:each="movie : ${artist.listaFilmDiretti}">
+				<a th:href="@{'/movies/'+${movie.id}}" th:text="${movie.title}"></a>
+			</div>
+		</div>
 		<div th:if="${artist.picture}">
 				<!-- Immagine-->
 				<img th:src="'data:image/jpeg;base64,'+${artist.picture.getImgData()}"></img>

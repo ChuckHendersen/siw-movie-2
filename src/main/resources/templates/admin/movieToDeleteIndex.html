@@ -1,18 +1,24 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Elimina film - SiW Movie</title>
-		<meta charset="UTF-8" />
-		<link th:replace="fragments/header.html :: stylesheetFragment"/>
-	</head>
-	<body>
-		<header th:replace="fragments/loginHeader.html :: headerLogin"></header>
-		<h1>Scegli film da eliminare</h1>
-		<div th:if="${movies}"></div>
-			<div th:each="movie : ${movies}">
-				<span th:text="${movie.title}+'('+${movie.year}+')'"></span>
-				<a th:href="'/admin/deleteMovie/'+${movie.id}">elimina</a>
-			</div>
+<head>
+<title>Elimina film - SiW Movie</title>
+<meta charset="UTF-8" />
+<link th:replace="fragments/header.html :: stylesheetFragment" />
+</head>
+<body>
+	<header th:replace="fragments/loginHeader.html :: headerLogin"></header>
+	<div>
+		<a href="/"><img src="/images/logo-siw.png" width=30% /></a>
+	</div>
+	<h1>Scegli film da eliminare</h1>
+	<div th:if="${movies}">
+		<div th:each="movie : ${movies}">
+			<span th:text="${movie.title}+'('+${movie.year}+')'"></span> <a
+				th:href="'/admin/deleteMovie/'+${movie.id}">elimina</a>
 		</div>
-	</body>
+	</div>
+	<div th:if="${movies == null || movies.size() == 0}">
+		<h2>Non ci sono film da cancellare</h2>
+	</div>
+</body>
 </html>

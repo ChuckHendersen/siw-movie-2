@@ -2,6 +2,8 @@ package it.uniroma3.siw.controller;
 
 import java.io.IOException;
 import java.util.*;
+
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,13 +34,13 @@ import jakarta.validation.Valid;
 @Controller
 public class MovieController {
 
-	@Autowired MovieRepository movieRepository;
-	@Autowired ArtistRepository artistRepository;
+	@Autowired private MovieRepository movieRepository;
+	@Autowired private ArtistRepository artistRepository;
 	@Autowired private ReviewRepository reviewRepository;
-	@Autowired MovieValidator movieValidator;
-	@Autowired PictureRepository pictureRepository;
-	@Autowired UserRepository userRepository;
-	@Autowired CredentialsService credentialsService;
+	@Autowired private MovieValidator movieValidator;
+	@Autowired private PictureRepository pictureRepository;
+	@Autowired private UserRepository userRepository;
+	@Autowired private CredentialsService credentialsService;
 
 	@GetMapping("/")
 	public String index(Model model) {
@@ -49,12 +51,12 @@ public class MovieController {
 	public String index1(Model model) {
 		return indexGeneral(model);
 	}
-	
+
 	private String indexGeneral(Model model) {
 		//model.addAttribute("credentials", this.getCredentials());
 		return "index.html";
 	}
-	
+
 	@GetMapping("/admin/indexMovie")
 	public String indexMovie() {
 		return "/admin/indexMovie.html";
@@ -66,7 +68,7 @@ public class MovieController {
 		//model.addAttribute("picture", new Picture());
 		return "/admin/formNewMovie.html";
 	}
-	
+
 	//RICORDARSI DI CAMBIARE I COSTRAINST DI JPA nella tabella di join fra movie e picture (non so come dirlo da java)
 	@PostMapping("/admin/movies")
 	public String newMovie(@Valid @ModelAttribute("movie") Movie movie, @RequestParam("file") MultipartFile[] files, BindingResult bindingResult, Model model) throws IOException {
@@ -226,14 +228,14 @@ public class MovieController {
 		model.addAttribute("artists", setAttoriCheNonHannoRecitato);
 		return "/admin/actorsToAdd.html";
 	}
-	
+
 	@GetMapping("/admin/moviesToDeleteIndex")
 	public String moviesToDeleteIndex(Model model) {
 		Iterable<Movie> movies = this.movieRepository.findAll();
 		model.addAttribute("movies", movies);
 		return "/admin/movieToDeleteIndex.html";
 	}
-	
+
 	@GetMapping("/admin/confirmMovieDeletion/{movie_id}")
 	public String confirmMovieDeletion(@PathVariable("movie_id") Long movieId, Model model) {
 		Movie movie = this.movieRepository.findById(movieId).orElse(null);
@@ -244,7 +246,7 @@ public class MovieController {
 			return "movieError.html";
 		}
 	}
-	
+
 	// DA TESTARE
 	@GetMapping("/admin/deleteMovie/{movie_id}")
 	public String deleteMovie(@PathVariable("movie_id") Long movieId, Model model) {
@@ -254,26 +256,42 @@ public class MovieController {
 			Set<Artist> actors = movieToBeDeleted.getActors();
 			Artist director = movieToBeDeleted.getDirector();
 			Set<Picture> pictures = movieToBeDeleted.getPictures();
+			Hibernate.initialize(reviews);
+			Hibernate.initialize(actors);
+			Hibernate.initialize(pictures);
 			movieToBeDeleted.setReviews(null);
 			movieToBeDeleted.setActors(null);
 			movieToBeDeleted.setDirector(null);
 			movieToBeDeleted.setPictures(null);
 			this.movieRepository.save(movieToBeDeleted);
+			//Eliminiamo le foto
+			for(Picture p : pictures) {
+				pictureRepository.delete(p);
+			}
 			//Eliminiamo le recensioni
 			for(Review r : reviews) {
 				r.getAuthor().getReviews().remove(r);
-				r.setAuthor(null);
-				r.setReviewedMovie(null);
 				this.userRepository.save(r.getAuthor());
 				this.reviewRepository.delete(r);
 			}
-			
+			//eliminiamo il riferimento al film recitato dell'artista
+			for(Artist actor : actors) {
+				actor.getListaFilmRecitati().remove(movieToBeDeleted);
+				artistRepository.save(actor);
+			}
 			// ripetere il processo per tutti quanti
 			// sono troppo stanco per continuare
+			//Elimiamo il riferimento del film dall'artista che lo ha diretto
+			if(director!=null) {
+				director.getListaFilmDiretti().remove(movieToBeDeleted);
+			}
+			this.movieRepository.delete(movieToBeDeleted);
+		}else {
+			return "movieError.html";
 		}
-		return "/admin/movieToDeleteIndex.html";
+		return "redirect:/admin/moviesToDeleteIndex";
 	}
-	
+
 	private Credentials getCredentials() {
 		if(!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
 			UserDetails userDetails = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -282,23 +300,16 @@ public class MovieController {
 		}
 		return null;
 	}
-	
+
 	private Picture[] savePictureIfNotExistsOrRetrieve(MultipartFile[] files) throws IOException {
 		Picture[] pictures = new Picture[files.length];
 		int i=0;
 		for(MultipartFile f:files) {
 			Picture picture;
-			if(true) {
-				//System.out.println("la foto non esiste");
-				picture = new Picture();
-				picture.setName(f.getResource().getFilename());
-				picture.setData(f.getBytes());
-				this.pictureRepository.save(picture);
-			}
-//			}else {
-//				System.out.println("La foto già esiste");
-//				picture = this.pictureRepository.findByName(f.getResource().getFilename());
-//			}
+			picture = new Picture();
+			picture.setName(f.getResource().getFilename());
+			picture.setData(f.getBytes());
+			this.pictureRepository.save(picture);
 			pictures[i] = picture;
 			i++;	
 		}

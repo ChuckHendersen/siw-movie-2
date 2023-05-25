@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Elimina artista - SiW Movie</title>
+	<meta charset="UTF-8" />
+	<link th:replace="fragments/header.html :: stylesheetFragment" />
+</head>
+<body>
+	<header th:replace="fragments/loginHeader.html :: headerLogin"></header>
+	<div>
+		<a href="/"><img src="/images/logo-siw.png" width=30% /></a>
+	</div>
+	<h1>Scegli film da eliminare</h1>
+	<div th:if="${artists}">
+		<div th:each="artist : ${artists}">
+			<span th:text="${artist.name}+' '+${artist.surname}"></span> 
+            <a th:href="'/admin/confirmArtistDeletion/'+${artist.id}">elimina</a>
+		</div>
+	</div>
+	<div th:if="${artists == null || artists.size() == 0}">
+		<h2>Non ci sono artisti da cancellare</h2>
+	</div>
+</body>
+</html>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Lista Film - SiW Movie</title>
+<title>Conferma eliminazione artista - SiW Movie</title>
 <meta charset="UTF-8" />
 <link th:replace="fragments/header.html :: stylesheetFragment" />
 </head>
@@ -10,17 +10,11 @@
 	<div>
 		<a href="/"><img src="/images/logo-siw.png" width=30% /></a>
 	</div>
-	<h1>Lista di film</h1>
-	<div th:if="${movies.isEmpty()}">Non ci sono film nel sistema</div>
+	<h1>Sei sicuro di voler eliminare questo artista:</h1>
 	<div>
-		<ul>
-			<li th:each="movie:${movies}">
-				<div>
-					<a th:href="@{'/admin/formUpdateMovie/'+${movie.id}}"
-						th:text="${movie.title}"></a>
-				</div>
-			</li>
-		</ul>
+		<span th:text="'Nome: '+${artist.name}"></span>
+		<span th:text="'Cognome: '+${artist.surname}"></span>
+		<a th:href="'/admin/deleteMovie/'+${artist.id}">elimina</a>
 	</div>
 </body>
 </html>

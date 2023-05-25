@@ -21,7 +21,7 @@ import javax.sql.DataSource;
 @Configuration
 @EnableWebSecurity
 //public  class WebSecurityConfig {
-public class AuthConfiguration {
+public class AuthConfiguration{
 
 	@Autowired
 	private DataSource dataSource;

@@ -17,14 +17,14 @@ public class Movie {
 	@Min(1900)
 	@Max(2023)
 	private Integer year;
-
+	
 	@NotBlank
 	private String title;
 
 	@ManyToOne
 	private Artist director;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.LAZY)
 	private Set<Artist> actors;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "reviewedMovie")
