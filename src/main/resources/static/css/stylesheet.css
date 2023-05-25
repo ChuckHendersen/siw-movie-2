@@ -3,6 +3,11 @@ body {
     color:dimgrey;
 }
 
+img {
+  width: 50%;
+  max-width: 500px;
+}
+
 a { 
 	text-decoration: none; 
     color: darkgrey;

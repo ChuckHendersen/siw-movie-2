@@ -14,7 +14,7 @@
 	<div th:if="${movies}">
 		<div th:each="movie : ${movies}">
 			<span th:text="${movie.title}+'('+${movie.year}+')'"></span> <a
-				th:href="'/admin/deleteMovie/'+${movie.id}">elimina</a>
+				th:href="'/admin/confirmMovieDeletion/'+${movie.id}">elimina</a>
 		</div>
 	</div>
 	<div th:if="${movies == null || movies.size() == 0}">
