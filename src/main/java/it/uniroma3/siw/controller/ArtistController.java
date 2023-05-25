@@ -2,7 +2,9 @@ package it.uniroma3.siw.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,8 +14,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import it.uniroma3.siw.controller.validator.ArtistValidator;
 import it.uniroma3.siw.model.Artist;
+import it.uniroma3.siw.model.Movie;
 import it.uniroma3.siw.model.Picture;
 import it.uniroma3.siw.repository.ArtistRepository;
+import it.uniroma3.siw.repository.MovieRepository;
 import it.uniroma3.siw.repository.PictureRepository;
 import jakarta.validation.Valid;
 
@@ -28,6 +32,9 @@ public class ArtistController {
 
 	@Autowired
 	private PictureRepository pictureRepository;
+
+	@Autowired
+	private MovieRepository movieRepository;
 
 	@GetMapping("/admin/indexArtist")
 	public String indexArtist() {
@@ -78,7 +85,44 @@ public class ArtistController {
 	
 	@GetMapping("/admin/deleteArtist/{artist_id}")
 	public String deleteArtist(@PathVariable("artist_id") Long artistId, Model model) {
-		return "redirect:/admin/artistToDeleteIndex";
+		Artist artist = this.artistRepository.findById(artistId).orElse(null);
+		if(artist != null) {
+			List<Movie> filmRecitati;
+			List<Movie> filmDiretti;
+			Picture artistPicture;
+			filmDiretti = artist.getListaFilmDiretti();
+			artist.setListaFilmDiretti(null);
+			filmRecitati = artist.getListaFilmRecitati();
+			artist.setListaFilmRecitati(null);
+			artistPicture = artist.getPicture();
+			artist.setPicture(null);
+			artistRepository.save(artist);
+			Hibernate.initialize(filmRecitati);
+			Hibernate.initialize(filmDiretti);
+			Hibernate.initialize(artistPicture);
+			
+			if(artistPicture != null) {
+				pictureRepository.delete(artistPicture);
+			}
+			
+			for(Movie m:filmRecitati) {
+				Set<Artist> actors = m.getActors();
+				Hibernate.initialize(actors);
+				actors.remove(artist);
+				this.movieRepository.save(m);
+			}
+			
+			for(Movie m:filmDiretti) {
+				Set<Artist> actors = m.getActors();
+				Hibernate.initialize(actors);
+				actors.remove(artist);
+				this.movieRepository.save(m);
+			}
+			//finalmente si cancella l'artista
+			this.artistRepository.delete(artist);
+			return "redirect:/admin/artistToDeleteIndex";
+		}
+		return "artistError.html";
 	}
 
 	@GetMapping("/artists")
