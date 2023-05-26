@@ -91,16 +91,15 @@ public class ArtistController {
 			List<Movie> filmDiretti;
 			Picture artistPicture;
 			filmDiretti = artist.getListaFilmDiretti();
-			artist.setListaFilmDiretti(null);
 			filmRecitati = artist.getListaFilmRecitati();
-			artist.setListaFilmRecitati(null);
 			artistPicture = artist.getPicture();
-			artist.setPicture(null);
-			artistRepository.save(artist);
 			Hibernate.initialize(filmRecitati);
 			Hibernate.initialize(filmDiretti);
 			Hibernate.initialize(artistPicture);
-			
+			artist.setListaFilmDiretti(null);
+			artist.setListaFilmRecitati(null);
+			artist.setPicture(null);
+			artistRepository.save(artist);
 			if(artistPicture != null) {
 				pictureRepository.delete(artistPicture);
 			}
@@ -113,9 +112,7 @@ public class ArtistController {
 			}
 			
 			for(Movie m:filmDiretti) {
-				Set<Artist> actors = m.getActors();
-				Hibernate.initialize(actors);
-				actors.remove(artist);
+				m.setDirector(null);
 				this.movieRepository.save(m);
 			}
 			//finalmente si cancella l'artista
@@ -147,8 +144,33 @@ public class ArtistController {
 		}
 		return "artist.html";
 	}
-
-	//Implementare cancellazione artista
+	
+	@GetMapping("/admin/manageArtists")
+	public String manageArtist(Model model) {
+		Iterable<Artist> artists = this.artistRepository.findAll();
+		model.addAttribute("artists", artists);
+		return "/admin/manageArtists.html";
+	}
+	
+	@GetMapping("/admin/formUpdateArtist/{artist_id}")
+	public String formUpdateArtist(@PathVariable("artist_id") Long artistId, Model model) {
+		Artist artist = this.artistRepository.findById(artistId).orElse(null);
+		if(artist != null) {
+			model.addAttribute("artist", artist);
+			return "/admin/formUpdateArtist.html";
+		}
+		return "artistError.html";
+	}
+	
+	@PostMapping("/admin/updateArtistDetails/{artist_id}")
+	public String updateArtistDetails(@PathVariable("artist_id") Long artistId,
+			@RequestParam("artistName") String artistName,
+			@RequestParam("artistSurname") String artistSurname,
+			@RequestParam("dateOfBirth") 
+			Model model) {
+		return null;
+	}
+	
 	private Picture savePictureIfNotExistsOrRetrieve(MultipartFile f) throws IOException {
 		Picture picture;
 		if(f.getSize()!=0) {

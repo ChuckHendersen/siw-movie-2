@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Conferma eliminazione film - SiW Movie</title>
-<meta charset="UTF-8" />
+<meta th:replace="fragments/header.html :: metaFragment" />
 <link th:replace="fragments/header.html :: stylesheetFragment" />
 </head>
 <body>
@@ -12,9 +12,9 @@
 	</div>
 	<h1>Sei sicuro di voler eliminare questo film:</h1>
 	<div>
-		<span th:text="'Titolo: '+${movie.title}">Titolo Film</span>
-		<span>Anno: <span th:text="'('+${movie.year}+')'">2000</span></span>
-		<a th:href="'/admin/deleteMovie/'+${movie.id}">elimina</a>
+		<span th:text="'Titolo: '+${movie.title}">Titolo Film</span> <span>Anno:
+			<span th:text="'('+${movie.year}+')'">2000</span>
+		</span> <a th:href="'/admin/deleteMovie/'+${movie.id}">elimina</a>
 	</div>
 </body>
 </html>

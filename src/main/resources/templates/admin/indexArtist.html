@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<title>Gestione Artisti - SiW Movie</title>
-		<meta charset="UTF-8" />
+		<meta th:replace="fragments/header.html :: metaFragment" />
 		<link th:replace="fragments/header.html :: stylesheetFragment"/>
 	</head>
 	<body>
@@ -23,7 +23,7 @@
 			<a href="/admin/artistToDeleteIndex">Rimuovi artista</a>
 		</div>
 		<div>
-			<a href="/"> Modifica informazioni artista</a>
+			<a href="/admin/manageArtists"> Modifica informazioni artista</a>
 		</div>
 	</body>
 </html>

@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<title> Movie - SiW Movie</title>
-		<meta charset="UTF-8" />
+		<meta th:replace="fragments/header.html :: metaFragment" />
 		<link th:replace="fragments/header.html :: stylesheetFragment"/>
 	</head>
 	<body>
@@ -12,16 +12,13 @@
 		</div>
 		<div th:if="${movie}">
 			<div>
-				<h1 th:text="${movie.title}">Titolo Film</h1>
+				<h1 th:text="${movie.title} +' '+'('+${movie.year}+')'">Titolo Film</h1>
 			</div>
 			<div th:if="${movie.areThereAnyReviews()}">
 				<h2 th:text="'Valutazione media: '+${movie.getAverageVote()}">Valutazione media: 4.5</h2>
 			</div>
 			<div th:unless="${movie.areThereAnyReviews()}">
 				<h2>Valutazione media: nessuna recensione</h2>
-			</div>
-			<div>
-				<span>Anno: <span th:text="'('+${movie.year}+')'">2000</span></span>
 			</div>
 				<span>Regista: <br> <span th:if="${movie.director}" th:text="${movie.director.name}+' '+${movie.director.surname}">Cristopher Nolan</span></span>
 			</div>

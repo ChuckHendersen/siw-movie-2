@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Lista Film - SiW Movie</title>
+<title>Aggiorna artista - SiW Movie</title>
 <meta th:replace="fragments/header.html :: metaFragment" />
 <link th:replace="fragments/header.html :: stylesheetFragment" />
 </head>
@@ -10,17 +10,12 @@
 	<div>
 		<a href="/"><img src="/images/logo-siw.png" width=30% /></a>
 	</div>
-	<h1>Seleziona film da modificare</h1>
-	<div th:if="${movies.isEmpty()}">Non ci sono film nel sistema</div>
 	<div>
-		<ul>
-			<li th:each="movie:${movies}">
-				<div>
-					<a th:href="@{'/admin/formUpdateMovie/'+${movie.id}}"
-						th:text="${movie.title}"></a>
-				</div>
-			</li>
-		</ul>
+		<h1 th:text="${artist.name}+' '+${artist.surname}"></h1>
+	</div>
+	<div>
+		<span>Modifica informazioni artista</span>
+		<form th:action="@{'/admin/update'}"></form>
 	</div>
 </body>
 </html>

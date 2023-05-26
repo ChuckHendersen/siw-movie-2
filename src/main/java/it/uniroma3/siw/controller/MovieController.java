@@ -86,6 +86,20 @@ public class MovieController {
 			return "/admin/formNewMovie.html";
 		}
 	}
+	
+	@PostMapping("/admin/updateMovieDetails/{movie_id}")
+	public String updateMovieDetails(@PathVariable("movie_id") Long movieId, 
+			@RequestParam("movieTitle") String movieTitle, 
+			@RequestParam("movieYear") Integer movieYear, 
+			Model model) {
+		Movie movie = this.movieRepository.findById(movieId).orElse(null);
+		if(movie != null) {
+			movie.setTitle(movieTitle);
+			movie.setYear(movieYear);
+			movieRepository.save(movie);
+		}
+		return "redirect:/admin/formUpdateMovie/"+movieId;
+	}
 
 	@PostMapping("/admin/uploadPhoto/{movie_id}")
 	public String uploadPhoto(@PathVariable("movie_id") Long movieId, @RequestParam("file") MultipartFile[] files, Model model) throws IOException {
