@@ -1,6 +1,7 @@
 package it.uniroma3.siw.controller;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -157,6 +158,7 @@ public class ArtistController {
 		Artist artist = this.artistRepository.findById(artistId).orElse(null);
 		if(artist != null) {
 			model.addAttribute("artist", artist);
+			model.addAttribute("newArtist", new Artist());
 			return "/admin/formUpdateArtist.html";
 		}
 		return "artistError.html";
@@ -166,9 +168,19 @@ public class ArtistController {
 	public String updateArtistDetails(@PathVariable("artist_id") Long artistId,
 			@RequestParam("artistName") String artistName,
 			@RequestParam("artistSurname") String artistSurname,
-			@RequestParam("dateOfBirth") 
+			@RequestParam("birthDate") LocalDate birthDate,
+			@RequestParam(value = "deceasedDate", required = false) LocalDate deceasedDate,
 			Model model) {
-		return null;
+		System.out.println(artistName);
+		System.out.println(artistSurname);
+		System.out.println(birthDate);
+		System.out.println(deceasedDate);
+		Artist artist = this.artistRepository.findById(artistId).orElse(null);
+		if(artist != null) {
+			return "redirect:/admin/formUpdateArtist/"+artistId;
+		}
+		
+		return "artistError.html";
 	}
 	
 	private Picture savePictureIfNotExistsOrRetrieve(MultipartFile f) throws IOException {

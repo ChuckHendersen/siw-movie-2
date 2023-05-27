@@ -1,5 +1,6 @@
 package it.uniroma3.siw.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -22,11 +23,11 @@ public class Artist {
 	@PastOrPresent
 	@NotNull
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date birthDate;
+	private LocalDate birthDate;
 	
 	@PastOrPresent
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date deceasedDate;
+	private LocalDate deceasedDate;
 	
 	@OneToMany(mappedBy="director")
 	private List<Movie> listaFilmDiretti;
@@ -77,24 +78,22 @@ public class Artist {
 		this.listaFilmRecitati = listaFilmRecitati;
 	}
 	
-	public Date getBirthDate() {
+	public LocalDate getBirthDate() {
 		return birthDate;
 	}
 
-	public void setBirthDate(Date birthDate) {
+	public void setBirthDate(LocalDate birthDate) {
 		this.birthDate = birthDate;
 	}
 
-	public Date getDeceasedDate() {
+	public LocalDate getDeceasedDate() {
 		return deceasedDate;
 	}
 
-	public void setDeceasedDate(Date deceasedDate) {
+	public void setDeceasedDate(LocalDate deceasedDate) {
 		this.deceasedDate = deceasedDate;
 	}
-	
-	
-	
+
 	public Picture getPicture() {
 		return picture;
 	}

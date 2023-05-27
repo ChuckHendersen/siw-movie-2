@@ -15,7 +15,17 @@
 	</div>
 	<div>
 		<span>Modifica informazioni artista</span>
-		<form th:action="@{'/admin/update'}"></form>
+		<form th:action="@{'/admin/updateArtistDetails/'+${artist.id}}" method="POST">
+			<label>Modifica nome</label>
+			<input th:placeholder="${artist.name}" name = "artistName"/> <br>
+			<label>Modifica cognome</label>
+			<input th:value="${artist.surname}" name = "artistSurname"/> <br>
+			<label>Modifica data di nascita</label>
+			<input th:value="${artist.birthDate}" type="date" name="birthDate"/> <br>
+			<label>Modifica data di morte</label>
+			<input th:value="${artist.deceasedDate}" type="date" name="deceasedDate" /> <br>
+			<button type="submit">Conferma</button>
+		</form>
 	</div>
 </body>
 </html>
