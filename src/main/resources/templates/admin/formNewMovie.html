@@ -19,15 +19,15 @@
 					<p th:each="err:${#fields.globalErrors()}" th:text="${err}"></span>
 				</div>
 				<div>
-					<span>Titolo<input required type="text" th:field="*{title}"></input></span>
+					<label>Titolo</label><input required type="text" th:field="*{title}"></input>
 					<span th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
 				</div>
 				<div>
-					<span>Anno<input required type="text" th:field="*{year}"></input></span>
+					<label>Anno</label><input required type="text" th:field="*{year}"></input>
 					<span th:if="${#fields.hasErrors('year')}" th:errors="*{year}"></span>
 				</div>
 				<div>
-					<span>Immagine<input type="file" name="file" multiple></input></span>
+					<label>Immagini</label><input type="file" name="file" multiple></input>
 				</div>
 				<div>
 					<span><button type="submit">Conferma</button></span>

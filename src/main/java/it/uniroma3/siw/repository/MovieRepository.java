@@ -1,5 +1,6 @@
 package it.uniroma3.siw.repository;
 
+import java.time.Year;
 import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
@@ -14,6 +15,6 @@ public interface MovieRepository extends CrudRepository<Movie,Long>{
 	
 	public List<Movie> findAllByOrderByYear();
 	
-	public boolean existsByTitleAndYear (String title, Integer year);
+	public boolean existsByTitleAndYear (String title, Year year);
 	
 }

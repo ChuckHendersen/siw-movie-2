@@ -1,7 +1,7 @@
 package it.uniroma3.siw.model;
-
+import java.time.Year;
 import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
@@ -14,9 +14,8 @@ public class Movie {
 	private Long id;
 
 	@NotNull
-	@Min(1900)
-	@Max(2023)
-	private Integer year;
+	@PastOrPresent
+	private Year year;
 	
 	@NotBlank
 	private String title;
@@ -33,6 +32,12 @@ public class Movie {
 	@ManyToMany(fetch = FetchType.LAZY)
 	private	Set<Picture> pictures;
 
+	public Movie() {
+		this.actors = new HashSet<Artist>();
+		this.reviews = new HashSet<Review>();
+		this.pictures = new HashSet<Picture>();
+	}
+	
 	public Artist getDirector() {
 		return director;
 	}
@@ -56,11 +61,11 @@ public class Movie {
 		this.id = id;
 	}
 
-	public Integer getYear() {
+	public Year getYear() {
 		return year;
 	}
 
-	public void setYear(Integer year) {
+	public void setYear(Year year) {
 		this.year = year;
 	}
 

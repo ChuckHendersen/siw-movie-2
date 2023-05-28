@@ -1,10 +1,7 @@
 package it.uniroma3.siw.model;
 
+import java.util.Arrays;
 import java.util.Base64;
-
-
-import java.util.Objects;
-
 import jakarta.persistence.*;
 
 @Entity
@@ -46,9 +43,12 @@ public class Picture {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(name);
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Arrays.hashCode(data);
+		return result;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -56,7 +56,7 @@ public class Picture {
 		if (!(obj instanceof Picture))
 			return false;
 		Picture other = (Picture) obj;
-		return Objects.equals(name, other.name);
+		return Arrays.equals(data, other.data);
 	}
 
 	@Override

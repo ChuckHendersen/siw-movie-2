@@ -28,7 +28,7 @@ import it.uniroma3.siw.repository.PictureRepository;
 import it.uniroma3.siw.repository.ReviewRepository;
 import it.uniroma3.siw.repository.UserRepository;
 import it.uniroma3.siw.service.CredentialsService;
-
+import it.uniroma3.siw.service.MovieService;
 import jakarta.validation.Valid;
 
 @Controller
@@ -41,6 +41,8 @@ public class MovieController {
 	@Autowired private PictureRepository pictureRepository;
 	@Autowired private UserRepository userRepository;
 	@Autowired private CredentialsService credentialsService;
+
+	@Autowired private MovieService movieService;
 
 	@GetMapping("/")
 	public String index(Model model) {
@@ -64,7 +66,7 @@ public class MovieController {
 
 	@GetMapping("/admin/formNewMovie")
 	public String formNewMovie(Model model) {
-		model.addAttribute("movie", new Movie());
+		model.addAttribute("movie", this.movieService.createMovie());
 		//model.addAttribute("picture", new Picture());
 		return "/admin/formNewMovie.html";
 	}
@@ -72,31 +74,20 @@ public class MovieController {
 	//RICORDARSI DI CAMBIARE I COSTRAINST DI JPA nella tabella di join fra movie e picture (non so come dirlo da java)
 	@PostMapping("/admin/movies")
 	public String newMovie(@Valid @ModelAttribute("movie") Movie movie, @RequestParam("file") MultipartFile[] files, BindingResult bindingResult, Model model) throws IOException {
-		this.movieValidator.validate(movie, bindingResult);
-		if(!bindingResult.hasErrors()) {
-			movie.setPictures(new HashSet<Picture>());
-			Picture[] pictures = this.savePictureIfNotExistsOrRetrieve(files);
-			for(Picture p:pictures) {
-				movie.getPictures().add(p);
-			}
-			movie = this.movieRepository.save(movie);
+		Movie savedMovie = this.movieService.saveNewMovie(movie, files, bindingResult);
+		if(savedMovie != null) {
 			return "redirect:/movies/"+movie.getId();
 		} else {
-			//model.addAttribute("messaggioErrore", "Questo film esiste già");
-			return "/admin/formNewMovie.html";
+			return "redirect:/admin/formNewMovie";
 		}
 	}
-	
+
 	@PostMapping("/admin/updateMovieDetails/{movie_id}")
 	public String updateMovieDetails(@PathVariable("movie_id") Long movieId, 
-			@RequestParam("movieTitle") String movieTitle, 
-			@RequestParam("movieYear") Integer movieYear, 
+			@Valid @ModelAttribute("movie") Movie movie, BindingResult bindingResult,
 			Model model) {
-		Movie movie = this.movieRepository.findById(movieId).orElse(null);
-		if(movie != null) {
-			movie.setTitle(movieTitle);
-			movie.setYear(movieYear);
-			movieRepository.save(movie);
+		if(!bindingResult.hasErrors()) {
+			this.movieService.updateMovieDetails(movieId, movie);
 		}
 		return "redirect:/admin/formUpdateMovie/"+movieId;
 	}
@@ -104,14 +95,23 @@ public class MovieController {
 	@PostMapping("/admin/uploadPhoto/{movie_id}")
 	public String uploadPhoto(@PathVariable("movie_id") Long movieId, @RequestParam("file") MultipartFile[] files, Model model) throws IOException {
 		// Prendere il film, caricare le nuove foto nell'array e poi mettere il movie nel model addattribute
-		Movie movie = movieRepository.findById(movieId).get();
-		Picture[] pictures = this.savePictureIfNotExistsOrRetrieve(files);
-		for(Picture p:pictures) {
-			movie.getPictures().add(p);	
+		this.movieService.uploadNewPhoto(movieId, files);
+		return "redirect:/admin/formUpdateMovie.html";
+	}
+
+	@GetMapping("/admin/deletePhoto/{movie_id}/{photo_id}")
+	public String deletePhoto(@PathVariable("movie_id") Long movieId, @PathVariable("photo_id") Long photoId) {
+		Movie movie = this.movieRepository.findById(movieId).orElse(null);
+		Picture picture = this.pictureRepository.findById(photoId).orElse(null);
+		if(movie != null) {
+			Set<Picture> pictures = movie.getPictures();
+			if(pictures.size()>1 && pictures.contains(picture)) {
+				pictures.remove(picture);
+				this.movieRepository.save(movie);
+			}
+			this.pictureRepository.delete(picture);
 		}
-		movieRepository.save(movie);
-		model.addAttribute("movie", movie);
-		return "/admin/formUpdateMovie.html";
+		return "redirect:/admin/formUpdateMovie/"+movieId;
 	}
 
 	@GetMapping("/movies")
@@ -158,15 +158,13 @@ public class MovieController {
 
 	@GetMapping("/admin/formUpdateMovie/{id}")
 	public String formUpdateMovie(@PathVariable Long id,Model model) {
-		Movie movie;
-		try {
-			movie = this.movieRepository.findById(id).get();
-		}catch(Exception e) {
-			movie = null;
+		Movie movie = this.movieService.findById(id);
+		if(movie != null) {
+			model.addAttribute("movie", movie);
+			return "/admin/formUpdateMovie.html";
+		}else {
+			return "movieError.html";
 		}
-		//movie = this.movieRepository.findById(id).get();
-		model.addAttribute("movie", movie);
-		return "/admin/formUpdateMovie.html";
 	}
 
 	@GetMapping("/admin/addDirectorToMovie/{movie_id}")
@@ -313,20 +311,5 @@ public class MovieController {
 			return credentials;
 		}
 		return null;
-	}
-
-	private Picture[] savePictureIfNotExistsOrRetrieve(MultipartFile[] files) throws IOException {
-		Picture[] pictures = new Picture[files.length];
-		int i=0;
-		for(MultipartFile f:files) {
-			Picture picture;
-			picture = new Picture();
-			picture.setName(f.getResource().getFilename());
-			picture.setData(f.getBytes());
-			this.pictureRepository.save(picture);
-			pictures[i] = picture;
-			i++;	
-		}
-		return pictures;
 	}
 }

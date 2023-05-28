@@ -1,7 +1,6 @@
 package it.uniroma3.siw.controller;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -12,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import it.uniroma3.siw.controller.validator.ArtistValidator;
 import it.uniroma3.siw.model.Artist;
 import it.uniroma3.siw.model.Movie;
@@ -56,7 +54,7 @@ public class ArtistController {
 		this.artistValidator.validate(artist, bindingResult);
 		if(!bindingResult.hasErrors()) {
 			//dovrebbe avere una sola immagine l'array
-			Picture picture = this.savePictureIfNotExistsOrRetrieve(file);
+			Picture picture = this.savePicture(file);
 			artist.setPicture(picture);
 			this.artistRepository.save(artist);
 			model.addAttribute(artist);
@@ -66,13 +64,13 @@ public class ArtistController {
 			return "/admin/formNewArtist.html";
 		}
 	}
-	
+
 	@GetMapping("/admin/artistToDeleteIndex")
 	public String artistToDeleteIndex(Model model) {
 		model.addAttribute("artists",this.artistRepository.findAll());
 		return "/admin/artistToDeleteIndex.html";
 	}
-	
+
 	@GetMapping("/admin/confirmArtistDeletion/{artist_id}")
 	public String confirmArtistDeletion(@PathVariable("artist_id") Long artistId, Model model) {
 		Artist artist = this.artistRepository.findById(artistId).orElse(null);
@@ -83,7 +81,7 @@ public class ArtistController {
 			return "/admin/confirmArtistDeletion.html";
 		}
 	}
-	
+
 	@GetMapping("/admin/deleteArtist/{artist_id}")
 	public String deleteArtist(@PathVariable("artist_id") Long artistId, Model model) {
 		Artist artist = this.artistRepository.findById(artistId).orElse(null);
@@ -104,14 +102,14 @@ public class ArtistController {
 			if(artistPicture != null) {
 				pictureRepository.delete(artistPicture);
 			}
-			
+
 			for(Movie m:filmRecitati) {
 				Set<Artist> actors = m.getActors();
 				Hibernate.initialize(actors);
 				actors.remove(artist);
 				this.movieRepository.save(m);
 			}
-			
+
 			for(Movie m:filmDiretti) {
 				m.setDirector(null);
 				this.movieRepository.save(m);
@@ -145,45 +143,62 @@ public class ArtistController {
 		}
 		return "artist.html";
 	}
-	
+
 	@GetMapping("/admin/manageArtists")
 	public String manageArtist(Model model) {
 		Iterable<Artist> artists = this.artistRepository.findAll();
 		model.addAttribute("artists", artists);
 		return "/admin/manageArtists.html";
 	}
-	
+
 	@GetMapping("/admin/formUpdateArtist/{artist_id}")
 	public String formUpdateArtist(@PathVariable("artist_id") Long artistId, Model model) {
 		Artist artist = this.artistRepository.findById(artistId).orElse(null);
 		if(artist != null) {
 			model.addAttribute("artist", artist);
-			model.addAttribute("newArtist", new Artist());
 			return "/admin/formUpdateArtist.html";
 		}
 		return "artistError.html";
 	}
-	
+
 	@PostMapping("/admin/updateArtistDetails/{artist_id}")
 	public String updateArtistDetails(@PathVariable("artist_id") Long artistId,
-			@RequestParam("artistName") String artistName,
-			@RequestParam("artistSurname") String artistSurname,
-			@RequestParam("birthDate") LocalDate birthDate,
-			@RequestParam(value = "deceasedDate", required = false) LocalDate deceasedDate,
+			@Valid @ModelAttribute("artist") Artist artist,
+			BindingResult bindingResult, 
 			Model model) {
-		System.out.println(artistName);
-		System.out.println(artistSurname);
-		System.out.println(birthDate);
-		System.out.println(deceasedDate);
-		Artist artist = this.artistRepository.findById(artistId).orElse(null);
-		if(artist != null) {
+		Artist originalArtist = this.artistRepository.findById(artistId).orElse(null);
+		if(originalArtist!=null && artist != null && !bindingResult.hasErrors()) {
+			originalArtist.setName(artist.getName());
+			originalArtist.setSurname(artist.getSurname());
+			originalArtist.setBirthDate(artist.getBirthDate());
+			originalArtist.setDeceasedDate(artist.getDeceasedDate());
+			this.artistRepository.save(originalArtist);
 			return "redirect:/admin/formUpdateArtist/"+artistId;
 		}
-		
 		return "artistError.html";
 	}
-	
-	private Picture savePictureIfNotExistsOrRetrieve(MultipartFile f) throws IOException {
+
+	@PostMapping("/admin/updateArtistPicture/{artist_id}")
+	public String updateArtistPicture(@PathVariable("artist_id") Long artistId, 
+			@RequestAttribute("file") MultipartFile file, 
+			Model model) throws IOException {
+		Artist artist = this.artistRepository.findById(artistId).orElse(null);
+		if(artist != null) {
+			Picture newPicture = this.savePicture(file);
+			if(newPicture != null) {
+				Picture oldPicture = artist.getPicture();
+				artist.setPicture(newPicture);
+				this.artistRepository.save(artist);
+				if(oldPicture != null) {
+					this.pictureRepository.delete(oldPicture);
+				}
+			}
+			return "redirect:/admin/formUpdateArtist/"+artistId;
+		}
+		return "artistError.html";
+	}
+
+	private Picture savePicture(MultipartFile f) throws IOException {
 		Picture picture;
 		if(f.getSize()!=0) {
 			//System.out.println("la foto non esiste");

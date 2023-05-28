@@ -14,18 +14,24 @@
 		<h1 th:text="${artist.name}+' '+${artist.surname}"></h1>
 	</div>
 	<div>
-		<span>Modifica informazioni artista</span>
-		<form th:action="@{'/admin/updateArtistDetails/'+${artist.id}}" method="POST">
-			<label>Modifica nome</label>
-			<input th:placeholder="${artist.name}" name = "artistName"/> <br>
-			<label>Modifica cognome</label>
-			<input th:value="${artist.surname}" name = "artistSurname"/> <br>
-			<label>Modifica data di nascita</label>
-			<input th:value="${artist.birthDate}" type="date" name="birthDate"/> <br>
-			<label>Modifica data di morte</label>
-			<input th:value="${artist.deceasedDate}" type="date" name="deceasedDate" /> <br>
+		<form th:action="@{'/admin/updateArtistDetails/'+${artist.id}}"
+			method="POST" th:object="${artist}">
+			<label>Modifica nome</label> <input th:field="*{name}" required /> <br> 
+			<label>Modifica cognome</label> <input th:field="*{surname}" required/> <br> 
+			<label>Modifica data di nascita</label> <input type="date" th:field="*{birthDate}" required/> <br>
+			<label>Modifica data di morte</label> <input type="date" th:field="*{deceasedDate}" required/> <br>
 			<button type="submit">Conferma</button>
 		</form>
+		<div th:if="${artist.picture}">
+			<!-- Immagine-->
+			<img th:src="'data:image/jpeg;base64,'+${artist.picture.getImgData()}"></img>
+		</div>
+		<div>
+		<form th:action="@{'/admin/updateArtistPicture/'+${artist.id}}" method="POST" enctype="multipart/form-data">
+			<label>Aggiorna immagine</label> <input type="file" name="file"/><br>
+			<button type="submit">Carica immagine</button>
+		</form>
+		</div>
 	</div>
 </body>
 </html>

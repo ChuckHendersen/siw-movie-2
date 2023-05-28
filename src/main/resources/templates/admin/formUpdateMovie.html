@@ -12,15 +12,12 @@
 	</div>
 	<div>
 		<h1 th:text="${movie.title} +' '+'('+${movie.year}+')'">Titolo Film</h1>
-		<form method="POST"
-			th:action="@{'/admin/updateMovieDetails/'+${movie.id}}">
+		<form method="POST" th:action="@{'/admin/updateMovieDetails/'+${movie.id}}">
 			<div>
-				<label>Aggiorna nome</label> <input type="text"
-					th:value="${movie.title}" name = "movieTitle"></input>
+				<label>Modifica nome</label> <input type="text" th:field="${movie.title}" required></input>
 			</div>
 			<div>
-				<label>Aggiorna anno</label> <input type="text"
-					th:value="${movie.year}" name = "movieYear"></input>
+				<label>Modifica anno</label> <input type="number" th:field=${movie.year} min="1890"  required></input>
 			</div>
 			<span>
 				<button type="submit">Conferma</button>
@@ -30,6 +27,7 @@
 	<div th:each="img : ${movie.pictures}">
 		<!-- Immagine-->
 		<img th:src="'data:image/jpeg;base64,'+${img.getImgData()}"></img>
+		<a th:if="${movie.pictures.size()>1}" th:href="'/admin/deletePhoto/'+${movie.id}+'/'+${img.id}"> Rimuovi foto </a>
 	</div>
 	<div>
 		<form th:action="@{'/admin/uploadPhoto/'+${movie.id}}" method="POST"

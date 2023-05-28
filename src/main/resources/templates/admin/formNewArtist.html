@@ -19,23 +19,23 @@
 					<p th:each="err:${#fields.globalErrors()}" th:text="${err}"></span>
 				</div>
 				<div>
-					<span>Nome<input required type="text" th:field="${artist.name}"></input></span>
+					<label>Nome</label><input required type="text" th:field="${artist.name}"></input>
 					<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
 				</div>
 				<div>
-					<span>Cognome<input required type="text" th:field="${artist.surname}"></input></span>
+					<label>Cognome</label><input required type="text" th:field="${artist.surname}"></input>
 					<span th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"></span>
 				</div>
 				<div>
-					<span>Data nascita<input required type="date" th:field="${artist.birthDate}"></input></span>
+					<label>Data nascita</label><input required type="date" th:field="${artist.birthDate}"></input>
 					<span th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"></span>
 				</div>
 				<div>
-					<span>Data morte (opzionale)<input type="date" th:field="${artist.deceasedDate}"></input></span>
+					<label>Data morte (opzionale)</label><input type="date" th:field="${artist.deceasedDate}"></input>
 					<span th:if="${#fields.hasErrors('deceasedDate')}" th:errors="*{deceasedDate}"></span>
 				</div>
 				<div>
-					<span>Immagine<input type="file" name="file" multiple></input></span>
+					<label>Immagine</label><input type="file" name="file" multiple></input>
 				</div>
 				<div>
 					<button type="submit">Conferma</button>
