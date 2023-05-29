@@ -9,7 +9,7 @@ import it.uniroma3.siw.model.Movie;
 
 public interface MovieRepository extends CrudRepository<Movie,Long>{
 
-	public List<Movie> findByYear(Integer year);
+	public List<Movie> findByYear(Year year);
 	
 	public List<Movie> findAllByOrderByTitle();//ordina per titolo
 	

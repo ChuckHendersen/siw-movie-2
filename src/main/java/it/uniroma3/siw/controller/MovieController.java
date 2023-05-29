@@ -1,6 +1,7 @@
 package it.uniroma3.siw.controller;
 
 import java.io.IOException;
+import java.time.Year;
 import java.util.*;
 
 import org.hibernate.Hibernate;
@@ -43,7 +44,15 @@ public class MovieController {
 	@Autowired private CredentialsService credentialsService;
 
 	@Autowired private MovieService movieService;
-
+	
+	//Utility
+	public String redirection(Movie movie, String successPath, String failurePath) {
+		if(movie != null) {
+			return successPath;
+		}
+		return failurePath;
+	}
+	
 	@GetMapping("/")
 	public String index(Model model) {
 		return indexGeneral(model);
@@ -75,11 +84,7 @@ public class MovieController {
 	@PostMapping("/admin/movies")
 	public String newMovie(@Valid @ModelAttribute("movie") Movie movie, @RequestParam("file") MultipartFile[] files, BindingResult bindingResult, Model model) throws IOException {
 		Movie savedMovie = this.movieService.saveNewMovie(movie, files, bindingResult);
-		if(savedMovie != null) {
-			return "redirect:/movies/"+movie.getId();
-		} else {
-			return "redirect:/admin/formNewMovie";
-		}
+		return redirection(savedMovie, "redirect:/movies/"+movie.getId(), "redirect:/admin/formNewMovie");
 	}
 
 	@PostMapping("/admin/updateMovieDetails/{movie_id}")
@@ -94,24 +99,14 @@ public class MovieController {
 
 	@PostMapping("/admin/uploadPhoto/{movie_id}")
 	public String uploadPhoto(@PathVariable("movie_id") Long movieId, @RequestParam("file") MultipartFile[] files, Model model) throws IOException {
-		// Prendere il film, caricare le nuove foto nell'array e poi mettere il movie nel model addattribute
-		this.movieService.uploadNewPhoto(movieId, files);
-		return "redirect:/admin/formUpdateMovie.html";
+		// Prendere il film, caricare le nuove foto nell'array e poi mettere il movie nel model addattributo
+		return redirection(this.movieService.uploadNewPhoto(movieId, files), "redirect:/admin/formUpdateMovie.html", "movieError.html");
 	}
 
 	@GetMapping("/admin/deletePhoto/{movie_id}/{photo_id}")
 	public String deletePhoto(@PathVariable("movie_id") Long movieId, @PathVariable("photo_id") Long photoId) {
-		Movie movie = this.movieRepository.findById(movieId).orElse(null);
-		Picture picture = this.pictureRepository.findById(photoId).orElse(null);
-		if(movie != null) {
-			Set<Picture> pictures = movie.getPictures();
-			if(pictures.size()>1 && pictures.contains(picture)) {
-				pictures.remove(picture);
-				this.movieRepository.save(movie);
-			}
-			this.pictureRepository.delete(picture);
-		}
-		return "redirect:/admin/formUpdateMovie/"+movieId;
+		Movie movie = this.movieService.deletePhoto(movieId, photoId);
+		return redirection(movie, "redirect:/admin/formUpdateMovie/"+movieId, "movieError.html");
 	}
 
 	@GetMapping("/movies")
@@ -128,15 +123,9 @@ public class MovieController {
 			//System.out.println("Utente loggato");
 			model.addAttribute("review", new Review());
 		}
-		Movie movie;
-		try {
-			movie = this.movieRepository.findById(id).get();
-		}catch(Exception e) {
-			movie = null;
-		}
-		//movie = this.movieRepository.findById(id).get();
+		Movie movie = this.movieService.findById(id);
 		model.addAttribute("movie", movie);
-		return "movie.html";
+		return redirection(movie, "movie.html", "movieError.html");
 	}
 
 	@GetMapping("/formSearchMovies")
@@ -145,26 +134,22 @@ public class MovieController {
 	}
 
 	@PostMapping("/searchMovies")
-	public String searchMovies(Model model, @RequestParam Integer year) {
-		model.addAttribute("movies",this.movieRepository.findByYear(year));
+	public String searchMovies(Model model, @RequestParam Year year) {
+		model.addAttribute("movies",this.movieService.findByYear(year));
 		return "foundMovies.html";
 	}
 
 	@GetMapping("/admin/manageMovies")
 	public String manageMovies(Model model) {
-		model.addAttribute("movies", movieRepository.findAll());
+		model.addAttribute("movies", this.movieService.findAll());
 		return "/admin/manageMovies.html";
 	}
 
 	@GetMapping("/admin/formUpdateMovie/{id}")
 	public String formUpdateMovie(@PathVariable Long id,Model model) {
 		Movie movie = this.movieService.findById(id);
-		if(movie != null) {
-			model.addAttribute("movie", movie);
-			return "/admin/formUpdateMovie.html";
-		}else {
-			return "movieError.html";
-		}
+		model.addAttribute("movie", movie);
+		return redirection(movie, "/admin/formUpdateMovie.html", "movieError.html");
 	}
 
 	@GetMapping("/admin/addDirectorToMovie/{movie_id}")

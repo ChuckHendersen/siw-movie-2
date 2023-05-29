@@ -1,6 +1,9 @@
 package it.uniroma3.siw.service;
 
 import java.io.IOException;
+import java.time.Year;
+import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +19,6 @@ import it.uniroma3.siw.repository.MovieRepository;
 import it.uniroma3.siw.repository.PictureRepository;
 import it.uniroma3.siw.repository.ReviewRepository;
 import it.uniroma3.siw.repository.UserRepository;
-import jakarta.validation.Valid;
 
 @Service
 public class MovieService {
@@ -46,7 +48,8 @@ public class MovieService {
 		}
 		return null;
 	}
-
+	
+	@Transactional
 	public Movie findById(Long movieId) {
 		return this.movieRepository.findById(movieId).orElse(null);
 	}
@@ -74,5 +77,29 @@ public class MovieService {
 		}
 		return movie;
 	}
+	
+	@Transactional
+	public Movie deletePhoto(Long movieId, Long pictureId) {
+		Movie movie = this.movieRepository.findById(movieId).orElse(null);
+		Picture picture = this.pictureRepository.findById(pictureId).orElse(null);
+		if(movie != null && picture != null) {
+			Set<Picture> pictures = movie.getPictures();
+			if(pictures.size()>1 && pictures.contains(picture)) {
+				pictures.remove(picture);
+				this.movieRepository.save(movie);
+			}
+			this.pictureRepository.delete(picture);
+		}
+		return movie;
+	}
 
+	@Transactional
+	public List<Movie> findByYear(Year year) {
+		return this.movieRepository.findByYear(year);
+	}
+
+	public Iterable<Movie> findAll() {
+		return movieRepository.findAll();
+	}
+	
 }
