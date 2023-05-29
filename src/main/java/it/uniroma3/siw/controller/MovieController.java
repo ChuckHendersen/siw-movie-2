@@ -3,7 +3,6 @@ package it.uniroma3.siw.controller;
 import java.io.IOException;
 import java.time.Year;
 import java.util.*;
-
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -84,7 +83,7 @@ public class MovieController {
 	@PostMapping("/admin/movies")
 	public String newMovie(@Valid @ModelAttribute("movie") Movie movie, @RequestParam("file") MultipartFile[] files, BindingResult bindingResult, Model model) throws IOException {
 		Movie savedMovie = this.movieService.saveNewMovie(movie, files, bindingResult);
-		return redirection(savedMovie, "redirect:/movies/"+movie.getId(), "redirect:/admin/formNewMovie");
+		return redirection(savedMovie, "redirect:/admin/formUpdateMovie/"+movie.getId(), "redirect:/admin/formNewMovie");
 	}
 
 	@PostMapping("/admin/updateMovieDetails/{movie_id}")
@@ -100,7 +99,7 @@ public class MovieController {
 	@PostMapping("/admin/uploadPhoto/{movie_id}")
 	public String uploadPhoto(@PathVariable("movie_id") Long movieId, @RequestParam("file") MultipartFile[] files, Model model) throws IOException {
 		// Prendere il film, caricare le nuove foto nell'array e poi mettere il movie nel model addattributo
-		return redirection(this.movieService.uploadNewPhoto(movieId, files), "redirect:/admin/formUpdateMovie.html", "movieError.html");
+		return redirection(this.movieService.uploadNewPhoto(movieId, files), "redirect:/admin/formUpdateMovie/"+movieId, "movieError.html");
 	}
 
 	@GetMapping("/admin/deletePhoto/{movie_id}/{photo_id}")
