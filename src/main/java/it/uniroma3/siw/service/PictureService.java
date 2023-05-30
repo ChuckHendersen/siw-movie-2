@@ -15,7 +15,7 @@ public class PictureService {
 
 	@Autowired 
 	private PictureRepository pictureRepository;
-	
+
 	@Transactional
 	public Picture[] savePictures(MultipartFile[] files) throws IOException {
 		Picture[] pictures = new Picture[files.length];
@@ -30,5 +30,21 @@ public class PictureService {
 		}
 		return pictures;
 	}
-	
+
+	@Transactional
+	public Picture savePicture(MultipartFile f) throws IOException {
+		if(f.getSize() != 0) {
+			Picture picture = new Picture();
+			picture.setName(f.getResource().getFilename());
+			picture.setData(f.getBytes());
+			picture = this.pictureRepository.save(picture);
+			return picture;
+		}
+		else return null;
+	}
+
+	public void delete(Picture picture) {
+		this.pictureRepository.delete(picture);
+	}
+
 }
