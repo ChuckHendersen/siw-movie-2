@@ -19,7 +19,7 @@
 			<label>Modifica nome</label> <input th:field="*{name}" required /> <br> 
 			<label>Modifica cognome</label> <input th:field="*{surname}" required/> <br> 
 			<label>Modifica data di nascita</label> <input type="date" th:field="*{birthDate}" required/> <br>
-			<label>Modifica data di morte</label> <input type="date" th:field="*{deceasedDate}" required/> <br>
+			<label>Modifica data di morte</label> <input type="date" th:field="*{deceasedDate}"/> <br>
 			<button type="submit">Conferma</button>
 		</form>
 		<div th:if="${artist.picture}">
