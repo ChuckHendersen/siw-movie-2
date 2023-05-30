@@ -17,11 +17,13 @@
 				<span th:text="'Voto: '+${review.getVote()}">Voto: 5</span>
 				<p th:text="'Testo recensione: '+${review.getText()}">Testo recensione</p>
 			</div>
-			<div th:if="${review.isAuthor(credentials.user)}">
-				<a th:href="'/user/deleteReview/'+${review.getId()}">Cancella recensione (utente)</a>
-			</div>
-			<div th:if="${credentials.isAdmin() && !review.isAuthor(credentials.user)}">
-				<a th:href="'/admin/deleteReview/'+${review.getId()}">Cancella recensione (admin)</a>
+			<div th:if="${userDetails}">
+				<div th:if="${review.isAuthor(credentials.user)}">
+					<a th:href="'/user/deleteReview/'+${review.getId()}">Cancella recensione (utente)</a>
+				</div>
+				<div th:if="${credentials.isAdmin() && !review.isAuthor(credentials.user)}">
+					<a th:href="'/admin/deleteReview/'+${review.getId()}">Cancella recensione (admin)</a>
+				</div>
 			</div>
 		</div>
 	</body>
