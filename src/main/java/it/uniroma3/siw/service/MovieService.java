@@ -47,6 +47,7 @@ public class MovieService {
 		return null;
 	}
 
+	@Transactional
 	public Movie findById(Long movieId) {
 		return this.movieRepository.findById(movieId).orElse(null);
 	}

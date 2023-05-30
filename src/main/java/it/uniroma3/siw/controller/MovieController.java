@@ -126,14 +126,9 @@ public class MovieController {
 		model.addAttribute("credentials", credentials);
 		if(credentials!=null) {
 			//System.out.println("Utente loggato");
-			model.addAttribute("review", new Review());
+			model.addAttribute("review", this.movieService.createMovie());
 		}
-		Movie movie;
-		try {
-			movie = this.movieRepository.findById(id).get();
-		}catch(Exception e) {
-			movie = null;
-		}
+		Movie movie = this.movieService.findById(id);
 		//movie = this.movieRepository.findById(id).get();
 		model.addAttribute("movie", movie);
 		return "movie.html";
