@@ -147,7 +147,7 @@ public class MovieService {
 		}
 		return null;
 	}
-	
+
 	@Transactional
 	public Movie deleteMovie(Long movieId) {
 		Movie movieToBeDeleted = this.movieRepository.findById(movieId).orElse(null);
@@ -189,5 +189,13 @@ public class MovieService {
 		}
 		return movieToBeDeleted;
 	}
-}
 
+	public Movie save(Movie movie) {
+		boolean condition = Hibernate.isInitialized(movie);
+		condition = true; // per adesso
+		if(condition){
+			return this.movieRepository.save(movie);
+		}
+		return null;
+	}
+}

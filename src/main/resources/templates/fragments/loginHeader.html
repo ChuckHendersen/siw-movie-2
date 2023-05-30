@@ -7,7 +7,7 @@
 	<body>
 		<header th:fragment="headerLogin">
 			<div th:if="${userDetails}">
-				<span th:text="${userDetails.username}"></span>
+				<a th:href="'/users/'+${credentials.getUser().getId()}" th:text="${userDetails.username}"></a>
 				<a href="/logout">Logout</a>
 			</div>
 		<div th:unless="${userDetails}">

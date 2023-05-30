@@ -131,4 +131,8 @@ public class ArtistService {
 		return originalArtist;
 	}
 
+	public Set<Artist> findAllByListaFilmRecitatiIsNotContaining(Movie movie) {
+		return this.artistRepository.findAllByListaFilmRecitatiIsNotContaining(movie);
+	}
+
 }

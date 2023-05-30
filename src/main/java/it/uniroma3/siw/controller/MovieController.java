@@ -19,18 +19,18 @@ import it.uniroma3.siw.model.Artist;
 import it.uniroma3.siw.model.Credentials;
 import it.uniroma3.siw.model.Movie;
 import it.uniroma3.siw.model.Review;
-import it.uniroma3.siw.repository.ArtistRepository;
+import it.uniroma3.siw.service.ArtistService;
 import it.uniroma3.siw.service.CredentialsService;
 import it.uniroma3.siw.service.MovieService;
 import jakarta.validation.Valid;
 
 @Controller
 public class MovieController {
-	
-	@Autowired private ArtistRepository artistRepository;
+
 	@Autowired private CredentialsService credentialsService;
 	@Autowired private MovieService movieService;
-
+	@Autowired private ArtistService artistService;
+	
 	//Utility
 	/**
 	 * Metodo che ridirezione alla percorso di successo se movie!=null. Ritorna il percorso di fallimento altrimenti.
@@ -146,7 +146,7 @@ public class MovieController {
 
 	@GetMapping("/admin/addDirectorToMovie/{movie_id}")
 	public String addDirector(@PathVariable("movie_id") Long id, Model model) {
-		List<Artist> listaArtisti = (List<Artist>) this.artistRepository.findAll();
+		List<Artist> listaArtisti = (List<Artist>) this.artistService.findAll();
 		Movie movie = this.movieService.findById(id);
 		if(movie != null) {
 			if(listaArtisti.isEmpty()) {
@@ -172,7 +172,7 @@ public class MovieController {
 	public String addActors(Model model, @PathVariable("movie_id") Long movie_id) {
 		Movie movie = movieService.findById(movie_id);
 		if(movie !=null) {
-			Set<Artist> setAttoriCheNonHannoRecitato = (Set<Artist>) artistRepository.findAllByListaFilmRecitatiIsNotContaining(movie);
+			Set<Artist> setAttoriCheNonHannoRecitato = (Set<Artist>) artistService.findAllByListaFilmRecitatiIsNotContaining(movie);
 			model.addAttribute("movie", movie);
 			model.addAttribute("artists", setAttoriCheNonHannoRecitato);
 		}
@@ -182,7 +182,7 @@ public class MovieController {
 	@GetMapping("/admin/setActorToMovie/{actor_id}/{movie_id}")
 	public String setActorToMovie(Model model, @PathVariable("actor_id") Long actor_id, @PathVariable("movie_id") Long movie_id) {
 		Movie movie = this.movieService.setActorToMovie(actor_id, movie_id);
-		Set<Artist> setAttoriCheNonHannoRecitato = (Set<Artist>) artistRepository.findAllByListaFilmRecitatiIsNotContaining(movie);
+		Set<Artist> setAttoriCheNonHannoRecitato = (Set<Artist>) artistService.findAllByListaFilmRecitatiIsNotContaining(movie);
 		model.addAttribute("movie", movie);
 		model.addAttribute("artists", setAttoriCheNonHannoRecitato);
 		return redirection(movie, "/admin/actorsToAdd.html","movieError.html");
@@ -191,7 +191,7 @@ public class MovieController {
 	@GetMapping("/admin/deleteActorFromMovie/{actor_id}/{movie_id}")
 	public String deleteActorFromMovie(Model model, @PathVariable("actor_id") Long actor_id, @PathVariable("movie_id") Long movie_id) {
 		Movie movie = movieService.deleteActorFromMovie(actor_id, movie_id);
-		Set<Artist> setAttoriCheNonHannoRecitato = (Set<Artist>) artistRepository.findAllByListaFilmRecitatiIsNotContaining(movie);
+		Set<Artist> setAttoriCheNonHannoRecitato = (Set<Artist>) artistService.findAllByListaFilmRecitatiIsNotContaining(movie);
 		model.addAttribute("movie", movie);
 		model.addAttribute("artists", setAttoriCheNonHannoRecitato);
 		return redirection(movie,"/admin/actorsToAdd.html","movieError.html");

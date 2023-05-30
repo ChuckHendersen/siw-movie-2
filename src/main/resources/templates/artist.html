@@ -16,14 +16,14 @@
 		<div>
 			<span th:text="${artist.name}+' '+${artist.surname}"></span>
 		</div>
-		<div>
-		<h2>Film in cui ha recitato</h2>
+		<div th:if=${artist.listaFilmRecitati.size()!=0}>
+			<h2>Film in cui ha recitato</h2>
 			<div th:each="movie : ${artist.listaFilmRecitati}">
 				<a th:href="@{'/movies/'+${movie.id}}" th:text="${movie.title}"></a>
 			</div>
 		</div>
-		<div>
-		<h2>Film che ha diretto</h2>
+		<div th:if=${artist.listaFilmRecitati.size()!=0}>
+			<h2>Film che ha diretto</h2>
 			<div th:each="movie : ${artist.listaFilmDiretti}">
 				<a th:href="@{'/movies/'+${movie.id}}" th:text="${movie.title}"></a>
 			</div>

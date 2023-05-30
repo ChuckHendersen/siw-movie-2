@@ -15,18 +15,8 @@ import static it.uniroma3.siw.controller.ControllerUtils.*;
 @Controller
 public class ArtistController {
 
-	//	@Autowired 
-	//	private ArtistRepository artistRepository;
-
 	@Autowired
 	private ArtistValidator artistValidator;
-
-	//	@Autowired
-	//	private PictureRepository pictureRepository;
-	//
-	//	@Autowired
-	//	private MovieRepository movieRepository;
-
 
 	@Autowired
 	private ArtistService artistService;
@@ -48,8 +38,6 @@ public class ArtistController {
 			@RequestAttribute("file") MultipartFile file , 
 			BindingResult bindingResult, 
 			Model model) throws IOException {
-
-
 		this.artistValidator.validate(artist, bindingResult);
 		if(!bindingResult.hasErrors()) {
 			//dovrebbe avere una sola immagine l'array
