@@ -5,33 +5,21 @@
 	<title> Login - SiW Movie </title>
 	<meta th:replace="fragments/header.html :: metaFragment" />
 	<link th:replace="fragments/header.html :: stylesheetFragment"/>
+	<link th:replace="fragments/bootstrap.html :: bsCss"/>
 </head>
 
-<body>
-	<header th:replace="fragments/loginHeader.html :: headerLogin"></header>
-	<div>
-		<a href="/"><img src="/images/logo-siw.png" width=30%/></a>
-	</div>
+<body class="text-center">
+	<a href="/"><img class="mb-4" src="/images/logo-siw.png" width=30%/></a>
 	<h1>Login</h1>
-	<form th:action="@{/login}" method="POST">
-			<div>
-				<label>Username:</label>
-				<input name="username" type="text" required />
-			</div>
-			<div>
-				<label>Password:</label>
-				<span><input name="password" type="password" required /></span>
-			</div>
-			<div>
-				<span th:if="${param.error != null}">Username o password errati</span>
-			</div>
-			<div>
-				<span><button type="submit">Login</button></span>
-			</div>
+	<form th:action="@{/login}" method="POST" class="form-signin">
+		<label >Username:</label>
+		<input placeholder="Username" autofocus name="username" type="text" required /><br>
+		<label >Password:</label>
+		<input placeholder="Password" name="password" type="password" required /><br>
+		<span th:if="${param.error != null}">Username o password errati</span>
+		<button type="submit">Login</button>
 	</form>
-	<div>
-		<a th:href="@{/register}" th:text="Registrati">Registrati</a>
-	</div>
+	<a th:href="@{/register}" th:text="Registrati">Registrati</a>
+	<div th:replace="fragments/bootstrap.html :: bsScript"></div>
 </body>
-
 </html>
