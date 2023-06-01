@@ -4,12 +4,10 @@
 		<title>Gestione Film - SiW Movie</title>
 		<meta th:replace="fragments/header.html :: metaFragment" />
 		<link th:replace="fragments/header.html :: stylesheetFragment"/>
+		<link th:replace="fragments/bootstrap.html :: bsCss"/>
 	</head>
 	<body>
 		<header th:replace="fragments/loginHeader.html :: headerLogin"></header>
-		<div>
-			<a href="/"><img src="/images/logo-siw.png" width=30%/></a>
-		</div>
 		<h1>
 			Operazioni Film
 		</h1>
@@ -25,5 +23,6 @@
 		<div>
 			<a href="/admin/manageMovies">Modifica informazioni film</a>
 		</div>
+		<div th:replace="fragments/bootstrap.html :: bsScript"></div>
 	</body>
 </html>

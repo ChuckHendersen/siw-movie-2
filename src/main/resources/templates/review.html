@@ -4,6 +4,7 @@
 		<title>Recensione</title> 
 		<meta th:replace="fragments/header.html :: metaFragment" />
 		<link th:replace="fragments/header.html :: stylesheetFragment"/>
+		<link th:replace="fragments/bootstrap.html :: bsCss"/>
 	</head>
 	<body>
 		<header th:replace="fragments/loginHeader.html :: headerLogin"></header>
@@ -26,5 +27,6 @@
 				</div>
 			</div>
 		</div>
+		<div th:replace="fragments/bootstrap.html :: bsScript"></div>
 	</body>
 </html>

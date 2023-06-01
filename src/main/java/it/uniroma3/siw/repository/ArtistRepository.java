@@ -11,9 +11,9 @@ public interface ArtistRepository extends CrudRepository<Artist, Long>{
 	
 	/**
 	 * Checks if a artist already exists in the DB based on the name and surname
-	 * @param name
-	 * @param surname
-	 * @return
+	 * @param name name of the artist
+	 * @param surname surname of the artist
+	 * @return a boolean stating whether or not the artist is already present
 	 */
 	public boolean existsByNameAndSurname(String name, String surname);
 	
@@ -29,5 +29,5 @@ public interface ArtistRepository extends CrudRepository<Artist, Long>{
 	 * @param movie movie in which the artist have acted
 	 * @return Set of artist ordered by surname
 	 */
-	public Set<Artist> findAllByListFilmRecitatiContainingMovieOrderBySurname(Movie movie);
+	public Set<Artist> findAllByListaFilmRecitatiContainingOrderBySurname(Movie movie);
 }

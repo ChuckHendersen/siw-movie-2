@@ -4,12 +4,10 @@
 <title>Elimina film - SiW Movie</title>
 <meta th:replace="fragments/header.html :: metaFragment" />
 <link th:replace="fragments/header.html :: stylesheetFragment" />
+<link th:replace="fragments/bootstrap.html :: bsCss"/>
 </head>
 <body>
 	<header th:replace="fragments/loginHeader.html :: headerLogin"></header>
-	<div>
-		<a href="/"><img src="/images/logo-siw.png" width=30% /></a>
-	</div>
 	<h1>Scegli film da eliminare</h1>
 	<div th:if="${movies}">
 		<div th:each="movie : ${movies}">
@@ -20,5 +18,6 @@
 	<div th:if="${movies == null || movies.size() == 0}">
 		<h2>Non ci sono film da cancellare</h2>
 	</div>
+	<div th:replace="fragments/bootstrap.html :: bsScript"></div>
 </body>
 </html>

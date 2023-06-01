@@ -4,6 +4,7 @@
 		<title>Informazioni Utente - SiW Movie</title>  
 		<meta th:replace="fragments/header.html :: metaFragment" />
 		<link th:replace="fragments/header.html :: stylesheetFragment"/>
+		<link th:replace="fragments/bootstrap.html :: bsCss"/>
 	</head>
 	<body>
 		<header th:replace="fragments/loginHeader.html :: headerLogin"></header>
@@ -29,5 +30,6 @@
 		<div th:unless="${user.areThereAnyReviews()}">
 			<h3>Non ha scritto nessuna recensione</h3>
 		</div>
+		<div th:replace="fragments/bootstrap.html :: bsScript"></div>
 	</body>
 </html>

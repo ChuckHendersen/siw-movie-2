@@ -3,9 +3,8 @@ body {
     color:dimgrey;
 }
 
-img {
-  width: 50%;
-  max-width: 500px;
+img{
+	width: 50%;
 }
 
 a { 
@@ -18,21 +17,16 @@ a:hover {
 }
 
 label {
-	width: 8em;
+	width: 6em;
 	display: inline-block;
 }
 
-header {
-  background-color: rgb(98, 192, 144);
-  color: white;
-  height: 1.5em;
-  margin-bottom: 0.5em;
-  padding: 0.2em;
-  text-align: right; 
+.navbar-brand {
+      max-width: 280px;
+      display: flex;
+      align-items: center;
 }
-
-header a { 
-	text-decoration: none; 
-    color: white;
-    font-size: 0.8em;
+.navbar-brand img {
+      max-width: 100%;
+      height: auto;
 }

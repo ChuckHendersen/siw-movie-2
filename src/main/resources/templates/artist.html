@@ -4,12 +4,10 @@
 		<title>Artista - SiW Movie</title>
 		<meta th:replace="fragments/header.html :: metaFragment" />
 		<link th:replace="fragments/header.html :: stylesheetFragment"/>
+		<link th:replace="fragments/bootstrap.html :: bsCss"/>
 	</head>
 	<body>
 		<header th:replace="fragments/loginHeader.html :: headerLogin"></header>
-		<div>
-			<a href="/"><img src="/images/logo-siw.png" width=30%/></a>
-		</div>
 		<h1>
 			Artista
 		</h1>
@@ -22,7 +20,7 @@
 				<a th:href="@{'/movies/'+${movie.id}}" th:text="${movie.title}"></a>
 			</div>
 		</div>
-		<div th:if=${artist.listaFilmRecitati.size()!=0}>
+		<div th:if=${artist.listaFilmDiretti.size()!=0}>
 			<h2>Film che ha diretto</h2>
 			<div th:each="movie : ${artist.listaFilmDiretti}">
 				<a th:href="@{'/movies/'+${movie.id}}" th:text="${movie.title}"></a>
@@ -32,5 +30,6 @@
 				<!-- Immagine-->
 				<img th:src="'data:image/jpeg;base64,'+${artist.picture.getImgData()}"></img>
 		</div>
+		<div th:replace="fragments/bootstrap.html :: bsScript"></div>
 	</body>
 </html>

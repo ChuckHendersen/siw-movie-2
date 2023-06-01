@@ -8,18 +8,28 @@
 	<link th:replace="fragments/bootstrap.html :: bsCss"/>
 </head>
 
-<body class="text-center">
-	<a href="/"><img class="mb-4" src="/images/logo-siw.png" width=30%/></a>
+<body>
+	<header th:replace="fragments/loginHeader.html :: headerLoginPage"></header>
+	<div class="d-flex flex-column align-items-center">
 	<h1>Login</h1>
 	<form th:action="@{/login}" method="POST" class="form-signin">
+		<div class="mb-3 mt-3">
 		<label >Username:</label>
 		<input placeholder="Username" autofocus name="username" type="text" required /><br>
+		</div>
+		<div class="mb-3">
 		<label >Password:</label>
 		<input placeholder="Password" name="password" type="password" required /><br>
+		</div>
 		<span th:if="${param.error != null}">Username o password errati</span>
-		<button type="submit">Login</button>
+		<div class="d-flex justify-content-center mb-3">
+		<button class="btn btn-primary" type="submit">Login</button>
+		</div>
+		<div class="d-flex justify-content-center mb-3">
+		<a th:href="@{/register}" th:text="Registrati">Registrati</a>
+		</div>
 	</form>
-	<a th:href="@{/register}" th:text="Registrati">Registrati</a>
+	</div>
 	<div th:replace="fragments/bootstrap.html :: bsScript"></div>
 </body>
 </html>

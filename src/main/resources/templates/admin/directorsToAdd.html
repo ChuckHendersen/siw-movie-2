@@ -3,12 +3,10 @@
 		<title>Aggiungi Regista</title>
 		<meta th:replace="fragments/header.html :: metaFragment" />
 		<link th:replace="fragments/header.html :: stylesheetFragment"/>
+		<link th:replace="fragments/bootstrap.html :: bsCss"/>
 	</head>
 	<body>
 		<header th:replace="fragments/loginHeader.html :: headerLogin"></header>
-		<div>
-			<a href="/"><img src="/images/logo-siw.png" width=30%/></a>
-		</div>
 		<ul>
 			<li th:each="artist:${artists}">
 				<div>
@@ -17,5 +15,6 @@
 			</li>
 		</ul>
 		<span th:if="${messaggioErrore}" th:text="${messaggioErrore}"></span>
+		<div th:replace="fragments/bootstrap.html :: bsScript"></div>
 	</body>
 </html>

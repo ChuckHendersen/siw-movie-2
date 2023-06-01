@@ -1,21 +1,51 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-	<head th:fragment="headerfiles(title)">
-		<meta charset="UTF-8" />
-		<link th:href="@{/css/stylesheet.css?version=2}" rel="stylesheet">
-	</head>
-	<body>
-		<header th:fragment="headerLogin">
-			<div th:if="${userDetails}">
-				<a th:href="'/users/'+${credentials.getUser().getId()}" th:text="${userDetails.username}"></a>
-				<a href="/logout">Logout</a>
-			</div>
-		<div th:unless="${userDetails}">
-			<a href="/login">Login</a>
-		</div>
-		</header>
-		<footer th:fragment="footer">
-			<a th:href="@{/}">Home</a>
-		</footer>
-	</body>
+<head th:fragment="headerfiles(title)">
+<meta charset="UTF-8" />
+<link th:href="@{/css/stylesheet.css?version=2}" rel="stylesheet">
+</head>
+<body>
+
+	<header th:fragment="headerLogin" class="bg-light">
+			<nav class="navbar navbar-expand navbar-light bg-light">
+				<a class="navbar-brand" href="/"> 
+					<img src="/images/logo-siw.png" alt="Logo del sito" />
+				</a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMenu" aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
+     				<span class="navbar-toggler-icon"></span>
+   				</button>
+   				<div class="d-flex ml-auto" id="navbarMenu">
+     				<ul class="navbar-nav ml-auto">
+     					<li  th:if="${credentials}">
+     						<a class="nav-link" th:text="${credentials.username}" th:href="'/users/'+${credentials.user.id}"></a>
+     					</li>
+     					<li  th:if="${credentials}">
+     						<a class="nav-link" href="/logout">Logout</a>
+     					</li>
+        				<li  th:unless="${credentials}" class="nav-item">
+          					<a class="nav-link" href="/login">Login</a>
+        				</li>
+      				</ul>
+    			</div>
+			</nav>
+	</header>
+	<header th:fragment="headerLoginPage" class="bg-light">
+		<nav class="navbar navbar-expand navbar-light bg-light">
+			<a class="navbar-brand" href="/">
+				<img src="/images/logo-siw.png" alt="Logo del sito" />
+			</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMenu" aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
+     				<span class="navbar-toggler-icon"></span>
+   			</button>
+   			<div class="collapse navbar-collapse" id="navbarMenu">
+     			<ul class="navbar-nav ml-auto">
+      			</ul>
+    		</div>
+		</nav>
+	</header>
+
+	<footer th:fragment="footer">
+		<a th:href="@{/}">Home</a>
+	</footer>
+</body>
 </html>
