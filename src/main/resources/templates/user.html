@@ -2,12 +2,12 @@
 <html>
 	<head>
 		<title>Informazioni Utente - SiW Movie</title>  
-		<meta th:replace="fragments/header.html :: metaFragment" />
-		<link th:replace="fragments/header.html :: stylesheetFragment"/>
-		<link th:replace="fragments/bootstrap.html :: bsCss"/>
+		<meta th:replace="~{fragments/header.html :: metaFragment}" />
+		<link th:replace="~{fragments/header.html :: stylesheetFragment}"/>
+		<link th:replace="~{fragments/bootstrap.html :: bsCss}"/>
 	</head>
 	<body>
-		<header th:replace="fragments/loginHeader.html :: headerLogin"></header>
+		<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
 		<h1>Informazioni utente</h1>
 		<div>
 			<h2 th:text="${user.credentials.username}">Username</h2>
@@ -30,6 +30,6 @@
 		<div th:unless="${user.areThereAnyReviews()}">
 			<h3>Non ha scritto nessuna recensione</h3>
 		</div>
-		<div th:replace="fragments/bootstrap.html :: bsScript"></div>
+		<div th:replace="~{fragments/bootstrap.html :: bsScript}"></div>
 	</body>
 </html>

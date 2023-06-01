@@ -2,12 +2,12 @@
 <html>
 <head>
 	<title>Elimina artista - SiW Movie</title>
-	<meta th:replace="fragments/header.html :: metaFragment" />
-	<link th:replace="fragments/header.html :: stylesheetFragment" />
-	<link th:replace="fragments/bootstrap.html :: bsCss"/>
+	<meta th:replace="~{fragments/header.html :: metaFragment}" />
+	<link th:replace="~{fragments/header.html :: stylesheetFragment}" />
+	<link th:replace="~{fragments/bootstrap.html :: bsCss}"/>
 </head>
 <body>
-	<header th:replace="fragments/loginHeader.html :: headerLogin"></header>
+	<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
 	<h1>Scegli film da eliminare</h1>
 	<div th:if="${artists}">
 		<div th:each="artist : ${artists}">
@@ -18,6 +18,6 @@
 	<div th:if="${artists == null || artists.size() == 0}">
 		<h2>Non ci sono artisti da cancellare</h2>
 	</div>
-	<div th:replace="fragments/bootstrap.html :: bsScript"></div>
+	<div th:replace="~{fragments/bootstrap.html :: bsScript}"></div>
 </body>
 </html>

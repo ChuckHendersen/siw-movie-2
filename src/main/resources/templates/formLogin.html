@@ -3,22 +3,20 @@
 
 <head>
 	<title> Login - SiW Movie </title>
-	<meta th:replace="fragments/header.html :: metaFragment" />
-	<link th:replace="fragments/header.html :: stylesheetFragment"/>
-	<link th:replace="fragments/bootstrap.html :: bsCss"/>
+	<meta th:replace="~{fragments/header.html :: metaFragment}" />
+	<link th:replace="~{fragments/header.html :: stylesheetFragment}"/>
+	<link th:replace="~{fragments/bootstrap.html :: bsCss}"/>
 </head>
 
 <body>
-	<header th:replace="fragments/loginHeader.html :: headerLoginPage"></header>
+	<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
 	<div class="d-flex flex-column align-items-center">
 	<h1>Login</h1>
 	<form th:action="@{/login}" method="POST" class="form-signin">
 		<div class="mb-3 mt-3">
-		<label >Username:</label>
 		<input placeholder="Username" autofocus name="username" type="text" required /><br>
 		</div>
 		<div class="mb-3">
-		<label >Password:</label>
 		<input placeholder="Password" name="password" type="password" required /><br>
 		</div>
 		<span th:if="${param.error != null}">Username o password errati</span>
@@ -30,6 +28,6 @@
 		</div>
 	</form>
 	</div>
-	<div th:replace="fragments/bootstrap.html :: bsScript"></div>
+	<div th:replace="~{fragments/bootstrap.html :: bsScript}"></div>
 </body>
 </html>

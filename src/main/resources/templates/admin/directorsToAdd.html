@@ -1,12 +1,12 @@
 <html>
 	<head>
 		<title>Aggiungi Regista</title>
-		<meta th:replace="fragments/header.html :: metaFragment" />
-		<link th:replace="fragments/header.html :: stylesheetFragment"/>
-		<link th:replace="fragments/bootstrap.html :: bsCss"/>
+		<meta th:replace="~{fragments/header.html :: metaFragment}" />
+		<link th:replace="~{fragments/header.html :: stylesheetFragment}"/>
+		<link th:replace="~{fragments/bootstrap.html :: bsCss}"/>
 	</head>
 	<body>
-		<header th:replace="fragments/loginHeader.html :: headerLogin"></header>
+		<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
 		<ul>
 			<li th:each="artist:${artists}">
 				<div>
@@ -15,6 +15,6 @@
 			</li>
 		</ul>
 		<span th:if="${messaggioErrore}" th:text="${messaggioErrore}"></span>
-		<div th:replace="fragments/bootstrap.html :: bsScript"></div>
+		<div th:replace="~{fragments/bootstrap.html :: bsScript}"></div>
 	</body>
 </html>

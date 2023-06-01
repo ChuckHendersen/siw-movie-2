@@ -2,12 +2,12 @@
 <html>
 	<head>
 		<title>Film Cercato - SiW Movie</title>
-		<meta th:replace="fragments/header.html :: metaFragment" />
-		<link th:replace="fragments/header.html :: stylesheetFragment"/>
-		<link th:replace="fragments/bootstrap.html :: bsCss"/>
+		<meta th:replace="~{fragments/header.html :: metaFragment}" />
+		<link th:replace="~{fragments/header.html :: stylesheetFragment}"/>
+		<link th:replace="~{fragments/bootstrap.html :: bsCss}"/>
 	</head>
 	<body>
-		<header th:replace="fragments/loginHeader.html :: headerLogin"></header>
+		<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
 		<div>
 			<h1><span>Film trovati</span></h1>
 		</div>
@@ -20,6 +20,6 @@
 				</li>
 			</ul>
 		</div>
-		<div th:replace="fragments/bootstrap.html :: bsScript"></div>
+		<div th:replace="~{fragments/bootstrap.html :: bsScript}"></div>
 	</body>
 </html>

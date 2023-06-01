@@ -1,32 +1,33 @@
-body { 
-    font-family: "Geneva";
-    color:dimgrey;
+body {
+	font-family: "Geneva";
+	color: dimgrey;
 }
 
-img{
+img {
 	width: 50%;
 }
 
-a { 
-	text-decoration: none; 
-    color: darkgrey;
+a {
+	text-decoration: none;
+	color: darkgrey;
 }
 
-a:hover { 
-	text-decoration: underline; 
+a:hover {
+	text-decoration: underline;
 }
 
 label {
-	width: 6em;
+	width: 4em;
 	display: inline-block;
 }
 
 .navbar-brand {
-      max-width: 280px;
-      display: flex;
-      align-items: center;
+	max-width: 280px;
+	display: flex;
+	align-items: center;
 }
+
 .navbar-brand img {
-      max-width: 100%;
-      height: auto;
+	max-width: 100%;
+	height: auto;
 }

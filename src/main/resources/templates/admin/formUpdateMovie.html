@@ -2,12 +2,12 @@
 <html>
 <head>
 <title>Aggiorna film - SiW Movie</title>
-<meta th:replace="fragments/header.html :: metaFragment" />
-<link th:replace="fragments/header.html :: stylesheetFragment" />
-<link th:replace="fragments/bootstrap.html :: bsCss"/>
+<meta th:replace="~{fragments/header.html :: metaFragment}" />
+<link th:replace="~{fragments/header.html :: stylesheetFragment}" />
+<link th:replace="~{fragments/bootstrap.html :: bsCss}"/>
 </head>
 <body>
-	<header th:replace="fragments/loginHeader.html :: headerLogin"></header>
+	<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
 	<div>
 		<h1 th:text="${movie.title} +' '+'('+${movie.year}+')'">Titolo Film</h1>
 		<form method="POST" th:action="@{'/admin/updateMovieDetails/'+${movie.id}}">
@@ -58,6 +58,6 @@
 				th:text="${actor.name}+' '+${actor.surname}"></a>
 		</div>
 	</div>
-	<div th:replace="fragments/bootstrap.html :: bsScript"></div>
+	<div th:replace="~{fragments/bootstrap.html :: bsScript}"></div>
 </body>
 </html>

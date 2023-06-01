@@ -2,12 +2,12 @@
 <html>
 	<head>
 		<title>Artista - SiW Movie</title>
-		<meta th:replace="fragments/header.html :: metaFragment" />
-		<link th:replace="fragments/header.html :: stylesheetFragment"/>
-		<link th:replace="fragments/bootstrap.html :: bsCss"/>
+		<meta th:replace="~{fragments/header.html :: metaFragment}" />
+		<link th:replace="~{fragments/header.html :: stylesheetFragment}"/>
+		<link th:replace="~{fragments/bootstrap.html :: bsCss}"/>
 	</head>
 	<body>
-		<header th:replace="fragments/loginHeader.html :: headerLogin"></header>
+		<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
 		<h1>
 			Artista
 		</h1>
@@ -30,6 +30,6 @@
 				<!-- Immagine-->
 				<img th:src="'data:image/jpeg;base64,'+${artist.picture.getImgData()}"></img>
 		</div>
-		<div th:replace="fragments/bootstrap.html :: bsScript"></div>
+		<div th:replace="~{fragments/bootstrap.html :: bsScript}"></div>
 	</body>
 </html>
