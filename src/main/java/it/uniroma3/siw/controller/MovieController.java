@@ -207,6 +207,7 @@ public class MovieController {
 	@GetMapping("/admin/confirmMovieDeletion/{movie_id}")
 	public String confirmMovieDeletion(@PathVariable("movie_id") Long movieId, Model model) {
 		Movie movie = this.movieService.findById(movieId);
+		model.addAttribute("movie", movie);
 		return redirection(movie, "/admin/confirmMovieDeletion.html", "movieError.html");
 	}
 

@@ -31,3 +31,18 @@ label {
 	max-width: 100%;
 	height: auto;
 }
+
+.img-container {
+    max-height: 225px; /* Altezza massima desiderata */
+    overflow: hidden; /* Nasconde eventuali parti dell'immagine che superano il container */
+    display: flex; /* Utilizza un layout flessibile */
+    justify-content: center; /* Centra l'immagine sia verticalmente che orizzontalmente */
+    align-items: center;
+  }
+
+.image-container-img {
+    max-height: 100%; /* Occupa al massimo l'altezza del container */
+    max-width: 100%; /* Occupa al massimo la larghezza del container */
+    display: inline-block; /* Assicura il corretto layout dell'immagine */
+    vertical-align: middle; /* Centra l'immagine verticalmente */
+}
