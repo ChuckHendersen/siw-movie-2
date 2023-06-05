@@ -31,15 +31,6 @@ public class MovieController {
 	@Autowired private CredentialsService credentialsService;
 	@Autowired private MovieService movieService;
 	@Autowired private ArtistService artistService;
-	
-	//Utility
-	/**
-	 * Metodo che ridirezione alla percorso di successo se movie!=null. Ritorna il percorso di fallimento altrimenti.
-	 * @param movie 
-	 * @param successPath Percorso di successo
-	 * @param failurePath Percorso di fallimento
-	 * @return Percorso finale
-	 */
 
 	@GetMapping("/")
 	public String index(Model model) {
