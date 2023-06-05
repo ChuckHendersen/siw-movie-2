@@ -1,32 +1,46 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Recensione</title> 
-		<meta th:replace="~{fragments/header.html :: metaFragment}" />
-		<link th:replace="~{fragments/header.html :: stylesheetFragment}"/>
-		<link th:replace="~{fragments/bootstrap.html :: bsCss}"/>
-	</head>
-	<body>
-		<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
-		<div>
-			<h1>Gestisci recensione</h1>
-			<h2 th:text="'Id utente: '+${review.getAuthor().getId()}">Id utente: 1</h2>
-			<h2 th:text="'Autore: '+${review.getAuthor().getName()}+' '+${review.getAuthor().getSurname()}">Autore: nomeAutore</h2>
-			<div>
-				<h3>Recensione</h3>
-				<h4 th:text="'Titolo: '+${review.getTitle()}">Titolo: TitoloRecensione</h4>
-				<span th:text="'Voto: '+${review.getVote()}">Voto: 5</span>
-				<p th:text="'Testo recensione: '+${review.getText()}">Testo recensione</p>
-			</div>
-			<div th:if="${userDetails}">
-				<div th:if="${review.isAuthor(credentials.user)}">
-					<a th:href="'/user/deleteReview/'+${review.getId()}">Cancella recensione (utente)</a>
-				</div>
-				<div th:if="${credentials.isAdmin() && !review.isAuthor(credentials.user)}">
-					<a th:href="'/admin/deleteReview/'+${review.getId()}">Cancella recensione (admin)</a>
+
+<head>
+	<title>Recensione</title>
+	<meta th:replace="~{fragments/header.html :: metaFragment}" />
+	<link th:replace="~{fragments/header.html :: stylesheetFragment}" />
+	<link th:replace="~{fragments/bootstrap.html :: bsCss}" />
+</head>
+
+<body>
+	<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
+	<div class="container justify-content-center text-center">
+		<h1 class="mt-5">Gestisci recensione</h1>
+		<!-- Informazioni recensione -->
+		<div class="row justify-content-center mt-4">
+			<div class="col">
+				<div>
+					<h4 th:text="'Titolo: ' + ${review.getTitle()}">Titolo: TitoloRecensione</h4>
+					<span th:text="'Voto: ' + ${review.getVote()}">Voto: 5</span><br>
+					<span th:text="'Testo recensione: ' + ${review.getText()}">Testo recensione</span><br>
+					<span th:text="'Autore: ' + ${review.getAuthor().getName()} + ' ' + ${review.getAuthor().getSurname()}">
+					Autore: nomeAutore</span><br>
+					<span>Film recensito: <a th:href="'/movies/' + ${review.reviewedMovie.id}" th:text="${review.reviewedMovie.title}"></a></span>
 				</div>
 			</div>
 		</div>
-		<div th:replace="~{fragments/bootstrap.html :: bsScript}"></div>
-	</body>
+
+		<!-- Opzioni di cancellazione -->
+		<div class="row justify-content-center mt-4" th:if="${userDetails}">
+			<div class="col">
+				<div th:if="${review.isAuthor(credentials.user)}">
+					<a class="btn btn-danger" th:href="'/user/deleteReview/' + ${review.getId()}">Cancella recensione
+						(utente)</a>
+				</div>
+				<div th:if="${credentials.isAdmin() && !review.isAuthor(credentials.user)}">
+					<a class="btn btn-danger" th:href="'/admin/deleteReview/' + ${review.getId()}">Cancella recensione
+						(admin)</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div th:replace="~{fragments/bootstrap.html :: bsScript}"></div>
+</body>
+
 </html>
