@@ -22,6 +22,8 @@ public class ReviewValidator implements org.springframework.validation.Validator
 		Review review = (Review) target;
 		if(this.reviewRepository.existsByReviewedMovieAndAuthor(review.getReviewedMovie(), review.getAuthor())) {
 			errors.reject("review.duplicate");
+		}else if(review.getVote()<1 ||  review.getVote()>5) {
+			errors.reject("review.invalidVote");
 		}
 	}
 

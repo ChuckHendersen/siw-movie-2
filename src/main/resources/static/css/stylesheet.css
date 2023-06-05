@@ -3,10 +3,6 @@ body {
 	color: dimgrey;
 }
 
-img {
-	width: 50%;
-}
-
 a {
 	text-decoration: none;
 	color: darkgrey;
@@ -32,9 +28,24 @@ label {
 	height: auto;
 }
 
+.review{
+	background-color: rgb(230, 230, 230);
+	margin-bottom: 2%;
+	color: black;
+	border-radius: 10px;
+}
+
+.roundedCorner{
+	border-radius: 10px;
+}
+
+.graybackground{
+	background-color: rgb(230, 230, 230);
+}
+
 .img-container {
     max-height: 225px; /* Altezza massima desiderata */
-    min-height: 225px; /*ho trovato il fix daje tutto forza roma*/
+    min-height: 225px; /*ho trovato il fix daje tutto forza*/
     overflow: hidden; /* Nasconde eventuali parti dell'immagine che superano il container */
     display: flex; /* Utilizza un layout flessibile */
     justify-content: center; /* Centra l'immagine sia verticalmente che orizzontalmente */

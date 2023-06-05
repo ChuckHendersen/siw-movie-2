@@ -23,6 +23,7 @@ import it.uniroma3.siw.service.ArtistService;
 import it.uniroma3.siw.service.CredentialsService;
 import it.uniroma3.siw.service.MovieService;
 import jakarta.validation.Valid;
+import static it.uniroma3.siw.controller.ControllerUtils.*;
 
 @Controller
 public class MovieController {
@@ -39,12 +40,6 @@ public class MovieController {
 	 * @param failurePath Percorso di fallimento
 	 * @return Percorso finale
 	 */
-	public String redirection(Movie movie, String successPath, String failurePath) {
-		if(movie != null) {
-			return successPath;
-		}
-		return failurePath;
-	}
 
 	@GetMapping("/")
 	public String index(Model model) {

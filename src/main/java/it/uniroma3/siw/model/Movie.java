@@ -134,4 +134,16 @@ public class Movie {
 		}
 		return null;
 	}
+	
+	public List<Picture> getAllButFirstPictures() {
+		List<Picture> allButFirst = new LinkedList<>();
+		Iterator<Picture> pictureIterator = this.pictures.iterator();
+		if(pictureIterator.hasNext()) {
+			pictureIterator.next();
+			while(pictureIterator.hasNext()) {
+				allButFirst.add(pictureIterator.next());
+			}
+		}
+		return allButFirst;
+	}
 }

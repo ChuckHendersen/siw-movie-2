@@ -1,35 +1,44 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Artista - SiW Movie</title>
-		<meta th:replace="~{fragments/header.html :: metaFragment}" />
-		<link th:replace="~{fragments/header.html :: stylesheetFragment}"/>
-		<link th:replace="~{fragments/bootstrap.html :: bsCss}"/>
-	</head>
-	<body>
-		<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
-		<h1>
-			Artista
-		</h1>
-		<div>
-			<span th:text="${artist.name}+' '+${artist.surname}"></span>
-		</div>
-		<div th:if=${artist.listaFilmRecitati.size()!=0}>
-			<h2>Film in cui ha recitato</h2>
-			<div th:each="movie : ${artist.listaFilmRecitati}">
-				<a th:href="@{'/movies/'+${movie.id}}" th:text="${movie.title}"></a>
+
+<head>
+	<title>Artista - SiW Movie</title>
+	<meta th:replace="~{fragments/header.html :: metaFragment}" />
+	<link th:replace="~{fragments/header.html :: stylesheetFragment}" />
+	<link th:replace="~{fragments/bootstrap.html :: bsCss}" />
+</head>
+
+<body>
+	<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
+	<div class="container display: flex;justify-content: center; align-items: center;">
+		<div class="row">
+			<div class="col text-center">
+				<div class="mt-3 mb-4">
+					<h1 th:text="${artist.name}+' '+${artist.surname}"></h1>
+				</div>
+				<div th:if="${artist.picture}" class="mt-2 mb-5">
+					<!-- Immagine-->
+					<img th:src="'data:image/jpeg;base64,'+${artist.picture.getImgData()}"
+						class="w-100 roundedCorner"></img>
+				</div>
 			</div>
 		</div>
-		<div th:if=${artist.listaFilmDiretti.size()!=0}>
-			<h2>Film che ha diretto</h2>
-			<div th:each="movie : ${artist.listaFilmDiretti}">
-				<a th:href="@{'/movies/'+${movie.id}}" th:text="${movie.title}"></a>
+		<div class="row mb-5 justify-content-center">
+			<div th:if=${artist.listaFilmRecitati.size()!=0} class="col-sm-5 mb-2 roundedCorner graybackground">
+				<h2>Film in cui ha recitato</h2>
+				<div th:each="movie : ${artist.listaFilmRecitati}">
+					<a th:href="@{'/movies/'+${movie.id}}" th:text="${movie.title}"></a>
+				</div>
+			</div>
+			<div th:if=${artist.listaFilmDiretti.size()!=0} class="col-sm-5 mb-2 roundedCorner graybackground offset-sm-1">
+				<h2>Film che ha diretto</h2>
+				<div th:each="movie : ${artist.listaFilmDiretti}">
+					<a th:href="@{'/movies/'+${movie.id}}" th:text="${movie.title}"></a>
+				</div>
 			</div>
 		</div>
-		<div th:if="${artist.picture}">
-				<!-- Immagine-->
-				<img th:src="'data:image/jpeg;base64,'+${artist.picture.getImgData()}"></img>
-		</div>
-		<div th:replace="~{fragments/bootstrap.html :: bsScript}"></div>
-	</body>
+	</div>
+	<div th:replace="~{fragments/bootstrap.html :: bsScript}"></div>
+</body>
+
 </html>

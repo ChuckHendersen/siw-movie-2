@@ -44,7 +44,7 @@ public class ReviewService {
 	public Review userSaveNewReview(Review review, Long movieId, Long userId) {
 		Movie movie = this.movieService.findById(movieId);
 		User author = this.userRepository.findById(userId).get();
-		if(movie != null && author != null) {
+		if(movie != null && author != null && !this.reviewRepository.existsByReviewedMovieAndAuthor(movie, author)) {
 			movie.getReviews().add(review);
 			author.getReviews().add(review);
 			review.setReviewedMovie(movie);
@@ -57,6 +57,10 @@ public class ReviewService {
 		return null;
 	}
 
+	public boolean hasUserWrittenReviewForMovie(Movie movie, User user) {
+		return reviewRepository.existsByReviewedMovieAndAuthor(movie, user);
+	}
+	
 	public Review userDeleteReview(Long reviewId) {
 		Review review = this.getReview(reviewId);
 		if(review != null) {
