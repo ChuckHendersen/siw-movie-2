@@ -12,46 +12,38 @@
 
 <body>
 	<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
-	<h1>Registrazione nuovo utente</h1>
-	<form th:action="@{/register}" method="POST">
-		<div>
-			<label>Username</label>
-			<span>
-				<input type="text" placeholder="username" required th:field="${newCredentials.username}" />
-			</span>
-			<span th:if="${#fields.hasErrors('newCredentials.username')}" th:errors="${newCredentials.username}"
-				th:style="'color:red'">
-			</span>
-		</div>
-		<div>
-			<label>Password</label>
-			<span><input type="password" placeholder="password" required th:field="${newCredentials.password}" />
-			</span>
-			<span th:if="${#fields.hasErrors('newCredentials.password')}" th:errors="${newCredentials.password}" th:style="'color:red'">
-			</span>
-		</div>
-		<div>
-			<label>Nome</label>
-			<span><input type="text" placeholder="name" required th:field="${user.name}" /></span>
-			<span th:if="${#fields.hasErrors('user.name')}" th:errors="${user.name}" th:style="'color:red'">
-			</span>
-		</div>
-		<div>
-			<label>Cognome</label>
-			<span><input type="text" placeholder="surname" required th:field="${user.surname}" /></span>
-			<span th:if="${#fields.hasErrors('user.surname')}" th:errors="${user.surname}" th:style="'color:red'">
-			</span>
-		</div>
-		<div>
-			<label>Email</label>
-			<span><input type="text" placeholder="email" required th:field="${user.email}" /></span>
-			<span th:if="${#fields.hasErrors('user.email')}" th:errors="${user.email}" th:style="'color:red'">
-			</span>
-		</div>
-		<div>
-			<button type="submit">Registra</button>
-		</div>
-	</form>
+	<div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-lg-6">
+                <h1 class="text-center">Registrazione nuovo utente</h1>
+                <form th:action="@{/register}" method="POST">
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="username" placeholder="Username" required th:field="${newCredentials.username}" />
+                        <span th:if="${#fields.hasErrors('newCredentials.username')}" class="text-danger" th:errors="${newCredentials.username}"></span>
+                    </div>
+                    <div class="mb-3">
+                        <input type="password" class="form-control" id="password" placeholder="Password" required th:field="${newCredentials.password}" />
+                        <span th:if="${#fields.hasErrors('newCredentials.password')}" class="text-danger" th:errors="${newCredentials.password}"></span>
+                    </div>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="name" placeholder="Nome" required th:field="${user.name}" />
+                        <span th:if="${#fields.hasErrors('user.name')}" class="text-danger" th:errors="${user.name}"></span>
+                    </div>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="surname" placeholder="Cognome" required th:field="${user.surname}" />
+                        <span th:if="${#fields.hasErrors('user.surname')}" class="text-danger" th:errors="${user.surname}"></span>
+                    </div>
+                    <div class="mb-3">
+                        <input type="email" class="form-control" id="email" placeholder="Email" required th:field="${user.email}" />
+                        <span th:if="${#fields.hasErrors('user.email')}" class="text-danger" th:errors="${user.email}"></span>
+                    </div>
+                    <div class="text-center mt-3">
+                        <button type="submit" class="btn btn-primary">Registra</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 	<div th:replace="~{fragments/bootstrap.html :: bsScript}"></div>
 </body>
 

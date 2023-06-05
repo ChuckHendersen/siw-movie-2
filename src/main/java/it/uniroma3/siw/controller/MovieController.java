@@ -113,7 +113,11 @@ public class MovieController {
 
 	@PostMapping("/searchMovies")
 	public String searchMovies(Model model, @RequestParam Year year) {
-		model.addAttribute("movies",this.movieService.findByYear(year));
+		if(year!=null)
+			model.addAttribute("movies",this.movieService.findByYear(year));
+		else {
+			model.addAttribute("movies", List.<Movie>of());
+		}
 		return "foundMovies.html";
 	}
 
