@@ -40,16 +40,6 @@ public class ArtistService {
 		return savedArtist;
 	}
 
-//	@Transactional
-//	public Artist setPictureToArtist(Long artistId, Picture picture ) {
-//		Artist artist = this.findById(artistId);
-//		if(artist!=null) {
-//			artist.setPicture(picture);
-//			this.artistRepository.save(artist);
-//		}
-//		return artist;
-//	}
-
 	@Transactional
 	public Artist updateArtistPicture(Long artistId, MultipartFile file) throws IOException {
 		Artist artist = this.findById(artistId);
