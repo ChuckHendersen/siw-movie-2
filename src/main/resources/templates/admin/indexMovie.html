@@ -1,28 +1,39 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Gestione Film - SiW Movie</title>
-		<meta th:replace="~{fragments/header.html :: metaFragment}" />
-		<link th:replace="~{fragments/header.html :: stylesheetFragment}"/>
-		<link th:replace="~{fragments/bootstrap.html :: bsCss}"/>
-	</head>
-	<body>
-		<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
-		<h1>
-			Operazioni Film
-		</h1>
-		<div>
-			<a href="/movies">Vedi film</a>
+<head>
+<title>Gestione Film - SiW Movie</title>
+<meta th:replace="~{fragments/header.html :: metaFragment}" />
+<link th:replace="~{fragments/header.html :: stylesheetFragment}" />
+<link th:replace="~{fragments/bootstrap.html :: bsCss}" />
+</head>
+<body>
+	<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
+	<div class="container justify-content-center text-center">
+		<h1 class="mb-4 mt-5">Operazioni Film</h1>
+		<div class="row justify-content-center">
+			<div class="col-md-4 mb-4">
+				<div class="card box-shadow">
+					<a href="/admin/formNewMovie" class=" btn btn-primary btn-lg">
+						<span class="text-black">Inserisci nuovo film</span>
+					</a>
+				</div>
+			</div>
+			<div class="col-md-4 mb-4">
+				<div class="card box-shadow">
+					<a href="/admin/moviesToDeleteIndex" class="btn btn-primary btn-lg">
+						<span class="text-black">Cancella un film esistente</span>
+					</a>
+				</div>
+			</div>
+			<div class="col-md-4 mb-4">
+				<div class="card box-shadow">
+					<a href="/admin/manageMovies" class="btn btn-primary btn-lg"> <span
+						class="text-black">Modifica informazioni film</span>
+					</a>
+				</div>
+			</div>
 		</div>
-		<div>
-			<a href="/admin/formNewMovie">Inserisci nuovo film</a>
-		</div>
-		<div>
-			<a href="/admin/moviesToDeleteIndex">Cancella un film esistente</a>
-		</div>
-		<div>
-			<a href="/admin/manageMovies">Modifica informazioni film</a>
-		</div>
-		<div th:replace="~{fragments/bootstrap.html :: bsScript}"></div>
-	</body>
+	</div>
+	<div th:replace="~{fragments/bootstrap.html :: bsScript}"></div>
+</body>
 </html>

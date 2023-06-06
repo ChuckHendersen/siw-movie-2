@@ -1,29 +1,40 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Gestione Artisti - SiW Movie</title>
-		<meta th:replace="~{fragments/header.html :: metaFragment}" />
-		<link th:replace="~{fragments/header.html :: stylesheetFragment}"/>
-		<link th:replace="~{fragments/bootstrap.html :: bsCss}"/>
-	</head>
-	<body>
-		<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
-		<h1>
-			Operazioni Artisti
-		</h1>
-		<div>
-			<a href="/artists">Mostra artisti</a>
+<head>
+<title>Gestione Artisti - SiW Movie</title>
+<meta th:replace="~{fragments/header.html :: metaFragment}" />
+<link th:replace="~{fragments/header.html :: stylesheetFragment}" />
+<link th:replace="~{fragments/bootstrap.html :: bsCss}" />
+</head>
+<body>
+	<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
+	<div class="container justify-content-center text-center">
+		<h1 class="mb-4 mt-5">Operazioni Artisti</h1>
+		<div class="row justify-content-center">
+			<div class="col-md-4 mb-4">
+				<div class="card box-shadow">
+					<a href="/admin/formNewArtist" class="btn btn-primary btn-lg">
+						<span class="text-black">Aggiungi artista</span>
+					</a>
+				</div>
+			</div>
+			<div class="col-md-4 mb-4">
+				<div class="card box-shadow">
+					<a href="/admin/artistToDeleteIndex" class="btn btn-primary btn-lg">
+						<span class="text-black">Rimuovi artista</span>
+					</a>
+				</div>
+			</div>
+			<div class="col-md-4 mb-4">
+				<div class="card box-shadow">
+					<a href="/admin/manageArtists" class="btn btn-primary btn-lg">
+						<span class="text-black">Modifica informazioni artista</span>
+					</a>
+				</div>
+			</div>
 		</div>
-		<div>
-			<a href="/admin/formNewArtist">Aggiungi artista</a>
-		</div>
-		<div>
-			<a href="/admin/artistToDeleteIndex">Rimuovi artista</a>
-		</div>
-		<div>
-			<a href="/admin/manageArtists"> Modifica informazioni artista</a>
-		</div>
-		<div th:replace="~{fragments/bootstrap.html :: bsScript}"></div>
-	</body>
+	</div>
+	<div th:replace="~{fragments/bootstrap.html :: bsScript}"></div>
+</body>
 </html>
-	
+

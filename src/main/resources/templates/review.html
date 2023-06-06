@@ -19,8 +19,7 @@
 					<h4 th:text="'Titolo: ' + ${review.getTitle()}">Titolo: TitoloRecensione</h4>
 					<span th:text="'Voto: ' + ${review.getVote()}">Voto: 5</span><br>
 					<span th:text="'Testo recensione: ' + ${review.getText()}">Testo recensione</span><br>
-					<span th:text="'Autore: ' + ${review.getAuthor().getName()} + ' ' + ${review.getAuthor().getSurname()}">
-					Autore: nomeAutore</span><br>
+					<span>Autore: <a th:href="'/users/'+${review.author.id}" th:text="${review.getAuthor().getName()} + ' ' + ${review.getAuthor().getSurname()}"/></span><br>
 					<span>Film recensito: <a th:href="'/movies/' + ${review.reviewedMovie.id}" th:text="${review.reviewedMovie.title}"></a></span>
 				</div>
 			</div>

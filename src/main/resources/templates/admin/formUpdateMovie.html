@@ -4,58 +4,97 @@
 <title>Aggiorna film - SiW Movie</title>
 <meta th:replace="~{fragments/header.html :: metaFragment}" />
 <link th:replace="~{fragments/header.html :: stylesheetFragment}" />
-<link th:replace="~{fragments/bootstrap.html :: bsCss}"/>
+<link th:replace="~{fragments/bootstrap.html :: bsCss}" />
 </head>
 <body>
 	<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
-	<div>
-		<h1 th:text="${movie.title} +' '+'('+${movie.year}+')'">Titolo Film</h1>
-		<form method="POST" th:action="@{'/admin/updateMovieDetails/'+${movie.id}}">
-			<div>
-				<label>Modifica nome</label> <input type="text" th:field="${movie.title}" required></input>
+	<div class="container justify-content-center">
+		<div class="row">
+			<div class="col">
+				<h1 th:text="${movie.title} +' '+'('+${movie.year}+')'">Titolo
+					Film</h1>
+				<form method="POST"
+					th:action="@{'/admin/updateMovieDetails/'+${movie.id}}">
+					<div class="form-group">
+						<label for="movieTitle" style="white-space:nowrap;">Modifica nome</label> 
+						<input type="text" id="movieTitle" class="form-control"
+							th:field="${movie.title}" required />
+					</div>
+					<div class="form-group">
+						<label for="movieYear" style="white-space:nowrap;">Modifica anno</label> 
+						<input type="number" id="movieYear" class="form-control"
+							th:field="${movie.year}" min="1890" required />
+					</div>
+					<button type="submit" class="btn btn-primary mb-3">Conferma</button>
+				</form>
 			</div>
-			<div>
-				<label>Modifica anno</label> <input type="number" th:field=${movie.year} min="1890"  required></input>
+		</div>
+		<div class="row text-center">
+			<div class="col">
+				<div th:if="${movie.pictures!=null && movie.pictures.size()>0}"
+					id="carouselControls" class="carousel slide col"
+					data-ride="carousel" style="max-width: 50;">
+					<div class="carousel-inner">
+						<div class="carousel-item active" style="height: 100%;">
+							<img
+								th:src="'data:image;base64,'+${movie.getFirstPicture().getImgData()}"
+								class="d-block w-100 rounded"
+								style="object-fit: cover; width: 25rem; height: 55rem;"
+								width="100"><a th:if="${movie.pictures.size()>1}"
+								th:href="'/admin/deletePhoto/'+${movie.id}+'/'+${movie.getFirstPicture().getId()}">
+								Rimuovi foto </a>
+						</div>
+						<div th:each="img : ${movie.getAllButFirstPictures()}"
+							class="carousel-item">
+							<!-- Immagine-->
+							<img th:src="'data:image;base64,'+${img.getImgData()}"
+								class="d-block w-100 rounded"
+								style="object-fit: cover; width: 25rem; height: 55rem;"
+								width="100"></img> <a th:if="${movie.pictures.size()>1}"
+								th:href="'/admin/deletePhoto/'+${movie.id}+'/'+${img.id}">
+								Rimuovi foto </a>
+						</div>
+					</div>
+					<a class="carousel-control-prev" href="#carouselControls"
+						role="button" data-slide="prev"> <span
+						class="carousel-control-prev-icon" aria-hidden="true"></span> <span
+						class="sr-only">Previous</span>
+					</a> <a class="carousel-control-next" href="#carouselControls"
+						role="button" data-slide="next"> <span
+						class="carousel-control-next-icon" aria-hidden="true"></span> <span
+						class="sr-only">Next</span>
+					</a>
+				</div>
 			</div>
-			<span>
-				<button type="submit">Conferma</button>
+		</div>
+		<div>
+			<form th:action="@{'/admin/uploadPhoto/'+${movie.id}}" method="POST"
+				enctype="multipart/form-data">
+				<h4 class="mt-3">Aggiungi foto</h4>
+				<div>
+					<input type="file" name="file" multiple></input>
+				</div>
+				<div>
+					<span><button type="submit" class="mt-1">Carica immagini</button></span>
+				</div>
+			</form>
+		</div>
+		<div class="mt-3">
+			<h3> Regista (<a th:href="@{'/admin/addDirectorToMovie/'+${movie.id}}">modifica regista</a>)</h3>
+			<span th:if="${movie.director}"> <a
+				th:href="@{'/artists/'+${movie.director.id}}"
+				th:text="${movie.director.name}+' '+${movie.director.surname}"></a>
 			</span>
-		</form>
-	</div>
-	<div th:each="img : ${movie.pictures}">
-		<!-- Immagine-->
-		<img th:src="'data:image/jpeg;base64,'+${img.getImgData()}"></img>
-		<a th:if="${movie.pictures.size()>1}" th:href="'/admin/deletePhoto/'+${movie.id}+'/'+${img.id}"> Rimuovi foto </a>
-	</div>
-	<div>
-		<form th:action="@{'/admin/uploadPhoto/'+${movie.id}}" method="POST"
-			enctype="multipart/form-data">
-			<div>
-				<label>Aggiungi immagini<input type="file" name="file" multiple></input></label>
+		</div>
+		<div class="mb-3">
+			<h3>
+				Attori (<a th:href="@{'/admin/updateActorsOfMovie/'+${movie.id}}">modifica
+					attori</a>)
+			</h3>
+			<div th:each="actor:${movie.actors}">
+				<a th:href="@{'/artists/'+${actor.id}}"
+					th:text="${actor.name}+' '+${actor.surname}"></a>
 			</div>
-			<div>
-				<span><button type="submit">Carica immagini</button></span>
-			</div>
-		</form>
-	</div>
-	<div>
-		<h3>
-			Regista (<a th:href="@{'/admin/addDirectorToMovie/'+${movie.id}}">modifica
-				regista</a>)
-		</h3>
-		<span th:if="${movie.director}"> <a
-			th:href="@{'/artists/'+${movie.director.id}}"
-			th:text="${movie.director.name}+' '+${movie.director.surname}"></a>
-		</span>
-	</div>
-	<div>
-		<h3>
-			Attori (<a th:href="@{'/admin/updateActorsOfMovie/'+${movie.id}}">modifica
-				attori</a>)
-		</h3>
-		<div th:each="actor:${movie.actors}">
-			<a th:href="@{'/artists/'+${actor.id}}"
-				th:text="${actor.name}+' '+${actor.surname}"></a>
 		</div>
 	</div>
 	<div th:replace="~{fragments/bootstrap.html :: bsScript}"></div>

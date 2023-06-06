@@ -4,21 +4,31 @@
 <title>Lista Film - SiW Movie</title>
 <meta th:replace="~{fragments/header.html :: metaFragment}" />
 <link th:replace="~{fragments/header.html :: stylesheetFragment}" />
-<link th:replace="~{fragments/bootstrap.html :: bsCss}"/>
+<link th:replace="~{fragments/bootstrap.html :: bsCss}" />
 </head>
 <body>
 	<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
-	<h1>Seleziona film da modificare</h1>
-	<div th:if="${movies.isEmpty()}">Non ci sono film nel sistema</div>
-	<div>
-		<ul>
-			<li th:each="movie:${movies}">
-				<div>
-					<a th:href="@{'/admin/formUpdateMovie/'+${movie.id}}"
-						th:text="${movie.title}"></a>
+	<div class="album py-5">
+		<div class="container justify-content-center text-center">
+			<h1>Seleziona film da modificare</h1>
+			<div th:if="${movies.isEmpty()}">
+				<span>Non ci sono film nel sistema</span>
+			</div>
+			<div class="row justify-content-center mt-5">
+				<div th:each="movie:${movies}" class="col-lg-4">
+					<div class="card mb-4 box-shadow">
+						<div class="img-container h-100">
+							<img class="card-img-top image-container-img h-100"
+								th:src="'data:image;base64,'+${movie.getFirstPicture().getImgData}">
+						</div>
+						<div class="card-body">
+							<a th:href="@{'/admin/formUpdateMovie/'+${movie.id}}"
+								th:text="${movie.title}"></a>
+						</div>
+					</div>
 				</div>
-			</li>
-		</ul>
+			</div>
+		</div>
 	</div>
 	<div th:replace="~{fragments/bootstrap.html :: bsScript}"></div>
 </body>

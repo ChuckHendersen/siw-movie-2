@@ -1,37 +1,40 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Inserisci Film - SiW Movie</title>
-		<meta th:replace="~{fragments/header.html :: metaFragment}" />
-		<link th:replace="~{fragments/header.html :: stylesheetFragment}"/>
-		<link th:replace="~{fragments/bootstrap.html :: bsCss}"/>
-	</head>
-	<body>
-		<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
-		<div>
-			<h1>
-				Aggiungi nuovo film
-			</h1>
-			<form th:action="@{/admin/movies}" method="POST" th:object="${movie}" enctype="multipart/form-data">
-				<div th:if="${#fields.hasGlobalErrors()}">
-					<p th:each="err:${#fields.globalErrors()}" th:text="${err}"></span>
-				</div>
-				<div>
-					<label>Titolo</label><input required type="text" th:field="*{title}"></input>
-					<span th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
-				</div>
-				<div>
-					<label>Anno</label><input required type="text" th:field="*{year}"></input>
-					<span th:if="${#fields.hasErrors('year')}" th:errors="*{year}"></span>
-				</div>
-				<div>
-					<label>Immagini</label><input type="file" name="file" multiple></input>
-				</div>
-				<div>
-					<span><button type="submit">Conferma</button></span>
-				</div>
-			</form>
+<head>
+	<title>Inserisci Film - SiW Movie</title>
+	<meta th:replace="~{fragments/header.html :: metaFragment}" />
+	<link th:replace="~{fragments/header.html :: stylesheetFragment}"/>
+	<link th:replace="~{fragments/bootstrap.html :: bsCss}"/>
+</head>
+<body>
+	<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
+	<div class="container">
+		<div class="row justify-content-center mt-5">
+			<div class="col-lg-6">
+				<h1 class="text-center">Aggiungi nuovo film</h1>
+				<form th:action="@{/admin/movies}" method="POST" th:object="${movie}" enctype="multipart/form-data">
+					<div th:if="${#fields.hasGlobalErrors()}" class="text-danger">
+						<p th:each="err:${#fields.globalErrors()}" th:text="${err}"></p>
+					</div>
+					<div class="mb-3">
+						<input required type="text" class="form-control" th:field="*{title}" placeholder="Inserisci il titolo" />
+						<span th:if="${#fields.hasErrors('title')}" class="text-danger" th:errors="*{title}"></span>
+					</div>
+					<div class="mb-3">
+						<input required type="text" class="form-control" th:field="*{year}" placeholder="Inserisci l'anno" />
+						<span th:if="${#fields.hasErrors('year')}" class="text-danger" th:errors="*{year}"></span>
+					</div>
+					<div class="mb-3">
+						<label>Immagini</label>
+						<input type="file" name="file" multiple class="form-control-file" />
+					</div>
+					<div class="text-center mt-3">
+						<button type="submit" class="btn btn-primary">Conferma</button>
+					</div>
+				</form>
+			</div>
 		</div>
-		<div th:replace="~{fragments/bootstrap.html :: bsScript}"></div>
-	</body>
+	</div>
+	<div th:replace="~{fragments/bootstrap.html :: bsScript}"></div>
+</body>
 </html>
