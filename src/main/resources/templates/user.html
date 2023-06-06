@@ -1,35 +1,54 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Informazioni Utente - SiW Movie</title>  
-		<meta th:replace="~{fragments/header.html :: metaFragment}" />
-		<link th:replace="~{fragments/header.html :: stylesheetFragment}"/>
-		<link th:replace="~{fragments/bootstrap.html :: bsCss}"/>
-	</head>
-	<body>
-		<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
-		<h1>Informazioni utente</h1>
-		<div>
-			<h2 th:text="${user.credentials.username}">Username</h2>
+
+<head>
+	<title>Informazioni Utente - SiW Movie</title>
+	<meta th:replace="~{fragments/header.html :: metaFragment}" />
+	<link th:replace="~{fragments/header.html :: stylesheetFragment}" />
+	<link th:replace="~{fragments/bootstrap.html :: bsCss}" />
+</head>
+
+<body>
+	<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
+	<div class="container">
+		<h1 class="mt-5 text-center">Informazioni utente</h1>
+
+		<!-- Informazioni statiche -->
+		<div class="row justify-content-center text-center mt-4">
+			<div class="col-lg-6">
+				<div class="mb-4">
+					<h2 th:text="'Username: '+${user.credentials.username}">Username</h2>
+				</div>
+				<div class="mb-4">
+					<h4 th:text="'Nome: '+${user.name} + ' ' + ${user.surname}">Nome cognome</h4>
+				</div>
+			</div>
 		</div>
-		<div>
-			<h2 th:text="${user.name}+' '+${user.surname}">Nome cognome</h2>
-		</div>
-		<div th:if="${user.areThereAnyReviews()}">
-			<h3>Recensioni scritte</h3>
-			<div th:each="review : ${user.reviews}">
-				<a th:href="'/reviews/'+${review.id}">
-					<div>
-						<span th:text="'Titolo: '+${review.title}">Titolo: titolo</span><br>
-						<span th:text="'Voto: '+${review.vote}">Voto: titolo</span><br>
-					</div>
-				</a>
-				<a th:href="'/movies/'+${review.reviewedMovie.id}" th:text="'Film recensito: '+${review.reviewedMovie.title}">Film recensito: titolo film</a><br>
+
+		<!-- Recensioni dinamiche -->
+		<div class="row justify-content-center mt-4">
+			<div th:if="${user.areThereAnyReviews()}">
+				<h3>Recensioni scritte</h3>
+				<div th:each="review : ${user.reviews}" class="col-ms-5 mb-4 graybackground roundedCorner p-2">
+					<a th:href="'/reviews/' + ${review.id}">
+						<div class="mb-3">
+							<span th:text="'Titolo: ' + ${review.title}">Titolo: titolo</span><br>
+							<span th:text="'Voto: ' + ${review.vote}">Voto: titolo</span><br>
+						</div>
+					</a>
+					<a th:href="'/movies/' + ${review.reviewedMovie.id}"
+						th:text="'Film recensito: ' + ${review.reviewedMovie.title}">Film recensito: titolo
+						film</a><br>
+				</div>
 			</div>
 		</div>
 		<div th:unless="${user.areThereAnyReviews()}">
 			<h3>Non ha scritto nessuna recensione</h3>
 		</div>
-		<div th:replace="~{fragments/bootstrap.html :: bsScript}"></div>
-	</body>
+	</div>
+	</div>
+	</div>
+	<div th:replace="~{fragments/bootstrap.html :: bsScript}"></div>
+</body>
+
 </html>

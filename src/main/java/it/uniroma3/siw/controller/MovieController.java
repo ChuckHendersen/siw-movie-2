@@ -23,6 +23,7 @@ import it.uniroma3.siw.service.ArtistService;
 import it.uniroma3.siw.service.CredentialsService;
 import it.uniroma3.siw.service.MovieService;
 import jakarta.validation.Valid;
+import static it.uniroma3.siw.controller.ControllerUtils.*;
 
 @Controller
 public class MovieController {
@@ -30,21 +31,6 @@ public class MovieController {
 	@Autowired private CredentialsService credentialsService;
 	@Autowired private MovieService movieService;
 	@Autowired private ArtistService artistService;
-	
-	//Utility
-	/**
-	 * Metodo che ridirezione alla percorso di successo se movie!=null. Ritorna il percorso di fallimento altrimenti.
-	 * @param movie 
-	 * @param successPath Percorso di successo
-	 * @param failurePath Percorso di fallimento
-	 * @return Percorso finale
-	 */
-	public String redirection(Movie movie, String successPath, String failurePath) {
-		if(movie != null) {
-			return successPath;
-		}
-		return failurePath;
-	}
 
 	@GetMapping("/")
 	public String index(Model model) {
@@ -127,7 +113,11 @@ public class MovieController {
 
 	@PostMapping("/searchMovies")
 	public String searchMovies(Model model, @RequestParam Year year) {
-		model.addAttribute("movies",this.movieService.findByYear(year));
+		if(year!=null)
+			model.addAttribute("movies",this.movieService.findByYear(year));
+		else {
+			model.addAttribute("movies", List.<Movie>of());
+		}
 		return "foundMovies.html";
 	}
 
@@ -207,6 +197,7 @@ public class MovieController {
 	@GetMapping("/admin/confirmMovieDeletion/{movie_id}")
 	public String confirmMovieDeletion(@PathVariable("movie_id") Long movieId, Model model) {
 		Movie movie = this.movieService.findById(movieId);
+		model.addAttribute("movie", movie);
 		return redirection(movie, "/admin/confirmMovieDeletion.html", "movieError.html");
 	}
 

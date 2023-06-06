@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import it.uniroma3.siw.controller.validator.UserValidator;
 import it.uniroma3.siw.model.Credentials;
 import it.uniroma3.siw.model.User;
 import it.uniroma3.siw.service.CredentialsService;
@@ -23,6 +24,9 @@ public class LoginController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private UserValidator userValidator;
 	
 	@GetMapping("/login") 
 	public String showLoginForm (Model model) {
@@ -43,6 +47,7 @@ public class LoginController {
                 BindingResult credentialsBindingResult,
                 Model model) {
         // se user e credential hanno entrambi contenuti validi, memorizza User e the Credentials nel DB
+		this.userValidator.validate(user, userBindingResult);
         if(!userBindingResult.hasErrors() && ! credentialsBindingResult.hasErrors()) {
             credentials.setUser(user);
             user.setCredentials(credentials);
@@ -51,8 +56,6 @@ public class LoginController {
             model.addAttribute("user", user);
             return "registrationSuccessful.html";
         }
-        System.out.println(userBindingResult.getNestedPath());
-        System.out.println(credentialsBindingResult.getNestedPath());
         return "formRegisterUser.html";
     }
 	

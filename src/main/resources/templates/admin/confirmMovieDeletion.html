@@ -10,9 +10,9 @@
 	<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
 	<h1>Sei sicuro di voler eliminare questo film:</h1>
 	<div>
-		<span th:text="'Titolo: '+${movie.title}">Titolo Film</span> <span>Anno:
-			<span th:text="'('+${movie.year}+')'">2000</span>
-		</span> <a th:href="'/admin/deleteMovie/'+${movie.id}">elimina</a>
+		<span th:text="'Titolo: '+${movie.title}">Titolo Film</span> 
+		<span>Anno:<span th:text="'('+${movie.year}+')'">2000</span></span> 
+		<a th:href="'/admin/deleteMovie/'+${movie.id}">elimina</a>
 	</div>
 	<div th:replace="~{fragments/bootstrap.html :: bsScript}"></div>
 </body>

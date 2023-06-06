@@ -10,19 +10,25 @@
 
 <body>
 	<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
-	<h1>Congratulazioni ti sei registrato!</h1>
-	<div>
-		<span>Nome: </span>
-		<span th:text="${user.name}"></span>
-	</div>
-	<div>
-		<span>Cognome: </span>
-		<span th:text="${user.surname}"></span>
-	</div>
-	<div>
-		<span>Email: </span>
-		<span th:text="${user.email}"></span>
-	</div>
+    <div class="container">
+        <h1 class="mt-5 text-center">Congratulazioni ti sei registrato!</h1>
+        <div class="row justify-content-center mt-3">
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <span>Nome: </span>
+                    <span th:text="${user.name}"></span>
+                </div>
+                <div class="mb-3">
+                    <span>Cognome: </span>
+                    <span th:text="${user.surname}"></span>
+                </div>
+                <div class="mb-3">
+                    <span>Email: </span>
+                    <span th:text="${user.email}"></span>
+                </div>
+            </div>
+        </div>
+    </div>
 	<div th:replace="~{fragments/bootstrap.html :: bsScript}"></div>
 </body>
 </html>

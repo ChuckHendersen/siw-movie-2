@@ -1,25 +1,37 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Film Cercato - SiW Movie</title>
-		<meta th:replace="~{fragments/header.html :: metaFragment}" />
-		<link th:replace="~{fragments/header.html :: stylesheetFragment}"/>
-		<link th:replace="~{fragments/bootstrap.html :: bsCss}"/>
-	</head>
-	<body>
-		<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
-		<div>
-			<h1><span>Film trovati</span></h1>
+
+<head>
+	<title>Film Cercato - SiW Movie</title>
+	<meta th:replace="~{fragments/header.html :: metaFragment}" />
+	<link th:replace="~{fragments/header.html :: stylesheetFragment}" />
+	<link th:replace="~{fragments/bootstrap.html :: bsCss}" />
+</head>
+
+<body>
+	<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
+	<div class="album py-5">
+		<div class="container justify-content-center text-center">
+			<h1>Film trovati</h1>
+			<div th:if="${movies.isEmpty()}">
+				<span>Non ci sono film che soddisfano i requisiti</span>
+			</div>
+			<div class="row justify-content-center mt-5">
+				<div th:each="movie:${movies}" class="col-lg-4">
+					<div class="card mb-4 box-shadow">
+						<div class="img-container h-100">
+							<img class="card-img-top image-container-img h-100"
+								th:src="'data:image;base64,'+${movie.getFirstPicture().getImgData}">
+						</div>
+						<div class="card-body">
+							<a th:href="@{'/movies/'+${movie.id}}" th:text="${movie.title}"></a>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
-		<div th:if="${movies.isEmpty()}"> Non ci sono film che soddisfano i requisiti </div>
-		<div th:if="${!movies.isEmpty()}">
-			<ul>
-				<li th:each="movie:${movies}">
-					<a href="movie.html" th:href="@{'/movies'+'/'+${movie.id}}" 
-					th:text="${movie.title}+' ('+${movie.year}+')'">FilmGenerico (2077)</a>
-				</li>
-			</ul>
-		</div>
-		<div th:replace="~{fragments/bootstrap.html :: bsScript}"></div>
-	</body>
+	</div>
+	<div th:replace="~{fragments/bootstrap.html :: bsScript}"></div>
+</body>
+
 </html>

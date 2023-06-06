@@ -5,7 +5,7 @@ import java.util.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
-
+// AGGIUNGERE CONSTRAIN PER TABELLA
 @Entity
 public class Movie {
 
@@ -125,5 +125,25 @@ public class Movie {
 	
 	public boolean areThereAnyReviews() {
 		return reviews.size()>0;
+	}
+	
+	public Picture getFirstPicture() {
+		Iterator<Picture> pictureIterator = this.pictures.iterator();
+		if(pictureIterator.hasNext()) {
+			return pictureIterator.next();
+		}
+		return null;
+	}
+	
+	public List<Picture> getAllButFirstPictures() {
+		List<Picture> allButFirst = new LinkedList<>();
+		Iterator<Picture> pictureIterator = this.pictures.iterator();
+		if(pictureIterator.hasNext()) {
+			pictureIterator.next();
+			while(pictureIterator.hasNext()) {
+				allButFirst.add(pictureIterator.next());
+			}
+		}
+		return allButFirst;
 	}
 }

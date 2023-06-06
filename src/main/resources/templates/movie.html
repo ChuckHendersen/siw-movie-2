@@ -1,74 +1,121 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title> Movie - SiW Movie</title>
-		<meta th:replace="~{fragments/header.html :: metaFragment}" />
-		<link th:replace="~{fragments/header.html :: stylesheetFragment}"/>
-		<link th:replace="~{fragments/bootstrap.html :: bsCss}"/>
-	</head>
-	<body>
-		<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
-		<div th:if="${movie}">
-			<div>
-				<h1 th:text="${movie.title} +' '+'('+${movie.year}+')'">Titolo Film</h1>
-			</div>
-			<div th:if="${movie.areThereAnyReviews()}">
-				<h2 th:text="'Valutazione media: '+${movie.getAverageVote()}">Valutazione media: 4.5</h2>
-			</div>
-			<div th:unless="${movie.areThereAnyReviews()}">
-				<h2>Valutazione media: nessuna recensione</h2>
-			</div>
-				<span>Regista: <br> <span th:if="${movie.director}" th:text="${movie.director.name}+' '+${movie.director.surname}">Cristopher Nolan</span></span>
-			</div>
-			<div>
-				Attori: 
-				<div th:each="actor:${movie.actors}">
-					<span th:text="${actor.name}+' '+${actor.surname}"></span>
+
+<head>
+	<title> Movie - SiW Movie</title>
+	<meta th:replace="~{fragments/header.html :: metaFragment}" />
+	<link th:replace="~{fragments/header.html :: stylesheetFragment}" />
+	<link th:replace="~{fragments/bootstrap.html :: bsCss}" />
+</head>
+
+<body>
+	<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
+	<div th:if="${movie}">
+		<div class="container">
+			<div class="row">
+				<div class="col text-center">
+					<div>
+						<h1 th:text="${movie.title} +' '+'('+${movie.year}+')'">Titolo Film</h1>
+					</div>
+					<div th:if="${movie.areThereAnyReviews()}">
+						<h2 th:text="'Valutazione media: '+${movie.getAverageVote()}">Valutazione media: 4.5</h2>
+					</div>
+					<div th:unless="${movie.areThereAnyReviews()}">
+						<h2>Valutazione media: nessuna recensione</h2>
+					</div>
 				</div>
 			</div>
-			<div th:each="img : ${movie.pictures}">
-				<!-- Immagine-->
-				<img th:src="'data:image;base64,'+${img.getImgData()}"></img>
-			</div>
-			<div th:if="${credentials}">
-				<div th:if="${!credentials.isGuest()}">
-				<h3>Scrivi una recensione</h3>
-				<div>
-					<form th:action="@{'/user/newReview/'+${movie.id}+'/'+${credentials.getUser().id}}" th:object="${review}" method="POST">
-						<div>
-							<label>Titolo</label> <input type="text" required th:field="${review.title}"/>
+			<div class="row">
+				<div class="col">
+					<div th:if="${movie.pictures!=null && movie.pictures.size()>0}" id="carouselControls"
+						class="carousel slide col" data-ride="carousel" style="max-width:50;">
+						<div class="carousel-inner">
+							<div class="carousel-item active" style="height: 100%;">
+								<img th:src="'data:image;base64,'+${movie.getFirstPicture().getImgData()}"
+									class="d-block w-100 rounded"
+									style="object-fit: cover; width: 25rem; height: 55rem;" width="100">
+							</div>
+							<div th:each="img : ${movie.getAllButFirstPictures()}" class="carousel-item">
+								<!-- Immagine-->
+								<img th:src="'data:image;base64,'+${img.getImgData()}" class="d-block w-100 rounded"
+									style="object-fit: cover; width: 25rem; height: 55rem;" width="100"></img>
+							</div>
 						</div>
-						<div>
-							<label>Valutazione</label> <input type="number" required th:field="${review.vote}"/>
-						</div>
-						<div>
-							<label>Testo</label> <input type="text" th:field="${review.text}"/>
-						</div>
-						<div>
-							<span><button type="submit">Conferma</button></span>
-						</div>
-					</form>
-				</div>
-			</div>
-			</div>
-			<div>
-				<h2>Recensioni</h2>
-				<div th:if="${movie.areThereAnyReviews()}">
-					<div th:each = "review : ${movie.reviews}">
-						<span><a th:href="'/users/'+${review.author.id}" th:text="'Autore: '+${review.author.name}+' '+${review.author.surname}"/></span><br>
-						<a th:href="'/reviews/'+${review.id}">
-							<span th:text="'Titolo: '+${review.title}"></span><br>
-							<span th:text="'Voto: '+${review.vote}"></span><br>
-							<span th:text="'Testo: '+${review.text}"></span><br>
+						<a class="carousel-control-prev" href="#carouselControls" role="button" data-slide="prev">
+							<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+							<span class="sr-only">Previous</span>
+						</a>
+						<a class="carousel-control-next" href="#carouselControls" role="button" data-slide="next">
+							<span class="carousel-control-next-icon" aria-hidden="true"></span>
+							<span class="sr-only">Next</span>
 						</a>
 					</div>
 				</div>
-				<div th:unless="${movie.areThereAnyReviews()}">
-					<span>Non esistono recensioni per questo film</span>
+			</div>
+			<div class="row mt-2 ml-1">
+				<div class="col-6">
+					<span>Regista: <br> <a th:if="${movie.director}" th:href="'/artists/'+${movie.director.id}"
+							th:text="${movie.director.name}+' '+${movie.director.surname}">Cristopher
+							Nolan</a></span>
+				</div>
+				<div class="col-6">
+					Attori:
+					<div th:each="actor:${movie.actors}">
+						<a th:href="'/artists/'+${actor.id}" th:text="${actor.name}+' '+${actor.surname}"></a>
+					</div>
+				</div>
+			</div>
+			<div class="row mt-3 ml-1 mb-5">
+				<div class="col-6" style="word-wrap: break-word;">
+					<h3>Recensioni</h3>
+					<div th:if="${movie.areThereAnyReviews()}">
+						<div th:each="review : ${movie.reviews}" class="review">
+							<div class="ml-1">
+								<a th:href="'/reviews/'+${review.id}">
+									<span th:text="'Titolo: '+${review.title}"></span><br>
+									<span th:text="'Voto: '+${review.vote}"></span><br>
+									<span th:text="'Testo: '+${review.text}"></span><br>
+								</a>
+								<a th:href="'/users/'+${review.author.id}" th:text="${review.author.name}+' '+${review.author.surname}"/>
+							</div>
+						</div>
+					</div>
+					<div th:unless="${movie.areThereAnyReviews()}">
+						<span>Non esistono recensioni per questo film</span>
+					</div>
+				</div>
+				<div class="col-6">
+					<div th:if="${credentials}">
+						<div th:if="${!credentials.isGuest()}">
+							<h3>Scrivi una recensione</h3>
+							<div>
+								<form th:action="@{'/user/newReview/'+${movie.id}+'/'+${credentials.getUser().id}}"
+									th:object="${review}" method="POST">
+									<div>
+										<input type="text" placeholder="Titolo" required th:field="${review.title}"
+											class="mb-1" />
+									</div>
+									<div>
+										<input type="number" required placeholder="Voto (1-5)" th:field="${review.vote}"
+											class="mb-1"/>
+									</div>
+									<div>
+										<input type="text" placeholder="Testo recensione" th:field="${review.text}"
+											class="mb-1" />
+									</div>
+									<div>
+										<span><button type="submit">Conferma</button></span>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
-		<div th:unless="${movie}">Non esiste</div>
-		<div th:replace="~{fragments/bootstrap.html :: bsScript}"></div>
-	</body>
+	</div>
+	<div th:unless="${movie}">Non esiste</div>
+	<div th:replace="~{fragments/bootstrap.html :: bsScript}"></div>
+</body>
+
 </html>

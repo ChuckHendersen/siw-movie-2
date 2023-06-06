@@ -3,3 +3,5 @@
 /org.eclipse.core.resources.prefs
 /.settings
 /target
+.vscode/settings.json
+.vscode/launch.json
