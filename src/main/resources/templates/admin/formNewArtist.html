@@ -1,45 +1,57 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Aggiungi Artista</title>
-		<meta th:replace="~{fragments/header.html :: metaFragment}" />
-		<link th:replace="~{fragments/header.html :: stylesheetFragment}"/>
-		<link th:replace="~{fragments/bootstrap.html :: bsCss}"/>
-	</head>
-	<body>
-		<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
-		<h1>
-			Inserisci nuovo artista
-		</h1>
-		<div>
-			<form th:action="@{/admin/artists}" th:method="POST" th:object="${artist}" enctype="multipart/form-data">
-				<div th:if="${#fields.hasGlobalErrors()}">
-					<p th:each="err:${#fields.globalErrors()}" th:text="${err}"></span>
-				</div>
-				<div>
-					<label>Nome</label><input required type="text" th:field="${artist.name}"></input>
-					<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
-				</div>
-				<div>
-					<label>Cognome</label><input required type="text" th:field="${artist.surname}"></input>
-					<span th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"></span>
-				</div>
-				<div>
-					<label>Data nascita</label><input required type="date" th:field="${artist.birthDate}"></input>
-					<span th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"></span>
-				</div>
-				<div>
-					<label>Data morte (opzionale)</label><input type="date" th:field="${artist.deceasedDate}"></input>
-					<span th:if="${#fields.hasErrors('deceasedDate')}" th:errors="*{deceasedDate}"></span>
-				</div>
-				<div>
-					<label>Immagine</label><input type="file" name="file" multiple></input>
-				</div>
-				<div>
-					<button type="submit">Conferma</button>
-				</div>
-			</form>
-		</div>
-		<div th:replace="~{fragments/bootstrap.html :: bsScript}"></div>
-	</body>
+<head>
+<title>Aggiungi Artista</title>
+<meta th:replace="~{fragments/header.html :: metaFragment}" />
+<link th:replace="~{fragments/header.html :: stylesheetFragment}" />
+<link th:replace="~{fragments/bootstrap.html :: bsCss}" />
+<style>
+label {
+	white-space: nowrap;
+}
+</style>
+</head>
+<body>
+	<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
+	<div class="container">
+		<h1 class="text-center">Inserisci nuovo artista</h1>
+		<form th:action="@{/admin/artists}" method="POST"
+			th:object="${artist}" enctype="multipart/form-data">
+			<div th:if="${#fields.hasGlobalErrors()}" class="text-danger">
+				<p th:each="err:${#fields.globalErrors()}" th:text="${err}"></p>
+			</div>
+			<div class="mb-3">
+				<input required type="text" class="form-control" placeholder="Nome"
+					th:field="*{name}" /> <span th:if="${#fields.hasErrors('name')}"
+					class="text-danger" th:errors="*{name}"></span>
+			</div>
+			<div class="mb-3">
+				<input required type="text" placeholder="Cognome"
+					class="form-control" th:field="*{surname}" /> <span
+					th:if="${#fields.hasErrors('surname')}" class="text-danger"
+					th:errors="*{surname}"></span>
+			</div>
+			<div class="mb-3">
+				<label>Data nascita</label> <input required type="date"
+					class="form-control" th:field="*{birthDate}" /> <span
+					th:if="${#fields.hasErrors('birthDate')}" class="text-danger"
+					th:errors="*{birthDate}"></span>
+			</div>
+			<div class="mb-3">
+				<label>Data morte (opzionale)</label> <input type="date"
+					class="form-control" th:field="*{deceasedDate}" /> <span
+					th:if="${#fields.hasErrors('deceasedDate')}" class="text-danger"
+					th:errors="*{deceasedDate}"></span>
+			</div>
+			<div class="mb-3">
+				<label>Immagine</label> <input type="file" name="file"
+					class="form-control-file" />
+			</div>
+			<div class="text-center mt-3">
+				<button type="submit" class="btn btn-primary">Conferma</button>
+			</div>
+		</form>
+	</div>
+	<div th:replace="~{fragments/bootstrap.html :: bsScript}"></div>
+</body>
 </html>

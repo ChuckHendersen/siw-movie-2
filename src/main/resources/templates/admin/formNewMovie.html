@@ -11,7 +11,7 @@
 	<div class="container">
 		<div class="row justify-content-center mt-5">
 			<div class="col-lg-6">
-				<h1 class="text-center">Aggiungi nuovo film</h1>
+				<h1 class="text-center mb-3">Aggiungi nuovo film</h1>
 				<form th:action="@{/admin/movies}" method="POST" th:object="${movie}" enctype="multipart/form-data">
 					<div th:if="${#fields.hasGlobalErrors()}" class="text-danger">
 						<p th:each="err:${#fields.globalErrors()}" th:text="${err}"></p>
