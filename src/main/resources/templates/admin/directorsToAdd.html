@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<title>Aggiungi Regista</title>
-<meta th:replace="~{fragments/header.html :: metaFragment}" />
-<link th:replace="~{fragments/header.html :: stylesheetFragment}" />
-<link th:replace="~{fragments/bootstrap.html :: bsCss}" />
+	<title>Aggiungi Regista</title>
+	<meta th:replace="~{fragments/header.html :: metaFragment}" />
+	<link th:replace="~{fragments/header.html :: stylesheetFragment}" />
+	<link th:replace="~{fragments/bootstrap.html :: bsCss}" />
 </head>
+
 <body>
 	<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
 	<div class="album py-5">
@@ -19,10 +21,8 @@
 								th:src="'data:image;base64,'+${artist.getPicture().getImgData()}" />
 						</div>
 						<div class="card-body">
-							<a
-								th:href="@{'/admin/setDirectorToMovie/'+${artist.id}+'/'+${movie.id}}"
-								th:text="${artist.name}+' '+${artist.surname}">Nome Cognome
-								artista</a>
+							<h5 class="card-title" th:text="${artist.name}+' '+${artist.surname}"></h5>
+							<a class="btn btn-primary" th:href="@{'/admin/setDirectorToMovie/'+${artist.id}+'/'+${movie.id}}">Seleziona artista</a>
 						</div>
 					</div>
 				</div>
@@ -32,4 +32,5 @@
 	</div>
 	<div th:replace="~{fragments/bootstrap.html :: bsScript}"></div>
 </body>
+
 </html>

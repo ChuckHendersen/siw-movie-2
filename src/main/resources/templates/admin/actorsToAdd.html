@@ -1,39 +1,73 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Aggiungi Attori - SiW Movie</title>
-		<meta th:replace="~{fragments/header.html :: metaFragment}" />
-		<link th:replace="~{fragments/header.html :: stylesheetFragment}"/>
-		<link th:replace="~{fragments/bootstrap.html :: bsCss}"/>
-	</head>
-	<body>
-		<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
-		<h1 th:text="${movie.title}">Aggiungi attori al film -> Titolo Film</h1>
-		<h2>Modifica attori</h2>
+<head>
+	<title>Aggiungi Attori - SiW Movie</title>
+	<meta th:replace="~{fragments/header.html :: metaFragment}" />
+	<link th:replace="~{fragments/header.html :: stylesheetFragment}"/>
+	<link th:replace="~{fragments/bootstrap.html :: bsCss}"/>
+	<style>
+		.container {
+			max-width: 800px;
+			margin: 0 auto;
+			padding: 20px;
+		}
+
+		.card {
+			width: 100%;
+			margin-bottom: 20px;
+		}
+
+		.card-img-top {
+			object-fit: cover;
+			height: 200px;
+		}
+	</style>
+</head>
+<body>
+	<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
+	<div class="container text-center">
+		<h1 class="text-center" th:text="${movie.title}">Aggiungi attori al film -> Titolo Film</h1>
+		<h2 class="text-center">Modifica attori</h2>
 		<div>
 			<div>
-				<h4>Attori Inseriti</h4>
+				<h4 class="text-center">Attori Inseriti</h4>
 			</div>
-			<div th:if="${movie.actors.size() == 0}"> Nessun attore inserito</div>
-			<div th:each="actor:${movie.actors}">
-				<span th:text="${actor.name}+' '+${actor.surname}+' '"></span>(<a th:href="@{'/admin/deleteActorFromMovie/'+${actor.id}+'/'+${movie.id}}">rimuovi attore</a>)
+			<div th:if="${movie.actors.size() == 0}" class="text-center"> Nessun attore inserito</div>
+			<div class="row">
+				<div th:each="actor:${movie.actors}" class="col-lg-4">
+					<div class="card mb-4 box-shadow">
+						<img class="card-img-top" th:src="'data:image;base64,'+${actor.picture.imgData}" alt="Immagine attore" />
+						<div class="card-body">
+							<h5 class="card-title" th:text="${actor.name}+' '+${actor.surname}"></h5>
+							<a class="btn btn-danger" th:href="@{'/admin/deleteActorFromMovie/'+${actor.id}+'/'+${movie.id}}">Rimuovi attore</a>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div>
 			<div>
-				<h4>Artisti Disponibili</h4>
+				<h4 class="text-center">Artisti Disponibili</h4>
 			</div>
-			<div th:if="${artists.size() == 0}"> Nessun artista disponibile</div>
-			<div th:each="artist:${artists}">
-				<span th:text="${artist.name}+' '+${artist.surname}+' '"></span>
-				(<a th:href="@{'/admin/setActorToMovie/'+${artist.id}+'/'+${movie.id}}">aggiungi attore</a>)
+			<div th:if="${artists.size() == 0}" class="text-center"> Nessun artista disponibile</div>
+			<div class="row">
+				<div th:each="artist:${artists}" class="col-lg-4">
+					<div class="card mb-4">
+						<img class="card-img-top" th:src="'data:image;base64,'+${artist.picture.imgData}" alt="Immagine artista" />
+						<div class="card-body">
+							<h5 class="card-title" th:text="${artist.name}+' '+${artist.surname}"></h5>
+							<a class="btn btn-primary" th:href="@{'/admin/setActorToMovie/'+${artist.id}+'/'+${movie.id}}">Aggiungi attore</a>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
-		<div>
+		<div class="text-center">
 			<form method="GET" th:action="@{'/admin/formUpdateMovie/'+${movie.id}}">
-				<input type="submit" value="Fine modifica">
+				<input type="submit" class="btn btn-primary" value="Fine modifica">
 			</form>
 		</div>
-		<div th:replace="~{fragments/bootstrap.html :: bsScript}"></div>
-	</body>
+	</div>
+	<div th:replace="~{fragments/bootstrap.html :: bsScript}"></div>
+</body>
 </html>

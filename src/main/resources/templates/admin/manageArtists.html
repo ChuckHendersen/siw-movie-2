@@ -1,25 +1,37 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<title>Lista Artist - SiW Movie</title>
-<meta th:replace="~{fragments/header.html :: metaFragment}" />
-<link th:replace="~{fragments/header.html :: stylesheetFragment}" />
-<link th:replace="~{fragments/bootstrap.html :: bsCss}"/>
+	<title>Lista Artist - SiW Movie</title>
+	<meta th:replace="~{fragments/header.html :: metaFragment}" />
+	<link th:replace="~{fragments/header.html :: stylesheetFragment}" />
+	<link th:replace="~{fragments/bootstrap.html :: bsCss}" />
 </head>
+
 <body>
 	<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
-	<h1>Selezione artista da modificare</h1>
-	<div th:if="${artists.isEmpty()}">Non ci sono artisti nel sistema</div>
-	<div>
-		<ul>
-			<li th:each="artist:${artists}">
-				<div>
-					<a th:href="@{'/admin/formUpdateArtist/'+${artist.id}}"
-						th:text="${artist.name} +' '+${artist.surname}"></a>
+	<div class="container text-center">
+		<h1 class="text-center">Selezione artista da modificare</h1>
+		<div th:if="${artists.isEmpty()}">Non ci sono artisti nel sistema</div>
+		<div class="row mt-5">
+			<div th:each="artist : ${artists}" class="col-lg-4">
+				<div class="card mb-4 box-shadow">
+					<div class="img-container h-100">
+						<img class="card-img-top" th:src="'data:image;base64,'+${artist.picture.imgData}"
+							alt="Immagine attore" />
+					</div>
+					<div class="card-body">
+						<h5 class="card-title">
+							<a th:href="@{'/admin/formUpdateArtist/'+${artist.id}}"
+								th:text="${artist.name} + ' ' + ${artist.surname}"></a>
+						</h5>
+					</div>
 				</div>
-			</li>
-		</ul>
+			</div>
+			<!-- Fine riga -->
+		</div>
 	</div>
 	<div th:replace="~{fragments/bootstrap.html :: bsScript}"></div>
 </body>
+
 </html>

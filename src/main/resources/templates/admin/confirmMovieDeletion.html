@@ -1,19 +1,99 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<title>Conferma eliminazione film - SiW Movie</title>
-<meta th:replace="~{fragments/header.html :: metaFragment}" />
-<link th:replace="~{fragments/header.html :: stylesheetFragment}" />
-<link th:replace="~{fragments/bootstrap.html :: bsCss}"/>
+	<title>Conferma eliminazione film - SiW Movie</title>
+	<meta th:replace="~{fragments/header.html :: metaFragment}" />
+	<link th:replace="~{fragments/header.html :: stylesheetFragment}" />
+	<link th:replace="~{fragments/bootstrap.html :: bsCss}" />
 </head>
+
 <body>
 	<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
-	<h1>Sei sicuro di voler eliminare questo film:</h1>
-	<div>
-		<span th:text="'Titolo: '+${movie.title}">Titolo Film</span> 
-		<span>Anno:<span th:text="'('+${movie.year}+')'">2000</span></span> 
-		<a th:href="'/admin/deleteMovie/'+${movie.id}">elimina</a>
+	<div class="container text-center">
+		<div class="row">
+				<div class="col text-center">
+					<h1 class="mt-4">Sei sicuro di voler eliminare questo film:</h1>
+					<h2 class="mt-4" th:text="${movie.title}+' ('+${movie.year}+')'">Titolo Film</h2>
+					<div th:if="${movie.areThereAnyReviews()}">
+						<h2 th:text="'Valutazione media: '+${movie.getAverageVote()}">Valutazione media: 4.5</h2>
+					</div>
+					<div th:unless="${movie.areThereAnyReviews()}">
+						<h2>Valutazione media: nessuna recensione</h2>
+					</div>
+					<a class="btn btn-danger mt-3 mb-4" th:href="'/admin/deleteMovie/'+${movie.id}">Elimina</a>
+				</div>
+			</div>
+		
+	</div>
+	<div th:if="${movie}">
+		<div class="container">
+			<div class="row">
+				<div class="col">
+					<div th:if="${movie.pictures!=null && movie.pictures.size()>0}" id="carouselControls"
+						class="carousel slide col" data-ride="carousel" style="max-width:50;">
+						<div class="carousel-inner">
+							<div class="carousel-item active" style="height: 100%;">
+								<img th:src="'data:image;base64,'+${movie.getFirstPicture().getImgData()}"
+									class="d-block w-100 rounded"
+									style="object-fit: cover; width: 25rem; height: 55rem;" width="100">
+							</div>
+							<div th:each="img : ${movie.getAllButFirstPictures()}" class="carousel-item">
+								<!-- Immagine-->
+								<img th:src="'data:image;base64,'+${img.getImgData()}" class="d-block w-100 rounded"
+									style="object-fit: cover; width: 25rem; height: 55rem;" width="100"></img>
+							</div>
+						</div>
+						<a class="carousel-control-prev" href="#carouselControls" role="button" data-slide="prev">
+							<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+							<span class="sr-only">Previous</span>
+						</a>
+						<a class="carousel-control-next" href="#carouselControls" role="button" data-slide="next">
+							<span class="carousel-control-next-icon" aria-hidden="true"></span>
+							<span class="sr-only">Next</span>
+						</a>
+					</div>
+				</div>
+			</div>
+			<div class="row mt-2 ml-1">
+				<div class="col-6">
+					<span>Regista: <br> <a th:if="${movie.director}" th:href="'/artists/'+${movie.director.id}"
+							th:text="${movie.director.name}+' '+${movie.director.surname}">Cristopher
+							Nolan</a></span>
+				</div>
+				<div class="col-6">
+					Attori:
+					<div th:each="actor:${movie.actors}">
+						<a th:href="'/artists/'+${actor.id}" th:text="${actor.name}+' '+${actor.surname}"></a>
+					</div>
+				</div>
+			</div>
+			<div class="row mt-3 ml-1 mb-5">
+				<div class="col-6" style="word-wrap: break-word;">
+					<h3>Recensioni</h3>
+					<div th:if="${movie.areThereAnyReviews()}">
+						<div th:each="review : ${movie.reviews}" class="review">
+							<div class="ml-1">
+								<a th:href="'/reviews/'+${review.id}">
+									<span th:text="'Titolo: '+${review.title}"></span><br>
+									<span th:text="'Voto: '+${review.vote}"></span><br>
+									<span th:text="'Testo: '+${review.text}"></span><br>
+								</a>
+								<a th:href="'/users/'+${review.author.id}"
+									th:text="${review.author.name}+' '+${review.author.surname}" />
+							</div>
+						</div>
+					</div>
+					<div th:unless="${movie.areThereAnyReviews()}">
+						<span>Non esistono recensioni per questo film</span>
+					</div>
+				</div>
+				<div class="col-6">
+				</div>
+			</div>
+		</div>
 	</div>
 	<div th:replace="~{fragments/bootstrap.html :: bsScript}"></div>
 </body>
+
 </html>

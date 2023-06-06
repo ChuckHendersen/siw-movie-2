@@ -1,23 +1,41 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<title>Elimina artista - SiW Movie</title>
 	<meta th:replace="~{fragments/header.html :: metaFragment}" />
 	<link th:replace="~{fragments/header.html :: stylesheetFragment}" />
-	<link th:replace="~{fragments/bootstrap.html :: bsCss}"/>
+	<link th:replace="~{fragments/bootstrap.html :: bsCss}" />
 </head>
+
 <body>
 	<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
-	<h1>Scegli film da eliminare</h1>
-	<div th:if="${artists}">
-		<div th:each="artist : ${artists}">
-			<span th:text="${artist.name}+' '+${artist.surname}"></span> 
-            <a th:href="'/admin/confirmArtistDeletion/'+${artist.id}">elimina</a>
+	<div class="album py-5">
+		<div class="container justify-content-center text-center">
+			<h1>Elimina artista</h1>
+			<div th:if="${artists.size()<=0}">
+				<span>Non ci sono artisti</span>
+			</div>
+			<div class="row mt-5">
+				<div th:each="artist:${artists}" class="col-lg-4">
+					<div class="card mb-4 box-shadow">
+						<div class="img-container h-100">
+							<img class="card-img-top image-container-img h-100"
+								th:src="'data:image;base64,'+${artist.getPicture().getImgData}" />
+						</div>
+						<div class="card-body">
+							<h5 class="card-title" th:text="${artist.name}+' '+${artist.surname}"></h5>
+							<a class="btn btn-danger" th:href="' /admin/deleteArtist/'+${artist.id}">Elimina</a>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 	<div th:if="${artists == null || artists.size() == 0}">
-		<h2>Non ci sono artisti da cancellare</h2>
+		<h2 class="text-center">Non ci sono artisti da cancellare</h2>
 	</div>
 	<div th:replace="~{fragments/bootstrap.html :: bsScript}"></div>
 </body>
+
 </html>

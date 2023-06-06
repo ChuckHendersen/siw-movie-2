@@ -1,23 +1,39 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<title>Elimina film - SiW Movie</title>
-<meta th:replace="~{fragments/header.html :: metaFragment}" />
-<link th:replace="~{fragments/header.html :: stylesheetFragment}" />
-<link th:replace="~{fragments/bootstrap.html :: bsCss}"/>
+	<title>Elimina film - SiW Movie</title>
+	<meta th:replace="~{fragments/header.html :: metaFragment}" />
+	<link th:replace="~{fragments/header.html :: stylesheetFragment}" />
+	<link th:replace="~{fragments/bootstrap.html :: bsCss}" />
 </head>
+
 <body>
 	<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
-	<h1>Scegli film da eliminare</h1>
-	<div th:if="${movies}">
-		<div th:each="movie : ${movies}">
-			<span th:text="${movie.title}+'('+${movie.year}+')'"></span> <a
-				th:href="'/admin/confirmMovieDeletion/'+${movie.id}">elimina</a>
+	<div class="container text-center">
+		<h1 class="text-center">Scegli film da eliminare</h1>
+		<div th:if="${movies}">
+			<div class="row">
+				<div th:each="movie : ${movies}" class="col-lg-4">
+					<div class="card mb-4 box-shadow">
+						<div class="img-container h-100">
+							<img th:src="'data:image;base64,' + ${movie.getFirstPicture().getImgData()}"
+								class="card-img-top" alt="Immagine del film">
+						</div>
+						<div class="card-body">
+							<h5 class="card-title" th:text="${movie.title} + ' (' + ${movie.year} + ')'"></h5>
+							<a class="btn btn-danger" th:href="'/admin/confirmMovieDeletion/' + ${movie.id}">Elimina</a>
+						</div>
+					</div>
+				</div>
+				<!-- Fine riga -->
+			</div>
 		</div>
-	</div>
-	<div th:if="${movies == null || movies.size() == 0}">
-		<h2>Non ci sono film da cancellare</h2>
+		<div th:if="${movies == null || movies.size() == 0}">
+			<h2 class="text-center">Non ci sono film da cancellare</h2>
+		</div>
 	</div>
 	<div th:replace="~{fragments/bootstrap.html :: bsScript}"></div>
 </body>
+
 </html>
