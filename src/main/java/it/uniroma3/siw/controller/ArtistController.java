@@ -10,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 import it.uniroma3.siw.controller.validator.ArtistValidator;
 import it.uniroma3.siw.controller.validator.MultipartFileValidator;
 import it.uniroma3.siw.controller.validator.MyMultipartFileValidator;
-import it.uniroma3.siw.controller.validator.UpdateArtistValidator;
 import it.uniroma3.siw.model.Artist;
 import it.uniroma3.siw.service.ArtistService;
 import jakarta.validation.Valid;
