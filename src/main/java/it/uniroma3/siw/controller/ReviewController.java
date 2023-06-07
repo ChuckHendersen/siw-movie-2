@@ -10,8 +10,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import it.uniroma3.siw.controller.validator.ReviewValidator;
+import it.uniroma3.siw.model.Movie;
 import it.uniroma3.siw.model.Review;
+import it.uniroma3.siw.model.User;
+import it.uniroma3.siw.service.MovieService;
 import it.uniroma3.siw.service.ReviewService;
+import it.uniroma3.siw.service.UserService;
 
 import static it.uniroma3.siw.controller.ControllerUtils.*;
 
@@ -23,7 +27,13 @@ public class ReviewController {
 
 	@Autowired
 	private ReviewService reviewService;
+	
+	@Autowired
+	private MovieService movieService;
 
+	@Autowired
+	private UserService userService;
+	
 	@GetMapping("/reviews/{review_id}")
 	public String getReview(@PathVariable("review_id") Long reviewId, Model model) {
 		Review review = this.reviewService.getReview(reviewId);
@@ -37,12 +47,6 @@ public class ReviewController {
 		return redirection(review, "redirect:/users/"+review.getAuthor().getId(), "reviewError.html");
 	}
 
-	@GetMapping("/user/formNewReview")
-	public String formNewReview(Model model) {
-		model.addAttribute("review", this.reviewService.createReview());
-		return "/user/formNewReview.html";
-	}
-
 	@PostMapping("/user/newReview/{movie_id}/{user_id}")
 	public String newReview(@Valid @ModelAttribute("review") Review review,
 			BindingResult bindingResult,
@@ -50,11 +54,24 @@ public class ReviewController {
 			@PathVariable("user_id") Long userId,
 			Model model) {
 		//Devo recuperare lo user
-		this.reviewValidator.validate(review, bindingResult);
-		if(!bindingResult.hasErrors()) {
-			this.reviewService.userSaveNewReview(review, movieId, userId);
+		User autore = this.userService.getUser(userId);
+		Movie movie = this.movieService.findById(movieId);
+		if(autore!=null && movie != null) {
+			review.setAuthor(autore);
+			review.setReviewedMovie(movie);
+			this.reviewValidator.validate(review, bindingResult);
+			if(!bindingResult.hasErrors()) {
+				return redirection(this.reviewService.userSaveNewReview(review, movieId, userId),"redirect:/movies/"+movieId,"reviewError.html");
+			}else {
+				model.addAttribute("movie", movie);
+				return redirection(movie,"movie.html","movieError.html");
+			}
+		}else if(autore == null) {
+			return "userError.html";
+		}else if(movie == null) {
+			return "movieError.html";
 		}
-		return "redirect:/movies/"+movieId;
+		return "reviewError.html";
 	}
 
 	@GetMapping("/admin/manageReview/{review_id}")

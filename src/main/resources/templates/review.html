@@ -14,11 +14,11 @@
 		<h1 class="mt-5">Gestisci recensione</h1>
 		<!-- Informazioni recensione -->
 		<div class="row justify-content-center mt-4">
-			<div class="col">
+			<div class="col-lg-6 w-100">
 				<div>
 					<h4 th:text="'Titolo: ' + ${review.getTitle()}">Titolo: TitoloRecensione</h4>
 					<span th:text="'Voto: ' + ${review.getVote()}">Voto: 5</span><br>
-					<span th:text="'Testo recensione: ' + ${review.getText()}">Testo recensione</span><br>
+					<span style="overflow-wrap: break-word;" th:text="'Testo recensione: ' + ${review.getText()}">Testo recensione</span><br>
 					<span>Autore: <a th:href="'/users/'+${review.author.id}" th:text="${review.getAuthor().getName()} + ' ' + ${review.getAuthor().getSurname()}"/></span><br>
 					<span>Film recensito: <a th:href="'/movies/' + ${review.reviewedMovie.id}" th:text="${review.reviewedMovie.title}"></a></span>
 				</div>

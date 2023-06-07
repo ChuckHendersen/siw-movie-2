@@ -4,46 +4,54 @@
 <head>
 	<title>
 		SiwMovie - Registrazione
-	</title> 
+	</title>
 	<meta th:replace="~{fragments/header.html :: metaFragment}" />
-	<link th:replace="~{fragments/header.html :: stylesheetFragment}"/>
-	<link th:replace="~{fragments/bootstrap.html :: bsCss}"/>
+	<link th:replace="~{fragments/header.html :: stylesheetFragment}" />
+	<link th:replace="~{fragments/bootstrap.html :: bsCss}" />
 </head>
 
 <body>
 	<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
 	<div class="container">
-        <div class="row justify-content-center mt-5">
-            <div class="col-lg-6">
-                <h1 class="text-center">Registrazione nuovo utente</h1>
-                <form th:action="@{/register}" method="POST">
-                    <div class="mb-3">
-                        <input type="text" class="form-control" id="username" placeholder="Username" required th:field="${newCredentials.username}" />
-                        <span th:if="${#fields.hasErrors('newCredentials.username')}" class="text-danger" th:errors="${newCredentials.username}"></span>
-                    </div>
-                    <div class="mb-3">
-                        <input type="password" class="form-control" id="password" placeholder="Password" required th:field="${newCredentials.password}" />
-                        <span th:if="${#fields.hasErrors('newCredentials.password')}" class="text-danger" th:errors="${newCredentials.password}"></span>
-                    </div>
-                    <div class="mb-3">
-                        <input type="text" class="form-control" id="name" placeholder="Nome" required th:field="${user.name}" />
-                        <span th:if="${#fields.hasErrors('user.name')}" class="text-danger" th:errors="${user.name}"></span>
-                    </div>
-                    <div class="mb-3">
-                        <input type="text" class="form-control" id="surname" placeholder="Cognome" required th:field="${user.surname}" />
-                        <span th:if="${#fields.hasErrors('user.surname')}" class="text-danger" th:errors="${user.surname}"></span>
-                    </div>
-                    <div class="mb-3">
-                        <input type="email" class="form-control" id="email" placeholder="Email" required th:field="${user.email}" />
-                        <span th:if="${#fields.hasErrors('user.email')}" class="text-danger" th:errors="${user.email}"></span>
-                    </div>
-                    <div class="text-center mt-3">
-                        <button type="submit" class="btn btn-primary">Registra</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+		<div class="row justify-content-center mt-5">
+			<div class="col-lg-6">
+				<h1 class="text-center">Registrazione nuovo utente</h1>
+				<form th:action="@{/register}" method="POST" th:object="${userForm}">
+					<div th:if="${#fields.hasGlobalErrors()}" class="text-danger">
+						<p th:each="err:${#fields.globalErrors()}" th:text="${err}"></p>
+					</div>
+					<div class="mb-3">
+						<input type="text" class="form-control" id="username" placeholder="Username" required
+							th:field="${userForm.credentials.username}" />
+
+					</div>
+					<div class="mb-3">
+						<input type="password" class="form-control" id="password" placeholder="Password" required
+							th:field="${userForm.credentials.password}" />
+
+					</div>
+					<div class="mb-3">
+						<input type="text" class="form-control" id="name" placeholder="Nome" required
+							th:field="${userForm.user.name}" />
+
+					</div>
+					<div class="mb-3">
+						<input type="text" class="form-control" id="surname" placeholder="Cognome" required
+							th:field="${userForm.user.surname}" />
+
+					</div>
+					<div class="mb-3">
+						<input type="email" class="form-control" id="email" placeholder="Email" required
+							th:field="${userForm.user.email}" />
+
+					</div>
+					<div class="text-center mt-3">
+						<button type="submit" class="btn btn-primary">Registra</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 	<div th:replace="~{fragments/bootstrap.html :: bsScript}"></div>
 </body>
 

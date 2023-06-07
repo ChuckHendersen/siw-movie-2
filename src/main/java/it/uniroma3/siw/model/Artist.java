@@ -34,7 +34,6 @@ public class Artist {
 	private List<Movie> listaFilmRecitati;
 
 	@OneToOne(fetch = FetchType.LAZY)
-	@NotNull
 	private Picture picture;
 
 	public Artist() {

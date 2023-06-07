@@ -15,15 +15,20 @@
 			<div class="col">
 				<h1 th:text="${movie.title} +' '+'('+${movie.year}+')'">Titolo
 					Film</h1>
-				<form method="POST" th:action="@{'/admin/updateMovieDetails/'+${movie.id}}">
+				<form method="POST" th:action="@{'/admin/updateMovieDetails/'+${movie.id}}" th:object="${movie}">
 					<div class="form-group">
+						<div th:if="${#fields.hasGlobalErrors()}" class="text-danger">
+							<p th:each="err:${#fields.globalErrors()}" th:text="${err}"></p>
+						</div>
 						<label for="movieTitle" style="white-space:nowrap;">Modifica nome</label>
-						<input type="text" id="movieTitle" class="form-control" th:field="${movie.title}" required />
+						<input type="text" id="movieTitle" class="form-control" th:field="*{title}" required />
+						<span th:if="${#fields.hasErrors('title')}" class="text-danger" th:errors="*{title}"></span>
 					</div>
 					<div class="form-group">
 						<label for="movieYear" style="white-space:nowrap;">Modifica anno</label>
-						<input type="number" id="movieYear" class="form-control" th:field="${movie.year}" min="1890"
+						<input type="number" id="movieYear" class="form-control" th:field="*{year}" min="1890"
 							required />
+						<span th:if="${#fields.hasErrors('year')}" class="text-danger" th:errors="*{year}"></span>
 					</div>
 					<button type="submit" class="btn btn-primary mb-3">Conferma</button>
 				</form>
@@ -63,22 +68,23 @@
 		<div>
 			<form th:action="@{'/admin/uploadPhoto/'+${movie.id}}" method="POST" enctype="multipart/form-data">
 				<h4 class="mt-3">Aggiungi foto</h4>
+				<span class="warning" th:text="${messaggioErroreFoto}"></span>
 				<div>
 					<input type="file" name="file" multiple></input>
 				</div>
 				<div>
-					<span><button type="submit" class="mt-1">Carica immagini</button></span>
+					<span><button type="submit" class="btn btn-primary mt-1">Carica immagini</button></span>
 				</div>
 			</form>
 		</div>
 		<div class="mt-3">
-			<a class="btn btn-primary" th:href="@{'/admin/addDirectorToMovie/'+${movie.id}}">Modifica Regista</a><br>
+			<a class="btn btn-secondary" th:href="@{'/admin/addDirectorToMovie/'+${movie.id}}">Modifica Regista</a><br>
 			<span th:if="${movie.director}"> <a th:href="@{'/artists/'+${movie.director.id}}"
 					th:text="${movie.director.name}+' '+${movie.director.surname}"></a>
 			</span>
 		</div>
 		<div class="mb-3 mt-3">
-			<a class="btn btn-primary" th:href="@{'/admin/updateActorsOfMovie/'+${movie.id}}">Modifica Attori</a><br>
+			<a class="btn btn-secondary" th:href="@{'/admin/updateActorsOfMovie/'+${movie.id}}">Modifica Attori</a><br>
 			<div th:each="actor:${movie.actors}">
 				<a th:href="@{'/artists/'+${actor.id}}" th:text="${actor.name}+' '+${actor.surname}"></a>
 			</div>

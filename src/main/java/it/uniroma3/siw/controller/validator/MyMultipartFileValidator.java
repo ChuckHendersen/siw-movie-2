@@ -9,4 +9,8 @@ public class MyMultipartFileValidator{
 	public boolean validate(MultipartFile f) {
 		return f.getSize()>0;
 	}
+	
+	public boolean validate(MultipartFile[] files) {
+		return !(files.length==0) && !(files[0].getSize()==0);
+	}
 }

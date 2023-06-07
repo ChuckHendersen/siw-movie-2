@@ -29,6 +29,15 @@ public class Review {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private User author;
 
+	public Review() {
+		
+	}
+	
+	public Review(User user, Movie movie) {
+		this.author = user;
+		this.reviewedMovie=movie;
+	}
+
 	public Long getId() {
 		return id;
 	}

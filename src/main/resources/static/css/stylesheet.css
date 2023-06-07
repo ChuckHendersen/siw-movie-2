@@ -58,3 +58,8 @@ label {
     display: inline-block; /* Assicura il corretto layout dell'immagine */
     vertical-align: middle; /* Centra l'immagine verticalmente */
 }
+
+.warning{
+	color: rgb(179, 183, 4);
+	font-style: italic;
+}

@@ -10,6 +10,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import it.uniroma3.siw.controller.validator.CredentialsValidator;
 import it.uniroma3.siw.controller.validator.UserValidator;
 import it.uniroma3.siw.model.Credentials;
 import it.uniroma3.siw.model.User;
@@ -28,6 +30,9 @@ public class LoginController {
 	@Autowired
 	private UserValidator userValidator;
 	
+	@Autowired
+	private CredentialsValidator credentialsValidator;
+	
 	@GetMapping("/login") 
 	public String showLoginForm (Model model) {
 		return "formLogin";
@@ -35,20 +40,19 @@ public class LoginController {
 	
 	@GetMapping("/register") 
 	public String showRegisterForm (Model model) {
-		model.addAttribute("user", new User());
-		model.addAttribute("newCredentials", new Credentials());
+		model.addAttribute("userForm", new UserForm(new Credentials() ,new User()));
 		return "formRegisterUser.html";
 	}
 	
 	@PostMapping("/register")
-    public String registerUser(@Valid @ModelAttribute("user") User user, 
-    			BindingResult userBindingResult, 
-    			@Valid @ModelAttribute("newCredentials") Credentials credentials,
-                BindingResult credentialsBindingResult,
-                Model model) {
+    public String registerUser(@Valid @ModelAttribute("userForm") UserForm userForm, 
+    			BindingResult userFormBindingResult, Model model) {
         // se user e credential hanno entrambi contenuti validi, memorizza User e the Credentials nel DB
-		this.userValidator.validate(user, userBindingResult);
-        if(!userBindingResult.hasErrors() && ! credentialsBindingResult.hasErrors()) {
+		User user = userForm.getUser();
+		Credentials credentials = userForm.getCredentials();
+		this.userValidator.validate(user, userFormBindingResult);
+		this.credentialsValidator.validate(credentials, userFormBindingResult);
+        if(!userFormBindingResult.hasErrors()) {
             credentials.setUser(user);
             user.setCredentials(credentials);
             credentialsService.saveCredentials(credentials);

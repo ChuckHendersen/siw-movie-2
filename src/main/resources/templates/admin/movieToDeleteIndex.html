@@ -10,27 +10,30 @@
 
 <body>
 	<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
-	<div class="container text-center">
-		<h1 class="text-center">Scegli film da eliminare</h1>
-		<div th:if="${movies}">
-			<div class="row">
-				<div th:each="movie : ${movies}" class="col-lg-4">
-					<div class="card mb-4 box-shadow">
-						<div class="img-container h-100">
-							<img th:src="'data:image;base64,' + ${movie.getFirstPicture().getImgData()}"
-								class="card-img-top" alt="Immagine del film">
-						</div>
-						<div class="card-body">
-							<h5 class="card-title" th:text="${movie.title} + ' (' + ${movie.year} + ')'"></h5>
-							<a class="btn btn-danger" th:href="'/admin/confirmMovieDeletion/' + ${movie.id}">Elimina</a>
+	<div class="album py-5">
+		<div class="container justify-content-center text-center">
+			<h1 class="text-center">Scegli film da eliminare</h1>
+			<div th:if="${movies}">
+				<div class="row">
+					<div th:each="movie : ${movies}" class="col-lg-4">
+						<div class="card mb-4 box-shadow">
+							<div class="img-container h-100">
+								<img th:src="'data:image;base64,' + ${movie.getFirstPicture().getImgData()}"
+									class="card-img-top" alt="Immagine del film">
+							</div>
+							<div class="card-body">
+								<h5 class="card-title" th:text="${movie.title} + ' (' + ${movie.year} + ')'"></h5>
+								<a class="btn btn-danger"
+									th:href="'/admin/confirmMovieDeletion/' + ${movie.id}">Elimina</a>
+							</div>
 						</div>
 					</div>
+					<!-- Fine riga -->
 				</div>
-				<!-- Fine riga -->
 			</div>
-		</div>
-		<div th:if="${movies == null || movies.size() == 0}">
-			<h2 class="text-center">Non ci sono film da cancellare</h2>
+			<div th:if="${movies.isEmpty()}">
+				<span>Non ci sono film nel sistema</span>
+			</div>
 		</div>
 	</div>
 	<div th:replace="~{fragments/bootstrap.html :: bsScript}"></div>

@@ -41,9 +41,9 @@
 						film</a><br>
 				</div>
 			</div>
-		</div>
-		<div th:unless="${user.areThereAnyReviews()}">
-			<h3>Non ha scritto nessuna recensione</h3>
+			<div th:unless="${user.areThereAnyReviews()}">
+				<p>Non ha scritto nessuna recensione</p>
+			</div>
 		</div>
 	</div>
 	</div>

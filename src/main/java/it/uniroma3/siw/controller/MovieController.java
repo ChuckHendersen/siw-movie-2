@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.time.Year;
 import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,25 +16,26 @@ import org.springframework.web.multipart.MultipartFile;
 
 import it.uniroma3.siw.controller.validator.MovieValidator;
 import it.uniroma3.siw.controller.validator.MultipartFileArrayValidator;
+import it.uniroma3.siw.controller.validator.MyMultipartFileValidator;
+import it.uniroma3.siw.controller.validator.UpdateMovieValidator;
 import it.uniroma3.siw.model.Artist;
 import it.uniroma3.siw.model.Credentials;
 import it.uniroma3.siw.model.Movie;
 import it.uniroma3.siw.model.Review;
 import it.uniroma3.siw.service.ArtistService;
-import it.uniroma3.siw.service.CredentialsService;
 import it.uniroma3.siw.service.MovieService;
 import jakarta.validation.Valid;
 import static it.uniroma3.siw.controller.ControllerUtils.*;
 
 @Controller
 public class MovieController {
-
-	@Autowired private CredentialsService credentialsService;
 	@Autowired private MovieService movieService;
 	@Autowired private ArtistService artistService;
 	@Autowired private MultipartFileArrayValidator mpfaValidator;
+	@Autowired private MyMultipartFileValidator mmpfValidator;
 	@Autowired private MovieValidator movieValidator;
-
+	@Autowired private UpdateMovieValidator updateMovieValidator;
+	
 	@GetMapping("/")
 	public String index(Model model) {
 		return indexGeneral(model);
@@ -81,16 +80,30 @@ public class MovieController {
 	public String updateMovieDetails(@PathVariable("movie_id") Long movieId, 
 			@Valid @ModelAttribute("movie") Movie movie, BindingResult bindingResult,
 			Model model) {
+		//Non va validato altrimenti trova sempre lo stesso film e fallirà sempre
+		this.updateMovieValidator.validate(movie, bindingResult);
 		if(!bindingResult.hasErrors()) {
 			this.movieService.updateMovieDetails(movieId, movie);
+			return "redirect:/admin/formUpdateMovie/"+movieId;
+		}else {
+			Movie movie2 = this.movieService.findById(movieId);
+			model.addAttribute("movie", movie2);
+			System.out.println("test");
+			return "/admin/formUpdateMovie.html";
 		}
-		return "redirect:/admin/formUpdateMovie/"+movieId;
 	}
 
 	@PostMapping("/admin/uploadPhoto/{movie_id}")
 	public String uploadPhoto(@PathVariable("movie_id") Long movieId, @RequestParam("file") MultipartFile[] files, Model model) throws IOException {
 		// Prendere il film, caricare le nuove foto nell'array e poi mettere il movie nel model addattributo
-		return redirection(this.movieService.uploadNewPhoto(movieId, files), "redirect:/admin/formUpdateMovie/"+movieId, "movieError.html");
+		if(this.mmpfValidator.validate(files)) {
+			return redirection(this.movieService.uploadNewPhoto(movieId, files), "redirect:/admin/formUpdateMovie/"+movieId, "movieError.html");
+		}else {
+			model.addAttribute("messaggioErroreFoto", "Nessun file è stato caricato");
+			Movie movie = this.movieService.findById(movieId);
+			model.addAttribute("movie", movie);
+			return redirection(movie, "/admin/formUpdateMovie.html", "movieError.html");
+		}
 	}
 
 	@GetMapping("/admin/deletePhoto/{movie_id}/{photo_id}")
@@ -106,14 +119,15 @@ public class MovieController {
 	}
 
 	@GetMapping("/movies/{id}")
-	public String getMovie(@PathVariable("id") Long id, Model model) {
-		Credentials credentials = this.getCredentials();
+	public String getMovie(@PathVariable("id") Long id, @ModelAttribute("credentials") Credentials credentials, Model model) {
+		System.out.println(credentials.getUsername());
+		System.out.println(credentials.getUser());
+		Movie movie = this.movieService.findById(id);
 		model.addAttribute("credentials", credentials);
 		if(credentials!=null) {
 			//System.out.println("Utente loggato");
 			model.addAttribute("review", new Review());
 		}
-		Movie movie = this.movieService.findById(id);
 		model.addAttribute("movie", movie);
 		return redirection(movie, "movie.html", "movieError.html");
 	}
@@ -217,14 +231,5 @@ public class MovieController {
 	@GetMapping("/admin/deleteMovie/{movie_id}")
 	public String deleteMovie(@PathVariable("movie_id") Long movieId, Model model) {
 		return redirection(this.movieService.deleteMovie(movieId), "redirect:/admin/moviesToDeleteIndex", "movieError.html");
-	}
-
-	private Credentials getCredentials() {
-		if(!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
-			UserDetails userDetails = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			Credentials credentials = credentialsService.getCredentials(userDetails.getUsername());
-			return credentials;
-		}
-		return null;
 	}
 }

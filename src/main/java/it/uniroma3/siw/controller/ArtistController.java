@@ -8,9 +8,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import it.uniroma3.siw.controller.validator.ArtistValidator;
-import it.uniroma3.siw.controller.validator.MultipartFileArrayValidator;
 import it.uniroma3.siw.controller.validator.MultipartFileValidator;
 import it.uniroma3.siw.controller.validator.MyMultipartFileValidator;
+import it.uniroma3.siw.controller.validator.UpdateArtistValidator;
 import it.uniroma3.siw.model.Artist;
 import it.uniroma3.siw.service.ArtistService;
 import jakarta.validation.Valid;
@@ -29,6 +29,9 @@ public class ArtistController {
 	
 	@Autowired
 	private MultipartFileValidator mpfValidator;
+	
+//	@Autowired
+//	private UpdateArtistValidator updateArtistValidator;
 
 
 	@GetMapping("/admin/indexArtist")
@@ -50,10 +53,14 @@ public class ArtistController {
 			Model model) throws IOException {
 		this.artistValidator.validate(artist, artistBr);
 		this.mpfValidator.validate(file, mpfBr);
-		if(!artistBr.hasErrors() || !mpfBr.hasErrors()) {
+		System.out.println(artist.getName());
+		System.out.println(artist.getSurname());
+		System.out.println(file.getSize());
+		if(!artistBr.hasErrors() && !mpfBr.hasErrors()) {
 			//dovrebbe avere una sola immagine l'array
 			artist = this.artistService.saveNewArtist(artist, file);
-			model.addAttribute(artist);
+			model.addAttribute("artist",artist);
+			System.out.println("FUNZIONA");
 			return "artist.html";
 		}else {
 			//model.addAttribute("messaggioErrore", "Questo artista è già presente");
@@ -105,21 +112,24 @@ public class ArtistController {
 	public String formUpdateArtist(@PathVariable("artist_id") Long artistId, Model model) {
 		Artist artist = this.artistService.findById(artistId);
 		model.addAttribute("artist", artist);
+		//AGGIUNGERE ALTRO NUOVO ARTISTA
 		return redirection(artist, "/admin/formUpdateArtist.html", "artistError.html");
 	}
 
 	@PostMapping("/admin/updateArtistDetails/{artist_id}")
 	public String updateArtistDetails(@PathVariable("artist_id") Long artistId,
-			@Valid @ModelAttribute("artist") Artist artist,
+			@Valid @ModelAttribute("artist") Artist artist, // RIMPIAZZARLO CON NUOVO ARTISTA
 			BindingResult bindingResult, 
 			Model model) {
-		this.artistValidator.validate(artist, bindingResult);
+		//this.updateArtistValidator.validate(artist, bindingResult);
+		//FARE BINDING RESULT SU UN NUOVO ARTISTA
 		if(!bindingResult.hasErrors()) {
 			Artist originalArtist = this.artistService.updateArtistdetails(artistId, artist);
 			return redirection(originalArtist, "redirect:/admin/formUpdateArtist/"+artistId, "artistError.html");
 		}else {
 			//gestione degli input errati che ne so
-			return "/admin/formUpdateArtist.html";
+			Artist originalArtist = this.artistService.findById(artistId);
+			return redirection(originalArtist, "/admin/formUpdateArtist.html", "artistError.html");
 		}
 	}
 

@@ -21,7 +21,7 @@ public class UserValidator implements org.springframework.validation.Validator{
 	public void validate(Object target, Errors errors) {
 		User user = (User) target;
 		if(this.userService.existsByEmail(user.getEmail())) {
-			errors.reject("user.duplicate");
+			errors.reject("user.email.duplicate");
 		}
 	}
 
