@@ -8,6 +8,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import it.uniroma3.siw.controller.validator.ArtistValidator;
+import it.uniroma3.siw.controller.validator.MultipartFileArrayValidator;
+import it.uniroma3.siw.controller.validator.MultipartFileValidator;
+import it.uniroma3.siw.controller.validator.MyMultipartFileValidator;
 import it.uniroma3.siw.model.Artist;
 import it.uniroma3.siw.service.ArtistService;
 import jakarta.validation.Valid;
@@ -20,6 +23,12 @@ public class ArtistController {
 
 	@Autowired
 	private ArtistService artistService;
+
+	@Autowired 
+	private MyMultipartFileValidator mmpfValidator;
+	
+	@Autowired
+	private MultipartFileValidator mpfValidator;
 
 
 	@GetMapping("/admin/indexArtist")
@@ -34,12 +43,14 @@ public class ArtistController {
 	}
 
 	@PostMapping("/admin/artists")
-	public String newArtist(@Valid @ModelAttribute("artist") Artist artist, 
+	public String newArtist(@Valid @ModelAttribute("artist") Artist artist,
+			BindingResult artistBr,
 			@RequestAttribute("file") MultipartFile file , 
-			BindingResult bindingResult, 
+			BindingResult mpfBr, 
 			Model model) throws IOException {
-		this.artistValidator.validate(artist, bindingResult);
-		if(!bindingResult.hasErrors()) {
+		this.artistValidator.validate(artist, artistBr);
+		this.mpfValidator.validate(file, mpfBr);
+		if(!artistBr.hasErrors() || !mpfBr.hasErrors()) {
 			//dovrebbe avere una sola immagine l'array
 			artist = this.artistService.saveNewArtist(artist, file);
 			model.addAttribute(artist);
@@ -102,20 +113,25 @@ public class ArtistController {
 			@Valid @ModelAttribute("artist") Artist artist,
 			BindingResult bindingResult, 
 			Model model) {
+		this.artistValidator.validate(artist, bindingResult);
 		if(!bindingResult.hasErrors()) {
 			Artist originalArtist = this.artistService.updateArtistdetails(artistId, artist);
 			return redirection(originalArtist, "redirect:/admin/formUpdateArtist/"+artistId, "artistError.html");
 		}else {
 			//gestione degli input errati che ne so
-			return null;
+			return "/admin/formUpdateArtist.html";
 		}
 	}
 
 	@PostMapping("/admin/updateArtistPicture/{artist_id}")
 	public String updateArtistPicture(@PathVariable("artist_id") Long artistId, 
-			@RequestAttribute("file") MultipartFile file, 
+			@Valid @RequestAttribute("file") MultipartFile file,
 			Model model) throws IOException {
-		Artist artist = this.artistService.updateArtistPicture(artistId, file);
-		return redirection(artist, "redirect:/admin/formUpdateArtist/"+artistId, "artistError.html");
+		if(mmpfValidator.validate(file)) {
+			Artist artist = this.artistService.updateArtistPicture(artistId, file);
+			return redirection(artist, "redirect:/admin/formUpdateArtist/"+artistId, "artistError.html");
+		}else {
+			return "/admin/formUpdateArtist.html";
+		}
 	}
 }

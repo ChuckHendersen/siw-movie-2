@@ -9,6 +9,7 @@ import it.uniroma3.siw.model.*;
 
 @Component
 public class MovieValidator implements org.springframework.validation.Validator {
+	
 	@Autowired
 	private MovieRepository movieRepository;
 

@@ -17,4 +17,12 @@ public class ControllerUtils {
 			return failurePath;
 		}
 	}
+	
+	public static String redirection(boolean condition, String successPath, String failurePath) {
+		if(condition) {
+			return successPath;
+		}else {
+			return failurePath;
+		}
+	}
 }

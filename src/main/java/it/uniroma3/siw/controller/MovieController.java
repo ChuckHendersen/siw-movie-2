@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+
+import it.uniroma3.siw.controller.validator.MovieValidator;
+import it.uniroma3.siw.controller.validator.MultipartFileArrayValidator;
 import it.uniroma3.siw.model.Artist;
 import it.uniroma3.siw.model.Credentials;
 import it.uniroma3.siw.model.Movie;
@@ -31,6 +34,8 @@ public class MovieController {
 	@Autowired private CredentialsService credentialsService;
 	@Autowired private MovieService movieService;
 	@Autowired private ArtistService artistService;
+	@Autowired private MultipartFileArrayValidator mpfaValidator;
+	@Autowired private MovieValidator movieValidator;
 
 	@GetMapping("/")
 	public String index(Model model) {
@@ -60,9 +65,16 @@ public class MovieController {
 
 	//RICORDARSI DI CAMBIARE I COSTRAINST DI JPA nella tabella di join fra movie e picture (non so come dirlo da java)
 	@PostMapping("/admin/movies")
-	public String newMovie(@Valid @ModelAttribute("movie") Movie movie, @RequestParam("file") MultipartFile[] files, BindingResult bindingResult, Model model) throws IOException {
-		Movie savedMovie = this.movieService.saveNewMovie(movie, files, bindingResult);
-		return redirection(savedMovie, "redirect:/admin/formUpdateMovie/"+movie.getId(), "redirect:/admin/formNewMovie");
+	public String newMovie(@Valid @ModelAttribute("movie") Movie movie,BindingResult movieBr ,@RequestParam("file") MultipartFile[] files, BindingResult filesBr, Model model) throws IOException {
+		this.mpfaValidator.validate(files, filesBr);
+		this.movieValidator.validate(movie, movieBr);
+		if(movieBr.hasErrors() || filesBr.hasErrors()) {
+			System.out.println("Dio cane");
+			return "/admin/formNewMovie.html";
+		}else {
+			this.movieService.saveNewMovie(movie, files);
+			return "redirect:/admin/formUpdateMovie/"+movie.getId();
+		}
 	}
 
 	@PostMapping("/admin/updateMovieDetails/{movie_id}")

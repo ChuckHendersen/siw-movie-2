@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Aggiorna artista - SiW Movie</title>
-	<meta th:replace="~{fragments/header.html :: metaFragment}" />
-	<link th:replace="~{fragments/header.html :: stylesheetFragment}" />
-	<link th:replace="~{fragments/bootstrap.html :: bsCss}" />
+<title>Aggiorna artista - SiW Movie</title>
+<meta th:replace="~{fragments/header.html :: metaFragment}" />
+<link th:replace="~{fragments/header.html :: stylesheetFragment}" />
+<link th:replace="~{fragments/bootstrap.html :: bsCss}" />
 </head>
 <body>
 	<header th:replace="~{fragments/loginHeader.html :: headerLogin}"></header>
@@ -12,22 +12,35 @@
 		<div class="row">
 			<div class="col">
 				<h1 th:text="${artist.name} + ' ' + ${artist.surname}"></h1>
-				<form th:action="@{'/admin/updateArtistDetails/' + ${artist.id}}" method="POST" th:object="${artist}">
+				<form th:action="@{'/admin/updateArtistDetails/' + ${artist.id}}"
+					method="POST" th:object="${artist}">
 					<div class="form-group">
-						<label for="name" style="white-space:nowrap;">Modifica nome</label>
-						<input type="text" id="name" class="form-control" th:field="*{name}" required />
+						<label for="name" style="white-space: nowrap;">Modifica
+							nome</label> <input type="text" id="name" class="form-control"
+							th:field="*{name}" required /><span
+							th:if="${#fields.hasErrors('name')}" class="text-danger"
+							th:errors="*{name}"></span>
 					</div>
 					<div class="form-group">
-						<label for="surname" style="white-space:nowrap;">Modifica cognome</label>
-						<input type="text" id="surname" class="form-control" th:field="*{surname}" required />
+						<label for="surname" style="white-space: nowrap;">Modifica
+							cognome</label> <input type="text" id="surname" class="form-control"
+							th:field="*{surname}" required /><span
+							th:if="${#fields.hasErrors('surname')}" class="text-danger"
+							th:errors="*{surname}"></span>
 					</div>
 					<div class="form-group">
-						<label for="birthDate" style="white-space:nowrap;">Modifica data di nascita</label>
-						<input type="date" id="birthDate" class="form-control" th:field="*{birthDate}" required />
+						<label for="birthDate" style="white-space: nowrap;">Modifica
+							data di nascita</label> <input type="date" id="birthDate"
+							class="form-control" th:field="*{birthDate}" required /><span
+							th:if="${#fields.hasErrors('birthDate')}" class="text-danger"
+							th:errors="*{birthDate}"></span>
 					</div>
 					<div class="form-group">
-						<label for="deceasedDate" style="white-space:nowrap;">Modifica data di morte</label>
-						<input type="date" id="deceasedDate" class="form-control" th:field="*{deceasedDate}" />
+						<label for="deceasedDate" style="white-space: nowrap;">Modifica
+							data di morte</label> <input type="date" id="deceasedDate"
+							class="form-control" th:field="*{deceasedDate}" /><span
+							th:if="${#fields.hasErrors('deceasedDate')}" class="text-danger"
+							th:errors="*{deceasedDate}"></span>
 					</div>
 					<button type="submit" class="btn btn-primary">Conferma</button>
 				</form>
@@ -36,16 +49,19 @@
 		<div class="row mt-3">
 			<div class="col">
 				<div th:if="${artist.picture}">
-					<img th:src="'data:image/jpeg;base64,' + ${artist.picture.getImgData()}" class="img-thumbnail" />
+					<img
+						th:src="'data:image/jpeg;base64,' + ${artist.picture.getImgData()}"
+						class="img-thumbnail" />
 				</div>
 				<div class="mb-5">
-					<form th:action="@{'/admin/updateArtistPicture/' + ${artist.id}}" method="POST"
-						enctype="multipart/form-data">
+					<form th:action="@{'/admin/updateArtistPicture/' + ${artist.id}}"
+						method="POST" enctype="multipart/form-data">
 						<div class="form-group">
-							<label for="picture">Aggiorna immagine</label><br>
-							<input type="file" id="picture" name="file" />
+							<label for="picture">Aggiorna immagine</label><br> <input
+								type="file" id="picture" name="file" />
 						</div>
-						<button type="submit" class="btn btn-primary mt-1">Carica immagine</button>
+						<button type="submit" class="btn btn-primary mt-1">Carica
+							immagine</button>
 					</form>
 				</div>
 			</div>

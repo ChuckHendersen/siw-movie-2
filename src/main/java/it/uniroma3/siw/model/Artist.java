@@ -1,8 +1,7 @@
 package it.uniroma3.siw.model;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -35,9 +34,12 @@ public class Artist {
 	private List<Movie> listaFilmRecitati;
 
 	@OneToOne(fetch = FetchType.LAZY)
+	@NotNull
 	private Picture picture;
 
 	public Artist() {
+		this.listaFilmDiretti = new ArrayList<>();
+		this.listaFilmRecitati = new ArrayList<>();
 	}
 
 	public Artist(String name, String surname, LocalDate birthDate, LocalDate deceasedDate, Picture picture,

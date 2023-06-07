@@ -1,5 +1,4 @@
 package it.uniroma3.siw.model;
-
 import java.util.Arrays;
 import java.util.Base64;
 import jakarta.persistence.*;
