@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Set;
 
 import it.uniroma3.siw.controller.form.UpdateArtistForm;
-import it.uniroma3.siw.controller.form.UpdateMovieForm;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

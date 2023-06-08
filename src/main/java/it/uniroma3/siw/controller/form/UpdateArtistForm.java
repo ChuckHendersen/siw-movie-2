@@ -1,15 +1,24 @@
 package it.uniroma3.siw.controller.form;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 
 import java.time.LocalDate;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 public class UpdateArtistForm {
     @NotBlank
     private String name;
     @NotBlank
     private String surname;
+    @PastOrPresent
+    @NotNull
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
+    @PastOrPresent
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate deceasedDate;
 
 

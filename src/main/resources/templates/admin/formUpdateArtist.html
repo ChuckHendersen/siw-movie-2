@@ -14,7 +14,7 @@
 		<div class="row">
 			<div class="col">
 				<h1 th:text="${artist.name} + ' ' + ${artist.surname}"></h1>
-				<form th:action="@{'/admin/updateArtistDetails/' + ${artist.id}}" method="POST" th:object="${updateFormArtist}">
+				<form th:action="@{'/admin/updateArtistDetails/' + ${artist.id}}" method="POST" th:object="${updateArtistForm}">
 					<div class="form-group">
 						<div th:if="${#fields.hasGlobalErrors()}" class="text-danger">
 							<p th:each="err:${#fields.globalErrors()}" th:text="${err}"></p>
@@ -54,9 +54,10 @@
 				<div class="mb-5">
 					<form th:action="@{'/admin/updateArtistPicture/' + ${artist.id}}" method="POST"
 						enctype="multipart/form-data">
+						<h4 class="mt-3">Aggiorna foto</h4>
+						<span class="warning" th:text="${messaggioErroreFoto}"></span>
 						<div class="form-group">
-							<label for="picture">Aggiorna immagine</label><br> <input type="file" id="picture"
-								name="file" />
+							<input type="file" id="picture" name="file" />
 						</div>
 						<button type="submit" class="btn btn-primary mt-1">Carica
 							immagine</button>

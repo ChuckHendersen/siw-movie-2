@@ -1,10 +1,7 @@
 package it.uniroma3.siw.controller.validator;
 
-import java.time.LocalDate;
-
 import it.uniroma3.siw.controller.form.UpdateArtistForm;
 import it.uniroma3.siw.service.ArtistService;
-import it.uniroma3.siw.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;

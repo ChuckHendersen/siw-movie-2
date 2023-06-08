@@ -116,23 +116,22 @@ public class ArtistController {
     public String formUpdateArtist(@PathVariable("artist_id") Long artistId, Model model) {
         Artist artist = this.artistService.findById(artistId);
         model.addAttribute("artist", artist);
-        model.addAttribute("updateArtistForm", this.artistService.generateUpdateArtistForm(artistId));
+        if(artist!=null) {
+        	model.addAttribute("updateArtistForm", this.artistService.generateUpdateArtistForm(artistId));
+        }
         return redirection(artist, "/admin/formUpdateArtist.html", "artistError.html");
     }
 
     @PostMapping("/admin/updateArtistDetails/{artist_id}")
     public String updateArtistDetails(@PathVariable("artist_id") Long artistId,
-                                      @Valid @ModelAttribute("updateArtistForm") UpdateArtistForm updateArtistForm,
-                                      BindingResult bindingResult,
-                                      Model model) {
-        //this.updateArtistValidator.validate(artist, bindingResult);
-        //FARE BINDING RESULT SU UN NUOVO ARTISTA
+    		@Valid @ModelAttribute("updateArtistForm") UpdateArtistForm updateArtistForm, BindingResult bindingResult,
+            Model model) {
         Artist artist = this.artistService.findById(artistId);
         if (artist != null) {
             this.updateArtistValidator.validate(updateArtistForm, artist, bindingResult);
             if (!bindingResult.hasErrors()) {
                 this.artistService.updateArtistDetails(artistId, updateArtistForm);
-                return "redirect:/admin/formUpdateArtist"+artistId;
+                return "redirect:/admin/formUpdateArtist/"+artistId;
             } else {
                 model.addAttribute("artist", artist);
                 return "/admin/formUpdateArtist.html";
@@ -150,6 +149,10 @@ public class ArtistController {
             Artist artist = this.artistService.updateArtistPicture(artistId, file);
             return redirection(artist, "redirect:/admin/formUpdateArtist/" + artistId, "artistError.html");
         } else {
+        	model.addAttribute("messaggioErroreFoto", "Nessun file è stato caricato");
+        	Artist artist = this.artistService.findById(artistId);
+        	model.addAttribute("artist", artist);
+        	model.addAttribute("updateArtistForm", this.artistService.generateUpdateArtistForm(artistId));
             return "/admin/formUpdateArtist.html";
         }
     }
