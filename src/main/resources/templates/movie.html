@@ -90,7 +90,7 @@
 						<div th:if="${!credentials.isGuest()}">
 							<h3>Scrivi una recensione</h3>
 							<div>
-								<form th:action="@{'/user/newReview/'+${movie.id}+'/'+${credentials.getUser().id}}"
+								<form th:action="@{'/user/newReview/'+${movie.id}+'/'+${credentials.getUser().getId()}}"
 									th:object="${review}" method="POST">
 									<div th:if="${#fields.hasGlobalErrors()}" class="text-danger">
 										<p th:each="err:${#fields.globalErrors()}" th:text="${err}"></p>

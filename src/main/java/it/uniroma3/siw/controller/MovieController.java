@@ -3,7 +3,6 @@ package it.uniroma3.siw.controller;
 import java.io.IOException;
 import java.time.Year;
 import java.util.*;
-
 import it.uniroma3.siw.controller.validator.MyMultipartFileValidator;
 import it.uniroma3.siw.controller.validator.UpdateMovieValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +15,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-
 import it.uniroma3.siw.controller.form.UpdateMovieForm;
 import it.uniroma3.siw.controller.validator.MovieValidator;
 import it.uniroma3.siw.controller.validator.MultipartFileArrayValidator;
 import it.uniroma3.siw.model.Artist;
-import it.uniroma3.siw.model.Credentials;
 import it.uniroma3.siw.model.Movie;
 import it.uniroma3.siw.model.Review;
 import it.uniroma3.siw.service.ArtistService;
@@ -125,15 +122,9 @@ public class MovieController {
 	}
 
 	@GetMapping("/movies/{id}")
-	public String getMovie(@PathVariable("id") Long id, @ModelAttribute("credentials") Credentials credentials, Model model) {
-		System.out.println(credentials.getUsername());
-		System.out.println(credentials.getUser());
+	public String getMovie(@PathVariable("id") Long id, Model model) {
 		Movie movie = this.movieService.findById(id);
-		model.addAttribute("credentials", credentials);
-		if(credentials!=null) {
-			//System.out.println("Utente loggato");
-			model.addAttribute("review", new Review());
-		}
+		model.addAttribute("review", new Review());
 		model.addAttribute("movie", movie);
 		return redirection(movie, "movie.html", "movieError.html");
 	}
