@@ -17,4 +17,5 @@ public interface MovieRepository extends CrudRepository<Movie,Long>{
 	
 	public boolean existsByTitleAndYear (String title, Year year);
 	
+	//public Integer countByTitleAndYear (String title, Year year);
 }

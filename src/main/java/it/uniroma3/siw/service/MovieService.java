@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import it.uniroma3.siw.controller.form.UpdateMovieForm;
 import it.uniroma3.siw.model.Artist;
 import it.uniroma3.siw.model.Movie;
 import it.uniroma3.siw.model.Picture;
@@ -53,17 +55,6 @@ public class MovieService {
 	@Transactional
 	public Movie findById(Long movieId) {
 		return this.movieRepository.findById(movieId).orElse(null);
-	}
-
-	@Transactional
-	public Movie updateMovieDetails(Long movieId, Movie newMovie) {
-		Movie oldMovie = this.movieRepository.findById(movieId).orElse(null);
-		if (oldMovie != null) {
-			oldMovie.setTitle(newMovie.getTitle());
-			oldMovie.setYear(newMovie.getYear());
-			movieRepository.save(oldMovie);
-		}
-		return oldMovie;
 	}
 
 	@Transactional
@@ -197,4 +188,39 @@ public class MovieService {
 		}
 		return null;
 	}
+
+
+	@Transactional
+	public UpdateMovieForm generateUpdateMovieForm(Long movieId) {
+		Movie movie = this.findById(movieId);
+		UpdateMovieForm updateMovieForm=null;
+		if(movie != null) {
+			updateMovieForm = new UpdateMovieForm(movie.getTitle(),movie.getYear());
+		}
+		return updateMovieForm;
+	}
+	
+	@Transactional
+	public Movie updateMovieDetails(Long movieId, UpdateMovieForm updateMovieForm) {
+		Movie oldMovie = this.movieRepository.findById(movieId).orElse(null);
+		if (oldMovie != null) {
+			oldMovie.setTitle(updateMovieForm.getTitle());
+			oldMovie.setYear(updateMovieForm.getYear());
+			movieRepository.save(oldMovie);
+		}
+		return oldMovie;
+	}
+
+	//	@Transactional
+	//	public Movie clone(Long movieId) {
+	//		Movie movie = this.findById(movieId);
+	//		Movie movieClone = null;
+	//		if(movie!=null) {
+	//			movieClone = new Movie();
+	//			movieClone.setTitle(movie.getTitle());
+	//			movieClone.setYear(movie.getYear());
+	//			
+	//		}
+	//		return movieClone;
+	//	}
 }

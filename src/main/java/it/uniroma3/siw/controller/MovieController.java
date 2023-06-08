@@ -14,10 +14,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import it.uniroma3.siw.controller.form.UpdateMovieForm;
 import it.uniroma3.siw.controller.validator.MovieValidator;
 import it.uniroma3.siw.controller.validator.MultipartFileArrayValidator;
 import it.uniroma3.siw.controller.validator.MyMultipartFileValidator;
-import it.uniroma3.siw.controller.validator.UpdateMovieValidator;
+//import it.uniroma3.siw.controller.validator.UpdateMovieValidator;
 import it.uniroma3.siw.model.Artist;
 import it.uniroma3.siw.model.Credentials;
 import it.uniroma3.siw.model.Movie;
@@ -34,8 +35,8 @@ public class MovieController {
 	@Autowired private MultipartFileArrayValidator mpfaValidator;
 	@Autowired private MyMultipartFileValidator mmpfValidator;
 	@Autowired private MovieValidator movieValidator;
-	@Autowired private UpdateMovieValidator updateMovieValidator;
-	
+	//@Autowired private UpdateMovieValidator updateMovieValidator;
+
 	@GetMapping("/")
 	public String index(Model model) {
 		return indexGeneral(model);
@@ -78,12 +79,12 @@ public class MovieController {
 
 	@PostMapping("/admin/updateMovieDetails/{movie_id}")
 	public String updateMovieDetails(@PathVariable("movie_id") Long movieId, 
-			@Valid @ModelAttribute("movie") Movie movie, BindingResult bindingResult,
+			@Valid @ModelAttribute("updateMovieForm") UpdateMovieForm updateMovieForm, BindingResult bindingResult,
 			Model model) {
 		//Non va validato altrimenti trova sempre lo stesso film e fallirà sempre
-		this.updateMovieValidator.validate(movie, bindingResult);
+		//this.updateMovieValidator.validate(updateMovieForm, bindingResult); capire come validare quell'aspetto
 		if(!bindingResult.hasErrors()) {
-			this.movieService.updateMovieDetails(movieId, movie);
+			this.movieService.updateMovieDetails(movieId, updateMovieForm);
 			return "redirect:/admin/formUpdateMovie/"+movieId;
 		}else {
 			Movie movie2 = this.movieService.findById(movieId);
@@ -102,6 +103,7 @@ public class MovieController {
 			model.addAttribute("messaggioErroreFoto", "Nessun file è stato caricato");
 			Movie movie = this.movieService.findById(movieId);
 			model.addAttribute("movie", movie);
+			model.addAttribute("updateMovieForm", this.movieService.generateUpdateMovieForm(movieId));
 			return redirection(movie, "/admin/formUpdateMovie.html", "movieError.html");
 		}
 	}
@@ -157,6 +159,9 @@ public class MovieController {
 	public String formUpdateMovie(@PathVariable Long id,Model model) {
 		Movie movie = this.movieService.findById(id);
 		model.addAttribute("movie", movie);
+		if(movie != null) {
+			model.addAttribute("updateMovieForm", this.movieService.generateUpdateMovieForm(id));
+		}
 		return redirection(movie, "/admin/formUpdateMovie.html", "movieError.html");
 	}
 

@@ -60,6 +60,6 @@ label {
 }
 
 .warning{
-	color: rgb(179, 183, 4);
+	color: red;
 	font-style: italic;
 }

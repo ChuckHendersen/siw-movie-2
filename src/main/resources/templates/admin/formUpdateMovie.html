@@ -15,7 +15,7 @@
 			<div class="col">
 				<h1 th:text="${movie.title} +' '+'('+${movie.year}+')'">Titolo
 					Film</h1>
-				<form method="POST" th:action="@{'/admin/updateMovieDetails/'+${movie.id}}" th:object="${movie}">
+				<form method="POST" th:action="@{'/admin/updateMovieDetails/'+${movie.id}}" th:object="${updateMovieForm}">
 					<div class="form-group">
 						<div th:if="${#fields.hasGlobalErrors()}" class="text-danger">
 							<p th:each="err:${#fields.globalErrors()}" th:text="${err}"></p>

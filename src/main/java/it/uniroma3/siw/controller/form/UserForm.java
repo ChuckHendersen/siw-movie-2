@@ -1,4 +1,4 @@
-package it.uniroma3.siw.controller;
+package it.uniroma3.siw.controller.form;
 
 import it.uniroma3.siw.model.Credentials;
 import it.uniroma3.siw.model.User;
