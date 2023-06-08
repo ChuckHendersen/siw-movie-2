@@ -2,30 +2,26 @@ package it.uniroma3.siw.controller.validator;
 
 import java.time.LocalDate;
 
+import it.uniroma3.siw.controller.form.UpdateArtistForm;
+import it.uniroma3.siw.service.ArtistService;
+import it.uniroma3.siw.service.MovieService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
 import it.uniroma3.siw.model.Artist;
 
 @Component
-public class UpdateArtistValidator implements org.springframework.validation.Validator{
+public class UpdateArtistValidator{
 
-	@Override
-	public boolean supports(Class<?> clazz) {
-		return Artist.class.equals(clazz);
-	}
+	@Autowired
+	private ArtistService artistService;
 
-	@Override
-	public void validate(Object target, Errors errors) {
-		Artist updatedArtist = (Artist) target;
-		if(updatedArtist.getBirthDate().isAfter(LocalDate.now())) {
-			errors.reject("artist.dataNascita.invalid");
-		}
-		if(updatedArtist.getName().equals("") || updatedArtist.getName().equals(" ")) {
-			errors.reject("artist.nome");
-		}
-		if(updatedArtist.getSurname().equals("") || updatedArtist.getSurname().equals(" ")) {
-			errors.reject("artist.cognome");
+	public void validate(UpdateArtistForm updateArtistForm, Artist artist, Errors errors) {
+		if(!(updateArtistForm.getName().equals(artist.getName()) && updateArtistForm.getSurname().equals(artist.getSurname()))) {
+			if(this.artistService.alreadyExists(updateArtistForm.getName(), updateArtistForm.getSurname())) {
+				errors.reject("artist.duplicate");
+			}
 		}
 	}
 

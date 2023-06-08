@@ -14,7 +14,7 @@
 		<div class="row">
 			<div class="col">
 				<h1 th:text="${artist.name} + ' ' + ${artist.surname}"></h1>
-				<form th:action="@{'/admin/updateArtistDetails/' + ${artist.id}}" method="POST" th:object="${artist}">
+				<form th:action="@{'/admin/updateArtistDetails/' + ${artist.id}}" method="POST" th:object="${updateFormArtist}">
 					<div class="form-group">
 						<div th:if="${#fields.hasGlobalErrors()}" class="text-danger">
 							<p th:each="err:${#fields.globalErrors()}" th:text="${err}"></p>

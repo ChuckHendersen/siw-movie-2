@@ -211,7 +211,11 @@ public class MovieService {
 		return oldMovie;
 	}
 
-	//	@Transactional
+    public boolean alreadyExists(String title, Year year) {
+		return this.movieRepository.existsByTitleAndYear(title, year);
+    }
+
+    //	@Transactional
 	//	public Movie clone(Long movieId) {
 	//		Movie movie = this.findById(movieId);
 	//		Movie movieClone = null;

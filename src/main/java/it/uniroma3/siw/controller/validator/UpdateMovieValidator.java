@@ -1,22 +1,25 @@
 package it.uniroma3.siw.controller.validator;
 
+import it.uniroma3.siw.model.Movie;
+import it.uniroma3.siw.service.MovieService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
 import it.uniroma3.siw.controller.form.UpdateMovieForm;
 
 @Component
-public class UpdateMovieValidator implements org.springframework.validation.Validator{
+public class UpdateMovieValidator{
 
-	@Override
-	public boolean supports(Class<?> clazz) {
-		return UpdateMovieForm.class.equals(clazz);
-	}
+	@Autowired
+	private MovieService movieService;
 
-	@Override
-	public void validate(Object target, Errors errors) {
-		//UpdateMovieForm updateMovieForm = (UpdateMovieForm)target;
-		
+	public void validate(UpdateMovieForm updateMovieForm, Movie movie, Errors errors) {
+		if(!updateMovieForm.getTitle().equals(movie.getTitle()) && updateMovieForm.getYear().equals(movie.getYear())) {
+			if(this.movieService.alreadyExists(updateMovieForm.getTitle(), updateMovieForm.getYear())) {
+				errors.reject("movie.duplicate");
+			}
+		}
 	}
 
 }

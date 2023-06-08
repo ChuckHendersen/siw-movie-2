@@ -3,6 +3,9 @@ package it.uniroma3.siw.controller;
 import java.io.IOException;
 import java.time.Year;
 import java.util.*;
+
+import it.uniroma3.siw.controller.validator.MyMultipartFileValidator;
+import it.uniroma3.siw.controller.validator.UpdateMovieValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,8 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 import it.uniroma3.siw.controller.form.UpdateMovieForm;
 import it.uniroma3.siw.controller.validator.MovieValidator;
 import it.uniroma3.siw.controller.validator.MultipartFileArrayValidator;
-import it.uniroma3.siw.controller.validator.MyMultipartFileValidator;
-//import it.uniroma3.siw.controller.validator.UpdateMovieValidator;
 import it.uniroma3.siw.model.Artist;
 import it.uniroma3.siw.model.Credentials;
 import it.uniroma3.siw.model.Movie;
@@ -35,7 +36,7 @@ public class MovieController {
 	@Autowired private MultipartFileArrayValidator mpfaValidator;
 	@Autowired private MyMultipartFileValidator mmpfValidator;
 	@Autowired private MovieValidator movieValidator;
-	//@Autowired private UpdateMovieValidator updateMovieValidator;
+	@Autowired private UpdateMovieValidator updateMovieValidator;
 
 	@GetMapping("/")
 	public String index(Model model) {
@@ -82,15 +83,18 @@ public class MovieController {
 			@Valid @ModelAttribute("updateMovieForm") UpdateMovieForm updateMovieForm, BindingResult bindingResult,
 			Model model) {
 		//Non va validato altrimenti trova sempre lo stesso film e fallirà sempre
-		//this.updateMovieValidator.validate(updateMovieForm, bindingResult); capire come validare quell'aspetto
-		if(!bindingResult.hasErrors()) {
-			this.movieService.updateMovieDetails(movieId, updateMovieForm);
-			return "redirect:/admin/formUpdateMovie/"+movieId;
-		}else {
-			Movie movie2 = this.movieService.findById(movieId);
-			model.addAttribute("movie", movie2);
-			System.out.println("test");
-			return "/admin/formUpdateMovie.html";
+		Movie movie = this.movieService.findById(movieId);
+		if(movie!=null) {
+			this.updateMovieValidator.validate(updateMovieForm, movie, bindingResult);
+			if (!bindingResult.hasErrors()) {
+				this.movieService.updateMovieDetails(movieId, updateMovieForm);
+				return "redirect:/admin/formUpdateMovie/" + movieId;
+			} else {
+				model.addAttribute("movie", movie);
+				return "/admin/formUpdateMovie.html";
+			}
+		}else{
+			return "movieError.html";
 		}
 	}
 

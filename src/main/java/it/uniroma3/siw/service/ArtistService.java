@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
+import it.uniroma3.siw.controller.form.UpdateArtistForm;
+import it.uniroma3.siw.controller.form.UpdateMovieForm;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -109,20 +111,35 @@ public class ArtistService {
 	}
 
 	@Transactional
-	public Artist updateArtistdetails(Long artistId, Artist artistUpdatedDetails) {
+	public Artist updateArtistDetails(Long artistId, UpdateArtistForm updateArtistForm) {
 		Artist originalArtist = this.findById(artistId);
-		if(originalArtist!=null && artistUpdatedDetails != null) {
-			originalArtist.setName(artistUpdatedDetails.getName());
-			originalArtist.setSurname(artistUpdatedDetails.getSurname());
-			originalArtist.setBirthDate(artistUpdatedDetails.getBirthDate());
-			originalArtist.setDeceasedDate(artistUpdatedDetails.getDeceasedDate());
+		if(originalArtist!=null && updateArtistForm != null) {
+			originalArtist.setName(updateArtistForm.getName());
+			originalArtist.setSurname(updateArtistForm.getSurname());
+			originalArtist.setBirthDate(updateArtistForm.getBirthDate());
+			originalArtist.setDeceasedDate(updateArtistForm.getDeceasedDate());
 			this.artistRepository.save(originalArtist);
 		}
 		return originalArtist;
 	}
 
+	@Transactional
 	public Set<Artist> findAllByListaFilmRecitatiIsNotContaining(Movie movie) {
 		return this.artistRepository.findAllByListaFilmRecitatiIsNotContaining(movie);
 	}
 
+	@Transactional
+    public boolean alreadyExists(String name, String surname) {
+		return this.artistRepository.existsByNameAndSurname(name, surname);
+    }
+
+	@Transactional
+	public UpdateArtistForm generateUpdateArtistForm(Long artistId) {
+		Artist artist = this.findById(artistId);
+		UpdateArtistForm updateArtistForm=null;
+		if(artist != null) {
+			updateArtistForm = new UpdateArtistForm(artist.getName(),artist.getSurname(),artist.getBirthDate(),artist.getDeceasedDate());
+		}
+		return updateArtistForm;
+	}
 }
