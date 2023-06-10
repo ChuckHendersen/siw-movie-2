@@ -16,20 +16,16 @@
 				<div class="mt-3 mb-4">
 					<h1 th:text="${artist.name}+' '+${artist.surname}"></h1>
 				</div>
+				<div>
+					<h4 th:text="'Nato il '+${artist.birthDateToString()}"></h4>
+				</div>
+				<div th:if="${artist.isDeceased()}">
+					<h4 th:text="'Deceduto il '+${artist.deceasedDateToString()}"></h4>
+				</div>
 				<div th:if="${artist.picture}" class="mt-2 mb-5">
 					<!-- Immagine-->
 					<img th:src="'data:image/jpeg;base64,'+${artist.picture.getImgData()}"
 						class="d-block w-100 roundedCorner graybackground" style="object-fit: contain;height: 50rem;" width="100">
-				</div>
-			</div>
-			<div class="col h-50">
-				<div>
-					<h3 th:text="'Nato il '+${artist.birthDateToString()}"></h3>
-				</div>
-			</div>
-			<div class="col h-50" th:if="${artist.deceasedDate!=null}">
-				<div>
-					<h3 th:text="'Deceduto il '+${artist.birthDateToString()}"></h3>
 				</div>
 			</div>
 		</div>
