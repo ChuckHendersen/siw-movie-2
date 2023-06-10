@@ -19,7 +19,17 @@
 				<div th:if="${artist.picture}" class="mt-2 mb-5">
 					<!-- Immagine-->
 					<img th:src="'data:image/jpeg;base64,'+${artist.picture.getImgData()}"
-						class="w-100 roundedCorner"></img>
+						class="d-block w-100 roundedCorner graybackground" style="object-fit: contain;height: 50rem;" width="100">
+				</div>
+			</div>
+			<div class="col h-50">
+				<div>
+					<h3 th:text="'Nato il '+${artist.birthDateToString()}"></h3>
+				</div>
+			</div>
+			<div class="col h-50" th:if="${artist.deceasedDate!=null}">
+				<div>
+					<h3 th:text="'Deceduto il '+${artist.birthDateToString()}"></h3>
 				</div>
 			</div>
 		</div>

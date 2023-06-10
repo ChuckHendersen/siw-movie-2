@@ -149,4 +149,16 @@ public class Artist {
 		}
 		return sb.toString();
 	}
+
+	public String birthDateToString() {
+		return this.birthDate.getDayOfMonth()+"-"+this.birthDate.getMonthValue()+"-"+this.birthDate.getYear();
+	}
+
+	public String deceasedDateToString() {
+		if(this.deceasedDate!=null) {
+			return this.deceasedDate.getDayOfMonth()+"-"+this.deceasedDate.getMonthValue()+"-"+this.deceasedDate.getYear();
+		}else {
+			return "non deceduto";
+		}
+	}
 }
