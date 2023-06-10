@@ -76,11 +76,6 @@ public class ArtistService {
 			Hibernate.initialize(artistPicture);
 			artist.setListaFilmDiretti(null);
 			artist.setListaFilmRecitati(null);
-			artist.setPicture(null);
-			artistRepository.save(artist);
-			if(artistPicture != null) {
-				pictureService.delete(artistPicture);
-			}
 
 			for(Movie m:filmRecitati) {
 				Set<Artist> actors = m.getActors();
@@ -95,6 +90,10 @@ public class ArtistService {
 			}
 			//finalmente si cancella l'artista
 			this.artistRepository.delete(artist);
+			//nevvero, ora si cancella la foto
+			if(artistPicture != null) {
+				pictureService.delete(artistPicture);
+			}
 		}
 		return artist;
 	}

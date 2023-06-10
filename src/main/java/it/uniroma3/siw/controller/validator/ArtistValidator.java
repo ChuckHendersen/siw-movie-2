@@ -22,7 +22,7 @@ public class ArtistValidator implements org.springframework.validation.Validator
 	public void validate(Object target, Errors errors) {
 		Artist artist = (Artist) target;
 		if(artist.getName()!=null && artist.getSurname()!=null && artistRepository.existsByNameAndSurname(artist.getName(), artist.getSurname())) {
-			System.out.println("duplciate");
+			System.out.println("duplicate");
 			errors.reject("artist.duplicate");
 		}
 	}

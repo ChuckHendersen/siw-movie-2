@@ -15,7 +15,7 @@ public class UpdateMovieValidator{
 	private MovieService movieService;
 
 	public void validate(UpdateMovieForm updateMovieForm, Movie movie, Errors errors) {
-		if(!updateMovieForm.getTitle().equals(movie.getTitle()) && updateMovieForm.getYear().equals(movie.getYear())) {
+		if(!updateMovieForm.getTitle().equals(movie.getTitle()) || !updateMovieForm.getYear().equals(movie.getYear())) {
 			if(this.movieService.alreadyExists(updateMovieForm.getTitle(), updateMovieForm.getYear())) {
 				errors.reject("movie.duplicate");
 			}

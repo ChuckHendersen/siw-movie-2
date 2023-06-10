@@ -181,7 +181,7 @@ public class MovieController {
 	public String setDirectorToMovie(@PathVariable("director_id") Long director_id,@PathVariable("movie_id") Long movie_id, Model model) {
 		Movie movie = this.movieService.setDirectorToMovie(director_id, movie_id);
 		model.addAttribute("movie", movie);
-		return redirection(movie, "/admin/formUpdateMovie.html", "movieError.html");
+		return redirection(movie, "redirect:/admin/formUpdateMovie/"+movie_id, "movieError.html");
 	}
 
 	@GetMapping("/admin/updateActorsOfMovie/{movie_id}")
