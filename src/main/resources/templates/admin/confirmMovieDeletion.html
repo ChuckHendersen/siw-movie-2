@@ -31,17 +31,17 @@
 			<div class="row">
 				<div class="col">
 					<div th:if="${movie.pictures!=null && movie.pictures.size()>0}" id="carouselControls"
-						class="carousel slide col" data-ride="carousel" style="max-width:50;">
+						class="carousel slide col" data-ride="carousel" style="max-width:100%;">
 						<div class="carousel-inner">
 							<div class="carousel-item active" style="height: 100%;">
 								<img th:src="'data:image;base64,'+${movie.getFirstPicture().getImgData()}"
-									class="d-block w-100 rounded"
-									style="object-fit: cover; width: 25rem; height: 55rem;" width="100">
+									class="d-block w-100 rounded graybackground"
+									style="object-fit: contain; height: 50rem;" width="100">
 							</div>
 							<div th:each="img : ${movie.getAllButFirstPictures()}" class="carousel-item">
 								<!-- Immagine-->
-								<img th:src="'data:image;base64,'+${img.getImgData()}" class="d-block w-100 rounded"
-									style="object-fit: cover; width: 25rem; height: 55rem;" width="100"></img>
+								<img th:src="'data:image;base64,'+${img.getImgData()}" class="d-block w-100 rounded graybackground"
+									style="object-fit: contain; height: 50rem;" width="100"></img>
 							</div>
 						</div>
 						<a class="carousel-control-prev" href="#carouselControls" role="button" data-slide="prev">
