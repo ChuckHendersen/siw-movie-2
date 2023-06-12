@@ -108,6 +108,7 @@ public class ArtistService {
 		return this.artistRepository.findById(artistId).orElse(null);
 	}
 
+
 	@Transactional
 	public Artist updateArtistDetails(Long artistId, UpdateArtistForm updateArtistForm) {
 		Artist originalArtist = this.findById(artistId);
@@ -116,7 +117,7 @@ public class ArtistService {
 			originalArtist.setSurname(updateArtistForm.getSurname());
 			originalArtist.setBirthDate(updateArtistForm.getBirthDate());
 			originalArtist.setDeceasedDate(updateArtistForm.getDeceasedDate());
-			this.artistRepository.save(originalArtist);
+			return this.artistRepository.save(originalArtist);
 		}
 		return originalArtist;
 	}

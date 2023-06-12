@@ -79,8 +79,8 @@ public class MovieService {
 			if (pictures.size() > 1 && pictures.contains(picture)) {
 				pictures.remove(picture);
 				this.movieRepository.save(movie);
+				this.pictureRepository.delete(picture);
 			}
-			this.pictureRepository.delete(picture);
 		}
 		return movie;
 	}
